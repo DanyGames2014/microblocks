@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "microblocks",
+  "version": "${version}",
+
+  "name": "Microblocks",
+  "description": "",
+  "authors": [
+    "DanyGames2014",
+    "ralf2oo2"
+  ],
+
+  "license": "MIT",
+  "icon": "assets/microblocks/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "stationapi:event_bus": [
+    ],
+    "stationapi:event_bus_client": [
+    ],
+    "stationapi:event_bus_server": [
+    ]
+  },
+  "mixins": [
+    "microblocks.mixins.json"
+  ],
+
+  "depends": {
+    "minecraft": "1.0.0-beta.7.3"
+  }
+}
