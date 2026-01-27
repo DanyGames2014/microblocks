@@ -1,6 +1,7 @@
 package net.danygames2014.microblocks.multipart;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.danygames2014.microblocks.util.DirectionUtil;
 import net.danygames2014.nyalib.util.BoxUtil;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.Box;
@@ -20,7 +21,7 @@ public class FaceMicroblockMultipartComponent extends MicroblockMultipartCompone
         ObjectArrayList<Box> boxes = new ObjectArrayList<>();
         Box box = bounds.copy();
         box.maxX = size * PIXEL_SIZE;
-        boxes.add(BoxUtil.rotate(box, Direction.byId(slot.ordinal())).offset(x, y, z));
+        boxes.add(BoxUtil.rotate(box, DirectionUtil.FaceSlotToDirection(slot)).offset(x, y, z));
         return boxes;
     }
 
@@ -28,11 +29,11 @@ public class FaceMicroblockMultipartComponent extends MicroblockMultipartCompone
     public void getCollisionBoxes(ObjectArrayList<Box> boxes) {
         Box box = bounds.copy();
         box.maxX = size * PIXEL_SIZE;
-        boxes.add(BoxUtil.rotate(box, Direction.byId(slot.ordinal())).offset(x, y, z));
+        boxes.add(BoxUtil.rotate(box, DirectionUtil.FaceSlotToDirection(slot)).offset(x, y, z));
     }
 
     @Override
     public int getMaxSize() {
-        return 8;
+        return 16;
     }
 }

@@ -23,7 +23,8 @@ public class FaceMicroblockItem extends MicroblockItem{
     public boolean useOnBlock(ItemStack stack, PlayerEntity player, World world, int x, int y, int z, int side, Vec3d hitVec) {
         Block block = getBlock(stack);
         int size = getSize(stack);
-        PlacementSlot slot = placementHelper.getSlot(x, y, z, Direction.byId(side), hitVec);
+        PlacementSlot slot = placementHelper.getSlot(x, y, z, Direction.byId(side), new net.modificationstation.stationapi.api.util.math.Vec3d(hitVec.x, hitVec.y, hitVec.z), 1/4D);
+        System.out.println(slot.ordinal());
         BlockPos placementPos = placementHelper.getPlacementPos(x, y, z, Direction.byId(side));
 
         world.addMultipartComponent(placementPos.getX(), placementPos.getY(), placementPos.getZ(), new FaceMicroblockMultipartComponent(block, slot, size));

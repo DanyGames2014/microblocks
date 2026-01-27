@@ -27,7 +27,7 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
         if(stack.getStationNbt().contains("size")){
             stack.getStationNbt().getInt("size");
         }
-        return 1;
+        return 2;
     }
 
     public static ItemStack setBlock(ItemStack stack, Block block) {

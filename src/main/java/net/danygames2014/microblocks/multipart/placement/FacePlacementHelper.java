@@ -1,75 +1,37 @@
 package net.danygames2014.microblocks.multipart.placement;
 
 import net.danygames2014.microblocks.multipart.PlacementSlot;
-import net.minecraft.util.math.Vec3d;
+import net.danygames2014.microblocks.util.MathHelper;
 import net.modificationstation.stationapi.api.util.math.Direction;
+import net.modificationstation.stationapi.api.util.math.Vec3d;
+import net.modificationstation.stationapi.api.util.math.Vec3i;
 
 public class FacePlacementHelper extends PlacementHelper{
-    private static final double MIN = 0.20;
-    private static final double MAX = 0.80;
-
     @Override
-    public PlacementSlot getSlot(int x, int y, int z, Direction face, Vec3d hit) {
+    public PlacementSlot getSlot(int x, int y, int z, Direction face, Vec3d hit, double size) {
 
-        System.out.println(face);
         Vec3d relativeHit = getRelativeHitVec(x, y, z, face, hit);
 
-        return switch (face) {
-            case DOWN -> {
-                if (inCenter(relativeHit.x, relativeHit.z)) yield PlacementSlot.FACE_NEG_Y;
-                if (low(relativeHit.z)) yield PlacementSlot.FACE_POS_Z;
-                if (high(relativeHit.z)) yield PlacementSlot.FACE_NEG_Z;
-                if (low(relativeHit.x)) yield PlacementSlot.FACE_POS_X;
-                if (high(relativeHit.x)) yield PlacementSlot.FACE_NEG_X;
-                yield null;
-            }
-            case UP -> {
-                if (inCenter(relativeHit.x, relativeHit.z)) yield PlacementSlot.FACE_POS_Y;
-                if (low(relativeHit.z)) yield PlacementSlot.FACE_POS_Z;
-                if (high(relativeHit.z)) yield PlacementSlot.FACE_NEG_Z;
-                if (low(relativeHit.x)) yield PlacementSlot.FACE_POS_X;
-                if (high(relativeHit.x)) yield PlacementSlot.FACE_NEG_X;
-                yield null;
-            }
-            case NORTH -> {
-                if (inCenter(relativeHit.z, relativeHit.y)) yield PlacementSlot.FACE_NEG_X;
-                if (low(relativeHit.y)) yield PlacementSlot.FACE_POS_Y;
-                if (high(relativeHit.y)) yield PlacementSlot.FACE_NEG_Y;
-                if (low(relativeHit.z)) yield PlacementSlot.FACE_POS_Z;
-                if (high(relativeHit.z)) yield PlacementSlot.FACE_NEG_Z;
-                yield null;
-            }
-            case SOUTH -> {
-                if (inCenter(relativeHit.z, relativeHit.y)) yield PlacementSlot.FACE_POS_X;
-                if (low(relativeHit.y)) yield PlacementSlot.FACE_POS_Y;
-                if (high(relativeHit.y)) yield PlacementSlot.FACE_NEG_Y;
-                if (low(relativeHit.z)) yield PlacementSlot.FACE_POS_Z;
-                if (high(relativeHit.z)) yield PlacementSlot.FACE_NEG_Z;
-                yield null;
-            }
-            case EAST -> {
-                if (inCenter(relativeHit.x, relativeHit.y)) yield PlacementSlot.FACE_NEG_Z;
-                if (low(relativeHit.y)) yield PlacementSlot.FACE_POS_Y;
-                if (high(relativeHit.y)) yield PlacementSlot.FACE_NEG_Y;
-                if (low(relativeHit.x)) yield PlacementSlot.FACE_POS_X;
-                if (high(relativeHit.x)) yield PlacementSlot.FACE_NEG_X;
-                yield null;
-            }
-            case WEST -> {
-                if (inCenter(relativeHit.x, relativeHit.y)) yield PlacementSlot.FACE_POS_Z;
-                if (low(relativeHit.y)) yield PlacementSlot.FACE_POS_Y;
-                if (high(relativeHit.y)) yield PlacementSlot.FACE_NEG_Y;
-                if (low(relativeHit.x)) yield PlacementSlot.FACE_POS_X;
-                if (high(relativeHit.x)) yield PlacementSlot.FACE_NEG_X;
-                yield null;
-            }
-        };
-    }
+        int s1 = (face.ordinal() + 2) % 6;
+        int s2 = (face.ordinal() + 4) % 6;
 
-    private boolean inCenter(double a, double b) {
-        return a > MIN && a < MAX && b > MIN && b < MAX;
-    }
+        Vec3i v1 = Direction.byId(s1).getVector();
+        Vec3i v2 = Direction.byId(s2).getVector();
 
-    private static boolean low(double v) { return v < MIN; }
-    private static boolean high(double v) { return v > MAX; }
+        Vec3d offset = relativeHit.add(-0.5, -0.5, -0.5);
+
+        double u = MathHelper.scalarProject(offset, new Vec3d(v1.getX(), v1.getY(), v1.getZ()));
+        double v = MathHelper.scalarProject(offset, new Vec3d(v2.getX(), v2.getY(), v2.getZ()));
+
+        System.out.println(Math.abs(u) + " " + Math.abs(v));
+        if(Math.abs(u) < size && Math.abs(v) < size){
+            return PlacementSlot.fromOrdinal(face.ordinal()^1);
+        }
+        if(Math.abs(u) > Math.abs(v)){
+            return u > 0 ? PlacementSlot.fromOrdinal(s1) : PlacementSlot.fromOrdinal(s1^1);
+        }
+        else {
+            return v > 0 ? PlacementSlot.fromOrdinal(s2) : PlacementSlot.fromOrdinal(s2^1);
+        }
+    }
 }
