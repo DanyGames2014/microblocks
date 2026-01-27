@@ -30,7 +30,7 @@ public class CornerMicroblockItem extends MicroblockItem{
         System.out.println(slot);
         System.out.println(slot.ordinal());
 
-//        world.addMultipartComponent(placementPos.getX(), placementPos.getY(), placementPos.getZ(), new CornerMicroblockMultipartComponent(block, slot, size));
+        world.addMultipartComponent(placementPos.getX(), placementPos.getY(), placementPos.getZ(), new CornerMicroblockMultipartComponent(block, slot, size));
         return true;
     }
 }

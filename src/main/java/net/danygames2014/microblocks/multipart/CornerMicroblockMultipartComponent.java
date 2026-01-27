@@ -1,6 +1,7 @@
 package net.danygames2014.microblocks.multipart;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.danygames2014.microblocks.util.MicroblockBoxUtil;
 import net.danygames2014.nyalib.util.BoxUtil;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.Box;
@@ -27,7 +28,7 @@ public class CornerMicroblockMultipartComponent extends MicroblockMultipartCompo
         box.maxX = size * PIXEL_SIZE;
         box.maxY = size * PIXEL_SIZE;
         box.maxZ = size * PIXEL_SIZE;
-        boxes.add(box.offset(x, y, z));
+        boxes.add(MicroblockBoxUtil.transformEdgeMicroblock(box, slot).offset(x, y, z));
         return boxes;
     }
 
@@ -37,6 +38,6 @@ public class CornerMicroblockMultipartComponent extends MicroblockMultipartCompo
         box.maxX = size * PIXEL_SIZE;
         box.maxY = size * PIXEL_SIZE;
         box.maxZ = size * PIXEL_SIZE;
-        boxes.add(box.offset(x, y, z));
+        boxes.add(MicroblockBoxUtil.transformEdgeMicroblock(box, slot).offset(x, y, z));
     }
 }

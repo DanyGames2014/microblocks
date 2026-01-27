@@ -73,6 +73,10 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
     @Override
     public void onBreakStart() {
         System.out.println(slot);
+        ObjectArrayList<Box> boxes = getBoundingBoxes();
+        for(Box box : boxes) {
+            System.out.println(box.offset(-x, -y, -z));
+        }
         if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
             size++;
             if(size > getMaxSize()){
