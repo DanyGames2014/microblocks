@@ -3,6 +3,9 @@ package net.danygames2014.microblocks.multipart;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.multipart.placement.PlacementHelper;
 import net.danygames2014.nyalib.multipart.MultipartComponent;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
@@ -10,6 +13,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Box;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
+import org.lwjgl.input.Keyboard;
 
 public abstract class MicroblockMultipartComponent extends MultipartComponent {
     protected static double PIXEL_SIZE = 1D / 16D;
@@ -69,5 +73,14 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
     @Override
     public void onBreakStart() {
         System.out.println(slot);
+        if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
+            size++;
+            if(size > getMaxSize()){
+                size = 1;
+            }
+            markDirty();
+        }
     }
+
+    public abstract int getMaxSize();
 }

@@ -1,7 +1,9 @@
 package net.danygames2014.microblocks;
 
-import net.danygames2014.microblocks.item.CoverMicroblockItem;
-import net.danygames2014.microblocks.multipart.CoverMicroblockMultipartComponent;
+import net.danygames2014.microblocks.item.CornerMicroblockItem;
+import net.danygames2014.microblocks.item.FaceMicroblockItem;
+import net.danygames2014.microblocks.multipart.CornerMicroblockMultipartComponent;
+import net.danygames2014.microblocks.multipart.FaceMicroblockMultipartComponent;
 import net.danygames2014.nyalib.event.MultipartComponentRegistryEvent;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.item.Item;
@@ -18,15 +20,18 @@ public class Microblocks {
     @Entrypoint.Logger
     public static Logger LOGGER;
 
-    public static Item coverMicroblock;
+    public static Item faceMicroblock;
+    public static Item cornerMicroblock;
 
     @EventListener
     public void registerItems(ItemRegistryEvent event){
-        coverMicroblock = new CoverMicroblockItem(Identifier.of("cover_microblock")).setTranslationKey(NAMESPACE, "cover_microblock");
+        faceMicroblock = new FaceMicroblockItem(Identifier.of("face_microblock")).setTranslationKey(NAMESPACE, "face_microblock");
+        cornerMicroblock = new CornerMicroblockItem(Identifier.of("corner_microblock")).setTranslationKey(NAMESPACE, "corner_microblock");
     }
 
     @EventListener
     public void registerMultiparts(MultipartComponentRegistryEvent event){
-        event.register(NAMESPACE.id("cover_microblock_component"), CoverMicroblockMultipartComponent.class, CoverMicroblockMultipartComponent::new);
+        event.register(NAMESPACE.id("face_microblock_component"), FaceMicroblockMultipartComponent.class, FaceMicroblockMultipartComponent::new);
+        event.register(NAMESPACE.id("corner_microblock_component"), CornerMicroblockMultipartComponent.class, CornerMicroblockMultipartComponent::new);
     }
 }

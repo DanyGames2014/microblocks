@@ -1,11 +1,10 @@
 package net.danygames2014.microblocks.multipart.placement;
 
 import net.danygames2014.microblocks.multipart.PlacementSlot;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
-public class CoverPlacementHelper extends PlacementHelper{
+public class FacePlacementHelper extends PlacementHelper{
     private static final double MIN = 0.20;
     private static final double MAX = 0.80;
 
