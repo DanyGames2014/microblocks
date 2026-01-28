@@ -1,41 +1,27 @@
 package net.danygames2014.microblocks.item;
 
-import net.danygames2014.microblocks.multipart.placement.PlacementHelper;
 import net.danygames2014.nyalib.item.EnhancedPlacementContextItem;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.modificationstation.stationapi.api.registry.BlockRegistry;
+import net.modificationstation.stationapi.api.client.item.CustomTooltipProvider;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
 import net.modificationstation.stationapi.api.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class MicroblockItem extends TemplateItem implements EnhancedPlacementContextItem {
-    public MicroblockItem(Identifier identifier) {
-        super(identifier);
-    }
+    public Block block;
 
-    public static Block getBlock(ItemStack stack) {
-        if(stack.getStationNbt().contains("blockId")){
-            return BlockRegistry.INSTANCE.get(Identifier.of(stack.getStationNbt().getString("blockId")));
-        }
-        return Block.STONE;
+    public MicroblockItem(Identifier identifier, Block block) {
+        super(identifier);
+        this.block = block;
     }
 
     public static int getSize(ItemStack stack) {
-        if(stack.getStationNbt().contains("size")){
+        if (stack.getStationNbt().contains("size")) {
             stack.getStationNbt().getInt("size");
         }
         return 2;
-    }
-
-    public static ItemStack setBlock(ItemStack stack, Block block) {
-        Identifier blockId = BlockRegistry.INSTANCE.getId(block);
-        if(blockId != null) {
-            stack.getStationNbt().putString("blockId", blockId.toString());
-        }
-        return stack;
     }
 
     public static ItemStack setSize(ItemStack stack, int size) {
@@ -43,5 +29,7 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
         return stack;
     }
 
-
+    public String getTypeTranslationKey() {
+        return "microblock.microblocks.invalid.name";
+    }
 }
