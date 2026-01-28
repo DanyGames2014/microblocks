@@ -1,6 +1,7 @@
 package net.danygames2014.microblocks.multipart;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.danygames2014.microblocks.multipart.model.MicroblockModel;
 import net.danygames2014.microblocks.multipart.placement.PlacementHelper;
 import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.fabricmc.api.EnvType;
@@ -18,7 +19,7 @@ import net.modificationstation.stationapi.api.util.Identifier;
 import org.lwjgl.input.Keyboard;
 
 public abstract class MicroblockMultipartComponent extends MultipartComponent {
-    protected static double PIXEL_SIZE = 1D / 16D;
+
     public Block block;
     public PlacementSlot slot;
     int size = 1;
@@ -104,6 +105,18 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
             }
             markDirty();
         }
+    }
+
+    public abstract MicroblockModel getMicroblockModel();
+
+    @Override
+    public void getCollisionBoxes(ObjectArrayList<Box> boxes) {
+        boxes.addAll(getMicroblockModel().getBoxesForSlot(slot, size, x, y, z));
+    }
+
+    @Override
+    public ObjectArrayList<Box> getBoundingBoxes() {
+        return getMicroblockModel().getBoxesForSlot(slot, size, x, y, z);
     }
 
     public abstract int getMaxSize();
