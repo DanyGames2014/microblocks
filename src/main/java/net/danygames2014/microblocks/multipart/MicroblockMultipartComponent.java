@@ -70,6 +70,7 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
     public void readNbt(NbtCompound nbt) {
         if (nbt.contains("blockId")) {
             this.block = BlockRegistry.INSTANCE.get(Identifier.of(nbt.getString("blockId")));
+            this.hardness = block == null ? 1.0F : block.getHardness();
         }
         if(nbt.contains("slot")) {
             this.slot = PlacementSlot.fromOrdinal(nbt.getInt("slot"));
