@@ -2,10 +2,7 @@ package net.danygames2014.microblocks;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.item.*;
-import net.danygames2014.microblocks.multipart.CornerMicroblockMultipartComponent;
-import net.danygames2014.microblocks.multipart.EdgeMicroblockMultipartComponent;
-import net.danygames2014.microblocks.multipart.FaceMicroblockMultipartComponent;
-import net.danygames2014.microblocks.multipart.PostMicroblockMultipartComponent;
+import net.danygames2014.microblocks.multipart.*;
 import net.danygames2014.nyalib.event.MultipartComponentRegistryEvent;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
@@ -78,6 +75,7 @@ public class Microblocks {
         event.register(NAMESPACE.id("corner_microblock_component"), CornerMicroblockMultipartComponent.class, CornerMicroblockMultipartComponent::new);
         event.register(NAMESPACE.id("edge_microblock_component"), EdgeMicroblockMultipartComponent.class, EdgeMicroblockMultipartComponent::new);
         event.register(NAMESPACE.id("post_microblock_component"), PostMicroblockMultipartComponent.class, PostMicroblockMultipartComponent::new);
+        event.register(NAMESPACE.id("hollow_microblock_component"), HollowMicroblockMultipartComponent.class, HollowMicroblockMultipartComponent::new);
     }
 
     @EventListener
