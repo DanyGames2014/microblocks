@@ -8,7 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.util.math.Box;
 
 public class HollowMicroblockMultipartComponent extends MicroblockMultipartComponent{
-    public Box bounds_top = Box.create(0D, 1D, 0D, 0D, 0.5D, 1D);
+    public Box bounds_top = Box.create(0D, 0.5D, 0D, 0D, 1D, 1D);
     public Box bounds_bottom = Box.create(0D, 0D, 0D, 0D, 0.5D, 1D);
     public Box bounds_left = Box.create(0D, 0.5D, 0D, 0D, 0.5D, 0.5);
     public Box bounds_right = Box.create(0D, 0.5D, 0.5, 0D, 0.5D, 1D);
