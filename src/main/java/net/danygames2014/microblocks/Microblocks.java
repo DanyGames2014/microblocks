@@ -48,6 +48,15 @@ public class Microblocks {
                 String slabId = identifier.namespace + "_" + identifier.path + "_slab";
                 microblockItems.add((MicroblockItem) new SlabMicroblockItem(NAMESPACE.id(slabId), block).setTranslationKey(NAMESPACE, slabId));
 
+                String hollowCoverId = identifier.namespace + "_" + identifier.path + "_hollow_cover";
+                microblockItems.add((MicroblockItem) new HollowCoverMicroblockItem(NAMESPACE.id(hollowCoverId), block).setTranslationKey(NAMESPACE, hollowCoverId));
+
+                String hollowPanelId = identifier.namespace + "_" + identifier.path + "_hollow_panel";
+                microblockItems.add((MicroblockItem) new HollowPanelMicroblockItem(NAMESPACE.id(hollowPanelId), block).setTranslationKey(NAMESPACE, hollowPanelId));
+
+                String hollowSlabId = identifier.namespace + "_" + identifier.path + "_hollow_slab";
+                microblockItems.add((MicroblockItem) new HollowSlabMicroblockItem(NAMESPACE.id(hollowSlabId), block).setTranslationKey(NAMESPACE, hollowSlabId));
+
                 String stripCornerId = identifier.namespace + "_" + identifier.path + "_corner";
                 microblockItems.add((MicroblockItem) new StripCornerMicroblockItem(NAMESPACE.id(stripCornerId), block).setTranslationKey(NAMESPACE, stripCornerId));
 

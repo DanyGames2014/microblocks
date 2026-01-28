@@ -1,6 +1,9 @@
 microblock.microblocks.cover.name=%s Cover
 microblock.microblocks.panel.name=%s Panel
 microblock.microblocks.slab.name=%s Slab
+microblock.microblocks.hollow_cover.name=%s Hollow Cover
+microblock.microblocks.hollow_panel.name=%s Hollow Panel
+microblock.microblocks.hollow_slab.name=%s Hollow Slab
 microblock.microblocks.strip.name=%s Strip
 microblock.microblocks.panel_strip.name=%s Panel Strip
 microblock.microblocks.slab_strip.name=%s Slab Strip

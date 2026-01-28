@@ -1,6 +1,5 @@
 package net.danygames2014.microblocks.item;
 
-import net.danygames2014.microblocks.multipart.FaceMicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.HollowMicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.multipart.placement.FacePlacementHelper;
@@ -13,10 +12,10 @@ import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
-public abstract class HollowMicroblockItem extends MicroblockItem{
+public abstract class HollowFaceMicroblockItem extends MicroblockItem{
     private static final FacePlacementHelper placementHelper = new FacePlacementHelper();
 
-    public HollowMicroblockItem(Identifier identifier, Block block) {
+    public HollowFaceMicroblockItem(Identifier identifier, Block block) {
         super(identifier, block);
     }
 
