@@ -9,7 +9,9 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.math.Box;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
@@ -26,6 +28,23 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         this.block = block;
         this.slot = slot;
         this.size = size;
+        
+        this.hardness = block.getHardness();
+    }
+
+    @Override
+    public boolean isHandHarvestable() {
+        return block.material.isHandHarvestable();
+    }
+
+    @Override
+    public float getBlastResistance(Entity source) {
+        return block.getBlastResistance(source);
+    }
+
+    @Override
+    public BlockSoundGroup getSoundGroup() {
+        return block.soundGroup;
     }
 
     public int getPriority(){
