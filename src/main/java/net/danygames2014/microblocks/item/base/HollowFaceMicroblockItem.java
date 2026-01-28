@@ -1,4 +1,4 @@
-package net.danygames2014.microblocks.item;
+package net.danygames2014.microblocks.item.base;
 
 import net.danygames2014.microblocks.multipart.HollowMicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.PlacementSlot;

@@ -1,6 +1,6 @@
 package net.danygames2014.microblocks.mixin;
 
-import net.danygames2014.microblocks.item.MicroblockItem;
+import net.danygames2014.microblocks.item.base.MicroblockItem;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;

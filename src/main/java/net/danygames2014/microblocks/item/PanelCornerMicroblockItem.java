@@ -1,5 +1,6 @@
 package net.danygames2014.microblocks.item;
 
+import net.danygames2014.microblocks.item.base.CornerMicroblockItem;
 import net.minecraft.block.Block;
 import net.modificationstation.stationapi.api.util.Identifier;
 
