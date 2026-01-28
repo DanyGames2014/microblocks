@@ -1,10 +1,7 @@
 package net.danygames2014.microblocks;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.danygames2014.microblocks.item.CornerMicroblockItem;
-import net.danygames2014.microblocks.item.EdgeMicroblockItem;
-import net.danygames2014.microblocks.item.FaceMicroblockItem;
-import net.danygames2014.microblocks.item.MicroblockItem;
+import net.danygames2014.microblocks.item.*;
 import net.danygames2014.microblocks.multipart.CornerMicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.EdgeMicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.FaceMicroblockMultipartComponent;
@@ -46,20 +43,33 @@ public class Microblocks {
             
             if (identifier != null && block.getTexture(0) != 0) {
                 String coverId = identifier.namespace + "_" + identifier.path + "_cover";
-                FaceMicroblockItem coverMicroblockItem = (FaceMicroblockItem) new FaceMicroblockItem(NAMESPACE.id(coverId), block).setTranslationKey(NAMESPACE, coverId);
+                microblockItems.add((MicroblockItem) new CoverMicroblockItem(NAMESPACE.id(coverId), block).setTranslationKey(NAMESPACE, coverId));
 
-                String cornerId = identifier.namespace + "_" + identifier.path + "_cover";
-                FaceMicroblockItem cornerMicroblockItem = (FaceMicroblockItem) new FaceMicroblockItem(NAMESPACE.id(cornerId), block).setTranslationKey(NAMESPACE, cornerId);
+                String panelId = identifier.namespace + "_" + identifier.path + "_panel";
+                microblockItems.add((MicroblockItem) new PanelMicroblockItem(NAMESPACE.id(panelId), block).setTranslationKey(NAMESPACE, panelId));
+
+                String slabId = identifier.namespace + "_" + identifier.path + "_slab";
+                microblockItems.add((MicroblockItem) new SlabMicroblockItem(NAMESPACE.id(slabId), block).setTranslationKey(NAMESPACE, slabId));
+
+                String stripCornerId = identifier.namespace + "_" + identifier.path + "_corner";
+                microblockItems.add((MicroblockItem) new StripCornerMicroblockItem(NAMESPACE.id(stripCornerId), block).setTranslationKey(NAMESPACE, stripCornerId));
+
+                String panelCornerId = identifier.namespace + "_" + identifier.path + "_panel_corner";
+                microblockItems.add((MicroblockItem) new PanelCornerMicroblockItem(NAMESPACE.id(panelCornerId), block).setTranslationKey(NAMESPACE, panelCornerId));
+
+                String slabCornerId = identifier.namespace + "_" + identifier.path + "_slab_corner";
+                microblockItems.add((MicroblockItem) new SlabCornerMicroblockItem(NAMESPACE.id(slabCornerId), block).setTranslationKey(NAMESPACE, slabCornerId));
+
+                String stripId = identifier.namespace + "_" + identifier.path + "_strip";
+                microblockItems.add((MicroblockItem) new StripMicroblockItem(NAMESPACE.id(stripId), block).setTranslationKey(NAMESPACE, stripId));
+
+                String panelStripId = identifier.namespace + "_" + identifier.path + "_panel_strip";
+                microblockItems.add((MicroblockItem) new PanelStripMicroblockItem(NAMESPACE.id(panelStripId), block).setTranslationKey(NAMESPACE, panelStripId));
+
+                String slabStripId = identifier.namespace + "_" + identifier.path + "_slab_strip";
+                microblockItems.add((MicroblockItem) new SlabStripMicroblockItem(NAMESPACE.id(slabStripId), block).setTranslationKey(NAMESPACE, slabStripId));
             }
         }
-        
-        faceMicroblock = new FaceMicroblockItem(Identifier.of("face_microblock"), Block.STONE).setTranslationKey(NAMESPACE, "face_microblock");
-        cornerMicroblock = new CornerMicroblockItem(Identifier.of("corner_microblock"), Block.STONE).setTranslationKey(NAMESPACE, "corner_microblock");
-        edgeMicroblock = new EdgeMicroblockItem(Identifier.of("edge_microblock"), Block.STONE).setTranslationKey(NAMESPACE, "edge_microblock");
-
-        microblockItems.add((MicroblockItem) faceMicroblock);
-        microblockItems.add((MicroblockItem) cornerMicroblock);
-        microblockItems.add((MicroblockItem) edgeMicroblock);
     }
 
     @EventListener

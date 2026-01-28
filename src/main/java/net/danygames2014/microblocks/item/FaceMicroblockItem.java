@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
-public class FaceMicroblockItem extends MicroblockItem{
+public abstract class FaceMicroblockItem extends MicroblockItem{
     private static final FacePlacementHelper placementHelper = new FacePlacementHelper();
 
     public FaceMicroblockItem(Identifier identifier, Block block) {
@@ -26,17 +26,12 @@ public class FaceMicroblockItem extends MicroblockItem{
 
     @Override
     public boolean useOnBlock(ItemStack stack, PlayerEntity player, World world, int x, int y, int z, int side, Vec3d hitVec) {
-        int size = getSize(stack);
+        int size = getSize();
         PlacementSlot slot = placementHelper.getSlot(x, y, z, Direction.byId(side), new net.modificationstation.stationapi.api.util.math.Vec3d(hitVec.x, hitVec.y, hitVec.z), 1/4D);
         System.out.println(slot.ordinal());
         BlockPos placementPos = placementHelper.getPlacementPos(x, y, z, Direction.byId(side));
 
         world.addMultipartComponent(placementPos.getX(), placementPos.getY(), placementPos.getZ(), new FaceMicroblockMultipartComponent(this.block, slot, size));
         return true;
-    }
-
-    @Override
-    public String getTypeTranslationKey() {
-        return "microblock.microblocks.cover.name";
     }
 }
