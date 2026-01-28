@@ -3,7 +3,6 @@ package net.danygames2014.microblocks.item;
 import net.danygames2014.microblocks.multipart.EdgeMicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.multipart.PostMicroblockMultipartComponent;
-import net.danygames2014.microblocks.multipart.placement.CornerPlacementHelper;
 import net.danygames2014.microblocks.multipart.placement.EdgePlacementHelper;
 import net.danygames2014.microblocks.multipart.placement.PostPlacementHelper;
 import net.minecraft.block.Block;
@@ -21,6 +20,11 @@ public class EdgeMicroblockItem extends MicroblockItem {
     
     public EdgeMicroblockItem(Identifier identifier, Block block) {
         super(identifier, block);
+    }
+
+    @Override
+    public void renderGrid(PlayerEntity player, int blockX, int blockY, int blockZ, net.modificationstation.stationapi.api.util.math.Vec3d hit, Direction face, float tickDelta) {
+        placementHelper.renderGrid(player, blockX, blockY, blockZ, hit, face, 1/4D, tickDelta);
     }
 
     @Override

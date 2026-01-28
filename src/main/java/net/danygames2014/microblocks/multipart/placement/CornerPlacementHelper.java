@@ -1,5 +1,7 @@
 package net.danygames2014.microblocks.multipart.placement;
 
+import net.danygames2014.microblocks.client.render.grid.CornerGridRenderer;
+import net.danygames2014.microblocks.client.render.grid.GridRenderer;
 import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.util.MathHelper;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -29,5 +31,10 @@ public class CornerPlacementHelper extends PlacementHelper {
         int bw = (face.ordinal() & 1) ^ 1;
 
         return PlacementSlot.fromOrdinal(6 + (bw<<(face.ordinal()>>1)| bu<<(s1>>1)| bv<<(s2>>1)));
+    }
+
+    @Override
+    protected GridRenderer getGridRenderer() {
+        return CornerGridRenderer.INSTANCE;
     }
 }

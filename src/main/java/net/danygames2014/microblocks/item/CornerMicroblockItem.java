@@ -1,10 +1,8 @@
 package net.danygames2014.microblocks.item;
 
 import net.danygames2014.microblocks.multipart.CornerMicroblockMultipartComponent;
-import net.danygames2014.microblocks.multipart.FaceMicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.multipart.placement.CornerPlacementHelper;
-import net.danygames2014.microblocks.multipart.placement.FacePlacementHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -19,6 +17,11 @@ public class CornerMicroblockItem extends MicroblockItem {
     
     public CornerMicroblockItem(Identifier identifier, Block block) {
         super(identifier, block);
+    }
+
+    @Override
+    public void renderGrid(PlayerEntity player, int blockX, int blockY, int blockZ, net.modificationstation.stationapi.api.util.math.Vec3d hit, Direction face, float tickDelta) {
+        placementHelper.renderGrid(player, blockX, blockY, blockZ, hit, face, 1/4D, tickDelta);
     }
 
     @Override
