@@ -32,6 +32,10 @@ public enum PlacementSlot {
     EDGE_BOT_POS_Z,
     EDGE_TOP_POS_Z,
 
+    POST_X,
+    POST_Y,
+    POST_Z,
+
     INVALID;
 
     private static final PlacementSlot[] VALUES = values();

@@ -21,7 +21,7 @@ public class FaceMicroblockMultipartComponent extends MicroblockMultipartCompone
         ObjectArrayList<Box> boxes = new ObjectArrayList<>();
         Box box = bounds.copy();
         box.maxX = size * PIXEL_SIZE;
-        boxes.add(BoxUtil.rotate(box, DirectionUtil.FaceSlotToDirection(slot)).offset(x, y, z));
+        boxes.add(BoxUtil.rotate(box, DirectionUtil.faceSlotToDirection(slot)).offset(x, y, z));
         return boxes;
     }
 
@@ -29,7 +29,7 @@ public class FaceMicroblockMultipartComponent extends MicroblockMultipartCompone
     public void getCollisionBoxes(ObjectArrayList<Box> boxes) {
         Box box = bounds.copy();
         box.maxX = size * PIXEL_SIZE;
-        boxes.add(BoxUtil.rotate(box, DirectionUtil.FaceSlotToDirection(slot)).offset(x, y, z));
+        boxes.add(BoxUtil.rotate(box, DirectionUtil.faceSlotToDirection(slot)).offset(x, y, z));
     }
 
     @Override

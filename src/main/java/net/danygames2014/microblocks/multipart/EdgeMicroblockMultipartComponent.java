@@ -7,6 +7,7 @@ import net.minecraft.util.math.Box;
 
 public class EdgeMicroblockMultipartComponent extends MicroblockMultipartComponent{
     public Box bounds = Box.create(0D, 0D, 0D, 0D, 0D, 1D);
+    public Box post_bounds = Box.create(0.5D, 0.5D, 0D, 0.5D, 0.5D, 1D);
 
     public EdgeMicroblockMultipartComponent(){}
 

@@ -4,7 +4,7 @@ import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 public class DirectionUtil {
-    public static Direction FaceSlotToDirection(PlacementSlot slot){
+    public static Direction faceSlotToDirection(PlacementSlot slot){
         return switch (slot) {
             case FACE_NEG_Y -> Direction.DOWN;
             case FACE_POS_Y -> Direction.UP;

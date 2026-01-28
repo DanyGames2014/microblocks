@@ -97,4 +97,20 @@ public class MicroblockBoxUtil {
         }
         return origin;
     }
+
+    public static Box transformPostMicroblock(Box box, PlacementSlot slot) {
+        Box origin = box.copy();
+        switch (slot) {
+            default -> {
+                return origin;
+            }
+            case POST_X -> {
+                origin = BoxUtil.rotateYClockwise(box, true);
+            }
+            case POST_Y -> {
+                origin = BoxUtil.rotateXClockwise(box, true);
+            }
+        }
+        return origin;
+    }
 }

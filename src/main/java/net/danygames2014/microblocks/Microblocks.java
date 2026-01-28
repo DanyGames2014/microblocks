@@ -6,6 +6,7 @@ import net.danygames2014.microblocks.item.FaceMicroblockItem;
 import net.danygames2014.microblocks.multipart.CornerMicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.EdgeMicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.FaceMicroblockMultipartComponent;
+import net.danygames2014.microblocks.multipart.PostMicroblockMultipartComponent;
 import net.danygames2014.nyalib.event.MultipartComponentRegistryEvent;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.item.Item;
@@ -38,5 +39,6 @@ public class Microblocks {
         event.register(NAMESPACE.id("face_microblock_component"), FaceMicroblockMultipartComponent.class, FaceMicroblockMultipartComponent::new);
         event.register(NAMESPACE.id("corner_microblock_component"), CornerMicroblockMultipartComponent.class, CornerMicroblockMultipartComponent::new);
         event.register(NAMESPACE.id("edge_microblock_component"), EdgeMicroblockMultipartComponent.class, EdgeMicroblockMultipartComponent::new);
+        event.register(NAMESPACE.id("post_microblock_component"), PostMicroblockMultipartComponent.class, PostMicroblockMultipartComponent::new);
     }
 }
