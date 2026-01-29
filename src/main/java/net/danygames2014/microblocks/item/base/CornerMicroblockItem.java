@@ -2,6 +2,7 @@ package net.danygames2014.microblocks.item.base;
 
 import net.danygames2014.microblocks.multipart.CornerMicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.PlacementSlot;
+import net.danygames2014.microblocks.multipart.model.CornerMicroblockModel;
 import net.danygames2014.microblocks.multipart.placement.CornerPlacementHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
@@ -29,6 +30,10 @@ public abstract class CornerMicroblockItem extends MicroblockItem {
         int size = getSize();
         PlacementSlot slot = placementHelper.getSlot(x, y, z, Direction.byId(side), new net.modificationstation.stationapi.api.util.math.Vec3d(hitVec.x, hitVec.y, hitVec.z), 1/4D);
         BlockPos placementPos = placementHelper.getPlacementPos(x, y, z, Direction.byId(side));
+
+        if(!placementHelper.canPlace(world, placementPos.getX(), placementPos.getY(), placementPos.getZ(), slot, size, CornerMicroblockMultipartComponent.MODEL)){
+            return false;
+        }
 
         System.out.println(slot);
         System.out.println(slot.ordinal());

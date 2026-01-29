@@ -8,7 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.util.math.Box;
 
 public class CornerMicroblockMultipartComponent extends MicroblockMultipartComponent{
-    private static final CornerMicroblockModel MODEL = new CornerMicroblockModel();
+    public static final CornerMicroblockModel MODEL = new CornerMicroblockModel();
 
     public CornerMicroblockMultipartComponent(){}
 

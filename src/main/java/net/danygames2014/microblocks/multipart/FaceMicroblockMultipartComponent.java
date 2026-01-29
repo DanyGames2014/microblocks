@@ -11,7 +11,7 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 
 public class FaceMicroblockMultipartComponent extends MicroblockMultipartComponent{
 
-    private static final FaceMicroblockModel MODEL = new FaceMicroblockModel();
+    public static final FaceMicroblockModel MODEL = new FaceMicroblockModel();
 
     public FaceMicroblockMultipartComponent(){}
 

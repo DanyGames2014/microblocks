@@ -1,5 +1,6 @@
 package net.danygames2014.microblocks.item.base;
 
+import net.danygames2014.microblocks.multipart.CornerMicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.HollowMicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.multipart.placement.FacePlacementHelper;
@@ -30,6 +31,11 @@ public abstract class HollowFaceMicroblockItem extends MicroblockItem{
         PlacementSlot slot = placementHelper.getSlot(x, y, z, Direction.byId(side), new net.modificationstation.stationapi.api.util.math.Vec3d(hitVec.x, hitVec.y, hitVec.z), 1/4D);
         System.out.println(slot.ordinal());
         BlockPos placementPos = placementHelper.getPlacementPos(x, y, z, Direction.byId(side));
+
+
+        if(!placementHelper.canPlace(world, placementPos.getX(), placementPos.getY(), placementPos.getZ(), slot, size, HollowMicroblockMultipartComponent.MODEL)){
+            return false;
+        }
 
         world.addMultipartComponent(placementPos.getX(), placementPos.getY(), placementPos.getZ(), new HollowMicroblockMultipartComponent(this.block, slot, size));
         return true;

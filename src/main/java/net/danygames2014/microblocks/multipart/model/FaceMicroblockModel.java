@@ -17,4 +17,9 @@ public class FaceMicroblockModel extends MicroblockModel{
         boxes.add(BoxUtil.rotate(box, DirectionUtil.faceSlotToDirection(slot)).offset(offsetX, offsetY, offsetZ));
         return boxes;
     }
+
+    @Override
+    public Box getRenderBounds(PlacementSlot slot, int size, double offsetX, double offsetY, double offsetZ) {
+        return getBoxesForSlot(slot, size, offsetX, offsetY, offsetZ).get(0);
+    }
 }

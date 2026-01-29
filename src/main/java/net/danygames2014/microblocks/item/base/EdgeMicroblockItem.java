@@ -1,5 +1,6 @@
 package net.danygames2014.microblocks.item.base;
 
+import net.danygames2014.microblocks.multipart.CornerMicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.EdgeMicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.multipart.PostMicroblockMultipartComponent;
@@ -37,9 +38,15 @@ public abstract class EdgeMicroblockItem extends MicroblockItem {
         System.out.println(slot.ordinal());
 
         if(slot != PlacementSlot.INVALID){
+            if(!placementHelper.canPlace(world, placementPos.getX(), placementPos.getY(), placementPos.getZ(), slot, size, EdgeMicroblockMultipartComponent.MODEL)){
+                return false;
+            }
             world.addMultipartComponent(placementPos.getX(), placementPos.getY(), placementPos.getZ(), new EdgeMicroblockMultipartComponent(this.block, slot, size));
             return true;
         } else {
+            if(!placementHelper.canPlace(world, placementPos.getX(), placementPos.getY(), placementPos.getZ(), slot, size, PostMicroblockMultipartComponent.MODEL)){
+                return false;
+            }
             slot = postPlacementHelper.getSlot(x, y, z, Direction.byId(side), new net.modificationstation.stationapi.api.util.math.Vec3d(hitVec.x, hitVec.y, hitVec.z), 1/4D);
             world.addMultipartComponent(placementPos.getX(), placementPos.getY(), placementPos.getZ(), new PostMicroblockMultipartComponent(this.block, slot, size));
             return true;

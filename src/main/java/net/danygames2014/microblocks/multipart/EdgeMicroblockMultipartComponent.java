@@ -8,7 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.util.math.Box;
 
 public class EdgeMicroblockMultipartComponent extends MicroblockMultipartComponent{
-    private static final EdgeMicroblockModel MODEL = new EdgeMicroblockModel();
+    public static final EdgeMicroblockModel MODEL = new EdgeMicroblockModel();
 
     public EdgeMicroblockMultipartComponent(){}
 

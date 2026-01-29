@@ -10,7 +10,7 @@ import net.minecraft.block.Block;
 import net.minecraft.util.math.Box;
 
 public class PostMicroblockMultipartComponent extends MicroblockMultipartComponent{
-    private static final PostMicroblockModel MODEL = new PostMicroblockModel();
+    public static final PostMicroblockModel MODEL = new PostMicroblockModel();
 
     public PostMicroblockMultipartComponent(){}
 

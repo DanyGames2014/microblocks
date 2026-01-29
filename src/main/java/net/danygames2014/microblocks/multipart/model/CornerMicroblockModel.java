@@ -19,4 +19,9 @@ public class CornerMicroblockModel extends MicroblockModel{
         boxes.add(MicroblockBoxUtil.transformCornerMicroblock(box, slot).offset(offsetX, offsetY, offsetZ));
         return boxes;
     }
+
+    @Override
+    public Box getRenderBounds(PlacementSlot slot, int size, double offsetX, double offsetY, double offsetZ) {
+        return getBoxesForSlot(slot, size, offsetX, offsetY, offsetZ).get(0);
+    }
 }

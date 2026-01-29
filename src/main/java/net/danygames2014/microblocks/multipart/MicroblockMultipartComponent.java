@@ -52,6 +52,10 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         return slot.getPriority();
     }
 
+    public boolean isTransparent(){
+        return !block.isOpaque();
+    }
+
     @Override
     public void render(Tessellator tessellator, BlockRenderManager blockRenderManager, int renderLayer) {
         if (renderLayer != 0) {
@@ -120,4 +124,7 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
     }
 
     public abstract int getMaxSize();
+    public int getSize() {
+        return size;
+    }
 }

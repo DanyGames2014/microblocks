@@ -8,4 +8,5 @@ import net.minecraft.util.math.Box;
 public abstract class MicroblockModel {
     protected static double PIXEL_SIZE = 1D / 16D;
     public abstract ObjectArrayList<Box> getBoxesForSlot(PlacementSlot slot, int size, double offsetX, double offsetY, double offsetZ);
+    public abstract Box getRenderBounds(PlacementSlot slot, int size, double offsetX, double offsetY, double offsetZ);
 }
