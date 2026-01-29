@@ -1,6 +1,7 @@
 package net.danygames2014.microblocks.item.base;
 
 import net.danygames2014.microblocks.multipart.CornerMicroblockMultipartComponent;
+import net.danygames2014.microblocks.multipart.FaceMicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.multipart.model.CornerMicroblockModel;
 import net.danygames2014.microblocks.multipart.placement.CornerPlacementHelper;
@@ -26,24 +27,17 @@ public abstract class CornerMicroblockItem extends MicroblockItem {
         placementHelper.renderGrid(player, blockX, blockY, blockZ, hit, face, 1/4D, tickDelta);
     }
 
-    @Override
-    public boolean useOnBlock(ItemStack stack, PlayerEntity player, World world, int x, int y, int z, int side, Vec3d hitVec) {
-        int size = getSize();
-        PlacementSlot slot = placementHelper.getSlot(x, y, z, Direction.byId(side), new net.modificationstation.stationapi.api.util.math.Vec3d(hitVec.x, hitVec.y, hitVec.z), 1/4D);
-        BlockPos placementPos = placementHelper.getPlacementPos(x, y, z, Direction.byId(side));
+    protected boolean tryPlace(World world, int x, int y, int z, Direction dir, net.modificationstation.stationapi.api.util.math.Vec3d vec, int size) {
+        PlacementSlot slot = placementHelper.getSlot(x, y, z, dir, vec, 0.25D);
 
-        if(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)){
-            slot = placementHelper.getOppositeSlot(slot, Direction.byId(side));
+        if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
+            slot = placementHelper.getOppositeSlot(slot, dir);
         }
 
-        if(!placementHelper.canPlace(world, placementPos.getX(), placementPos.getY(), placementPos.getZ(), slot, size, CornerMicroblockMultipartComponent.MODEL)){
-            return false;
+        if (placementHelper.canPlace(world, x, y, z, slot, size, CornerMicroblockMultipartComponent.MODEL)) {
+            world.addMultipartComponent(x, y, z, new CornerMicroblockMultipartComponent(this.block, slot, size));
+            return true;
         }
-
-        System.out.println(slot);
-        System.out.println(slot.ordinal());
-
-        world.addMultipartComponent(placementPos.getX(), placementPos.getY(), placementPos.getZ(), new CornerMicroblockMultipartComponent(this.block, slot, size));
-        return true;
+        return false;
     }
 }

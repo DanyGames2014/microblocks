@@ -1,6 +1,7 @@
 package net.danygames2014.microblocks.util;
 
 
+import net.minecraft.util.math.BlockPos;
 import net.modificationstation.stationapi.api.util.math.*;
 
 public class MathHelper {
@@ -40,5 +41,9 @@ public class MathHelper {
     public static double getHitDepth(Vec3d hit, Direction side) {
         Vec3i sideVec = side.getVector();
         return scalarProject(hit, new Vec3d(sideVec.getX(), sideVec.getY(), sideVec.getZ())) + (side.ordinal()%2^1);
+    }
+
+    public static BlockPos getPlacementPos(int x, int y, int z, Direction face){
+        return new BlockPos(x + face.getOffsetX(), y + face.getOffsetY(), z + face.getOffsetZ());
     }
 }

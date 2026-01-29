@@ -20,10 +20,6 @@ public abstract class PlacementHelper {
     public abstract PlacementSlot getSlot(int x, int y, int z, Direction face, Vec3d hit, double size);
     public abstract PlacementSlot getOppositeSlot(PlacementSlot slot, Direction side);
 
-    public BlockPos getPlacementPos(int x, int y, int z, Direction face){
-        return new BlockPos(x + face.getOffsetX(), y + face.getOffsetY(), z + face.getOffsetZ());
-    }
-
     public Vec3d getRelativeHitVec(int x, int y, int z, Direction face, Vec3d hit) {
         return hit.add(-x, -y, -z);
     }

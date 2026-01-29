@@ -1,9 +1,6 @@
 package net.danygames2014.microblocks.item.base;
 
-import net.danygames2014.microblocks.multipart.CornerMicroblockMultipartComponent;
-import net.danygames2014.microblocks.multipart.EdgeMicroblockMultipartComponent;
-import net.danygames2014.microblocks.multipart.PlacementSlot;
-import net.danygames2014.microblocks.multipart.PostMicroblockMultipartComponent;
+import net.danygames2014.microblocks.multipart.*;
 import net.danygames2014.microblocks.multipart.placement.EdgePlacementHelper;
 import net.danygames2014.microblocks.multipart.placement.PostPlacementHelper;
 import net.minecraft.block.Block;
@@ -29,32 +26,25 @@ public abstract class EdgeMicroblockItem extends MicroblockItem {
         placementHelper.renderGrid(player, blockX, blockY, blockZ, hit, face, 1/4D, tickDelta);
     }
 
-    @Override
-    public boolean useOnBlock(ItemStack stack, PlayerEntity player, World world, int x, int y, int z, int side, Vec3d hitVec) {
-        int size = getSize();
-        PlacementSlot slot = placementHelper.getSlot(x, y, z, Direction.byId(side), new net.modificationstation.stationapi.api.util.math.Vec3d(hitVec.x, hitVec.y, hitVec.z), 1/4D);
-        BlockPos placementPos = placementHelper.getPlacementPos(x, y, z, Direction.byId(side));
+    protected boolean tryPlace(World world, int x, int y, int z, Direction dir, net.modificationstation.stationapi.api.util.math.Vec3d vec, int size) {
+        PlacementSlot slot = placementHelper.getSlot(x, y, z, dir, vec, 0.25D);
 
-        if(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)){
-            slot = placementHelper.getOppositeSlot(slot, Direction.byId(side));
+        if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
+            slot = placementHelper.getOppositeSlot(slot, dir);
         }
 
-        System.out.println(slot);
-        System.out.println(slot.ordinal());
-
-        if(slot != PlacementSlot.INVALID){
-            if(!placementHelper.canPlace(world, placementPos.getX(), placementPos.getY(), placementPos.getZ(), slot, size, EdgeMicroblockMultipartComponent.MODEL)){
-                return false;
+        if (slot != PlacementSlot.INVALID) {
+            if(placementHelper.canPlace(world, x, y, z, slot, size, EdgeMicroblockMultipartComponent.MODEL)) {
+                world.addMultipartComponent(x, y, z, new EdgeMicroblockMultipartComponent(this.block, slot, size));
+                return true;
             }
-            world.addMultipartComponent(placementPos.getX(), placementPos.getY(), placementPos.getZ(), new EdgeMicroblockMultipartComponent(this.block, slot, size));
-            return true;
         } else {
-            if(!placementHelper.canPlace(world, placementPos.getX(), placementPos.getY(), placementPos.getZ(), slot, size, PostMicroblockMultipartComponent.MODEL)){
-                return false;
+            slot = postPlacementHelper.getSlot(x, y, z, dir, vec, 0.25D);
+            if (placementHelper.canPlace(world, x, y, z, slot, size, PostMicroblockMultipartComponent.MODEL)) {
+                world.addMultipartComponent(x, y, z, new PostMicroblockMultipartComponent(this.block, slot, size));
+                return true;
             }
-            slot = postPlacementHelper.getSlot(x, y, z, Direction.byId(side), new net.modificationstation.stationapi.api.util.math.Vec3d(hitVec.x, hitVec.y, hitVec.z), 1/4D);
-            world.addMultipartComponent(placementPos.getX(), placementPos.getY(), placementPos.getZ(), new PostMicroblockMultipartComponent(this.block, slot, size));
-            return true;
         }
+        return false;
     }
 }
