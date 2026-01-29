@@ -12,6 +12,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
+import org.lwjgl.input.Keyboard;
 
 public abstract class HollowFaceMicroblockItem extends MicroblockItem{
     private static final FacePlacementHelper placementHelper = new FacePlacementHelper();
@@ -32,6 +33,10 @@ public abstract class HollowFaceMicroblockItem extends MicroblockItem{
         System.out.println(slot.ordinal());
         BlockPos placementPos = placementHelper.getPlacementPos(x, y, z, Direction.byId(side));
 
+
+        if(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)){
+            slot = placementHelper.getOppositeSlot(slot, Direction.byId(side));
+        }
 
         if(!placementHelper.canPlace(world, placementPos.getX(), placementPos.getY(), placementPos.getZ(), slot, size, HollowMicroblockMultipartComponent.MODEL)){
             return false;

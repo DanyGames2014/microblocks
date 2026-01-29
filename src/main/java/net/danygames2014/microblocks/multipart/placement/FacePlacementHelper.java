@@ -34,4 +34,9 @@ public class FacePlacementHelper extends PlacementHelper{
             return v > 0 ? PlacementSlot.fromOrdinal(s2) : PlacementSlot.fromOrdinal(s2^1);
         }
     }
+
+    @Override
+    public PlacementSlot getOppositeSlot(PlacementSlot slot, Direction side) {
+        return PlacementSlot.fromOrdinal(slot.ordinal()^1);
+    }
 }

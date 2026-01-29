@@ -14,6 +14,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
+import org.lwjgl.input.Keyboard;
 
 public abstract class FaceMicroblockItem extends MicroblockItem{
     private static final FacePlacementHelper placementHelper = new FacePlacementHelper();
@@ -37,12 +38,19 @@ public abstract class FaceMicroblockItem extends MicroblockItem{
         MultipartState state = world.getMultipartState(x, y, z);
         if(state != null && MathHelper.getHitDepth(new net.modificationstation.stationapi.api.util.math.Vec3d(relativeHitVec.x, relativeHitVec.y, relativeHitVec.z), Direction.byId(side)) < 1){
             PlacementSlot slot = placementHelper.getSlot(x, y, z, Direction.byId(side), new net.modificationstation.stationapi.api.util.math.Vec3d(hitVec.x, hitVec.y, hitVec.z), 1/4D);
+            if(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)){
+                slot = placementHelper.getOppositeSlot(slot, Direction.byId(side));
+            }
             if(placementHelper.canPlace(world, x, y, z, slot, size, FaceMicroblockMultipartComponent.MODEL)){
                 world.addMultipartComponent(x, y, z, new FaceMicroblockMultipartComponent(this.block, slot, size));
                 return true;
             }
         }
         PlacementSlot slot = placementHelper.getSlot(placementPos.getX(), placementPos.getY(), placementPos.getZ(), Direction.byId(side), new net.modificationstation.stationapi.api.util.math.Vec3d(hitVec.x, hitVec.y, hitVec.z), 1/4D);
+        if(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)){
+            slot = placementHelper.getOppositeSlot(slot, Direction.byId(side));
+        }
+
         if(!placementHelper.canPlace(world, placementPos.getX(), placementPos.getY(), placementPos.getZ(), slot, size, FaceMicroblockMultipartComponent.MODEL)){
             return false;
         }

@@ -12,6 +12,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
+import org.lwjgl.input.Keyboard;
 
 public abstract class CornerMicroblockItem extends MicroblockItem {
     private static final CornerPlacementHelper placementHelper = new CornerPlacementHelper();
@@ -30,6 +31,10 @@ public abstract class CornerMicroblockItem extends MicroblockItem {
         int size = getSize();
         PlacementSlot slot = placementHelper.getSlot(x, y, z, Direction.byId(side), new net.modificationstation.stationapi.api.util.math.Vec3d(hitVec.x, hitVec.y, hitVec.z), 1/4D);
         BlockPos placementPos = placementHelper.getPlacementPos(x, y, z, Direction.byId(side));
+
+        if(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)){
+            slot = placementHelper.getOppositeSlot(slot, Direction.byId(side));
+        }
 
         if(!placementHelper.canPlace(world, placementPos.getX(), placementPos.getY(), placementPos.getZ(), slot, size, CornerMicroblockMultipartComponent.MODEL)){
             return false;

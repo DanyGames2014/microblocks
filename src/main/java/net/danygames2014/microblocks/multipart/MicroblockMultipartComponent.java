@@ -8,6 +8,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.entity.Entity;
@@ -97,7 +98,10 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
 
     @Override
     public void onBreakStart() {
-        System.out.println(slot);
+        System.out.println(slot + " " + (slot.ordinal() - 14));
+        if(Minecraft.INSTANCE.getMultipartCrosshairTarget() != null){
+            System.out.println("side: " + Minecraft.INSTANCE.getMultipartCrosshairTarget().face.ordinal());
+        }
         ObjectArrayList<Box> boxes = getBoundingBoxes();
         for(Box box : boxes) {
             System.out.println(box.offset(-x, -y, -z));

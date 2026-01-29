@@ -34,6 +34,11 @@ public class CornerPlacementHelper extends PlacementHelper {
     }
 
     @Override
+    public PlacementSlot getOppositeSlot(PlacementSlot slot, Direction side) {
+        return PlacementSlot.fromOrdinal(((slot.ordinal()-6)^(1<<(side.ordinal()>>1)))+6);
+    }
+
+    @Override
     protected GridRenderer getGridRenderer() {
         return CornerGridRenderer.INSTANCE;
     }

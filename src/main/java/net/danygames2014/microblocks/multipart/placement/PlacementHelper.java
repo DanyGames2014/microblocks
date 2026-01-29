@@ -18,6 +18,7 @@ import net.modificationstation.stationapi.api.util.math.Vec3d;
 
 public abstract class PlacementHelper {
     public abstract PlacementSlot getSlot(int x, int y, int z, Direction face, Vec3d hit, double size);
+    public abstract PlacementSlot getOppositeSlot(PlacementSlot slot, Direction side);
 
     public BlockPos getPlacementPos(int x, int y, int z, Direction face){
         return new BlockPos(x + face.getOffsetX(), y + face.getOffsetY(), z + face.getOffsetZ());

@@ -7,6 +7,24 @@ import net.modificationstation.stationapi.api.util.math.Vec3d;
 import net.modificationstation.stationapi.api.util.math.Vec3i;
 
 public class EdgePlacementHelper extends PlacementHelper{
+    private int[][] EDGE_OPPOSITE_MAP = {
+            //0  1  2  3  4  5
+            { 0, 0, 1, 1, 2, 2 },// 0
+            { 1, 1, 0, 0, 3, 3 },// 1
+            { 2, 2, 3, 3, 0, 0 },// 2
+            { 3, 3, 2, 2, 1, 1 },// 3
+
+            { 6, 6, 4, 4, 5, 5 },// 4
+            { 7, 7, 5, 5, 4, 4 },// 5
+            { 4, 4, 6, 6, 7, 7 },// 6
+            { 5, 5, 7, 7, 6, 6 },// 7
+
+            {10, 9, 8, 10, 8, 8 },// 8
+            {8, 11, 9, 11, 9, 9 },// 9
+            {11, 11, 8, 11, 10, 10 },// 10
+            {10, 9, 9, 10, 11, 11 }//11
+    };
+
     @Override
     public PlacementSlot getSlot(int x, int y, int z, Direction face, Vec3d hit, double size) {
         Vec3d relativeHit = getRelativeHitVec(x, y, z, face, hit);
@@ -39,5 +57,19 @@ public class EdgePlacementHelper extends PlacementHelper{
             }
             return PlacementSlot.fromOrdinal(14+((s1&6)<<1 | (face.ordinal()&1^1)<<1 | b));
         }
+    }
+
+    @Override
+    public PlacementSlot getOppositeSlot(PlacementSlot slot, Direction side) {
+
+        if(slot == PlacementSlot.INVALID || slot.ordinal() < 14){
+            return slot;
+        }
+        int edgeIndex = slot.ordinal()-14;
+        if (edgeIndex >= EDGE_OPPOSITE_MAP.length){
+            return slot;
+        }
+        System.out.println("new slot: " + (EDGE_OPPOSITE_MAP[edgeIndex][side.ordinal()]));
+        return PlacementSlot.fromOrdinal(14 + EDGE_OPPOSITE_MAP[edgeIndex][side.ordinal()]);
     }
 }

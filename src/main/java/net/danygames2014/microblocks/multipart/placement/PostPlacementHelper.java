@@ -13,4 +13,9 @@ public class PostPlacementHelper extends PlacementHelper{
             case Z -> PlacementSlot.POST_Z;
         };
     }
+
+    @Override
+    public PlacementSlot getOppositeSlot(PlacementSlot slot, Direction side) {
+        return slot;
+    }
 }
