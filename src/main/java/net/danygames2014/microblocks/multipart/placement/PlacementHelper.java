@@ -24,8 +24,7 @@ public abstract class PlacementHelper {
     }
 
     public Vec3d getRelativeHitVec(int x, int y, int z, Direction face, Vec3d hit) {
-        BlockPos placementPos = getPlacementPos(x, y, z, face);
-        return hit.add(-placementPos.getX(), -placementPos.getY(), -placementPos.getZ());
+        return hit.add(-x, -y, -z);
     }
 
     public boolean canPlace(World world, int x, int y, int z, PlacementSlot slot, int size, MicroblockModel model) {

@@ -1,10 +1,7 @@
 package net.danygames2014.microblocks.util;
 
 
-import net.modificationstation.stationapi.api.util.math.Direction;
-import net.modificationstation.stationapi.api.util.math.Quaternion;
-import net.modificationstation.stationapi.api.util.math.Vec3d;
-import net.modificationstation.stationapi.api.util.math.Vec3f;
+import net.modificationstation.stationapi.api.util.math.*;
 
 public class MathHelper {
     public static double scalarProject(Vec3d vec, Vec3d other){
@@ -38,5 +35,10 @@ public class MathHelper {
             case NORTH -> Vec3f.POSITIVE_Z.getDegreesQuaternion(90.0F);
             case SOUTH -> Vec3f.POSITIVE_Z.getDegreesQuaternion(-90.0F);
         };
+    }
+
+    public static double getHitDepth(Vec3d hit, Direction side) {
+        Vec3i sideVec = side.getVector();
+        return scalarProject(hit, new Vec3d(sideVec.getX(), sideVec.getY(), sideVec.getZ())) + (side.ordinal()%2^1);
     }
 }
