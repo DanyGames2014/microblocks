@@ -26,29 +26,40 @@ public abstract class PlacementHelper {
 
     public boolean canPlace(World world, int x, int y, int z, PlacementSlot slot, int size, MicroblockModel model) {
         MultipartState state = world.getMultipartState(x, y, z);
-        ObjectArrayList<Box> boxes = model.getBoxesForSlot(slot, size, x, y, z);
-        if(state != null){
-            for(MultipartComponent component : state.components) {
-                if(component instanceof MicroblockMultipartComponent microblock){
-                    if(microblock.slot == slot){
-                        return false;
+        if(state == null) return true;
+
+        ObjectArrayList<Box> newBoxes = model.getBoxesForSlot(slot, size, x, y, z);
+        ObjectArrayList<Box> existingBoxes = new ObjectArrayList<>();
+
+        for(MultipartComponent component : state.components) {
+            if(component instanceof MicroblockMultipartComponent microblock) {
+                if(microblock.slot == slot) return false;
+                existingBoxes.addAll(microblock.getMicroblockModel().getBoxesForSlot(microblock.slot, microblock.getSize(), x, y, z));
+            }
+        }
+
+        for(Box newBox : newBoxes) {
+            if(isFullyCovered(newBox, existingBoxes)) {
+                return false;
+            }
+        }
+
+        for(MultipartComponent component : state.components) {
+            if(component instanceof MicroblockMultipartComponent microblock) {
+                ObjectArrayList<Box> currentExistingBoxes = microblock.getMicroblockModel().getBoxesForSlot(microblock.slot, microblock.getSize(), x, y, z);
+
+                ObjectArrayList<Box> everyBox = new ObjectArrayList<>(newBoxes);
+                for(MultipartComponent otherComponent : state.components) {
+                    if(otherComponent instanceof MicroblockMultipartComponent otherMicro) {
+                        if(otherMicro != microblock) {
+                            everyBox.addAll(otherMicro.getMicroblockModel().getBoxesForSlot(otherMicro.slot, otherMicro.getSize(), x, y, z));
+                        }
                     }
-                    ObjectArrayList<Box> otherBoxes = microblock.getMicroblockModel().getBoxesForSlot(microblock.slot, microblock.getSize(), x, y, z);
-                    for(Box box : boxes) {
-                        for(Box otherBox : otherBoxes){
-                            if(isInBox(otherBox, box)){
-                                return false;
-                            }
-                            if(isInBox(box, otherBox)){
-                                return false;
-                            }
-                            if(isFullyCovered(otherBox, boxes)){
-                                return false;
-                            }
-                        }
-                        if(isFullyCovered(box, otherBoxes)){
-                            return false;
-                        }
+                }
+
+                for(Box existingBox : currentExistingBoxes) {
+                    if(isFullyCovered(existingBox, everyBox)){
+                        return false;
                     }
                 }
             }
