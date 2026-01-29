@@ -2,6 +2,7 @@ package net.danygames2014.microblocks;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.item.*;
+import net.danygames2014.microblocks.item.base.HandSawItem;
 import net.danygames2014.microblocks.item.base.MicroblockItem;
 import net.danygames2014.microblocks.multipart.*;
 import net.danygames2014.nyalib.event.MultipartComponentRegistryEvent;
@@ -27,14 +28,17 @@ public class Microblocks {
     @Entrypoint.Logger
     public static Logger LOGGER;
 
-    public static Item faceMicroblock;
-    public static Item cornerMicroblock;
-    public static Item edgeMicroblock;
+    public static Item ironHandsaw;
+    public static Item diamondHandsaw;
 
     public static ObjectArrayList<MicroblockItem> microblockItems = new ObjectArrayList<>();
 
     @EventListener
     public void registerItems(ItemRegistryEvent event) {
+        ironHandsaw = new HandSawItem(NAMESPACE.id("iron_handsaw"), 100).setTranslationKey(NAMESPACE, "iron_handsaw");
+        diamondHandsaw = new HandSawItem(NAMESPACE.id("diamond_handsaw"), 1000).setTranslationKey(NAMESPACE, "diamond_handsaw");
+
+
         for (Block block : BlockRegistry.INSTANCE.stream().toList()) {
             Identifier identifier = BlockRegistry.INSTANCE.getId(block);
             
