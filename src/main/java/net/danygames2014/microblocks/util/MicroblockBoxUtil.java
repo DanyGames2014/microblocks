@@ -113,4 +113,14 @@ public class MicroblockBoxUtil {
         }
         return origin;
     }
+
+    public static Box copy(Box box){
+        return Box.create(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ);
+    }
+
+    public static Box offset(Box box, double x, double y, double z) {
+        return Box.create(box.minX + x, box.minY + y, box.minZ + z, box.maxX + x, box.maxY + y, box.maxZ + z);
+    }
+
+
 }

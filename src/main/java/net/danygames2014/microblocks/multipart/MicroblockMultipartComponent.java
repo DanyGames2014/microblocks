@@ -1,9 +1,12 @@
 package net.danygames2014.microblocks.multipart;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.danygames2014.microblocks.client.render.MicroblockRenderer;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
 import net.danygames2014.microblocks.multipart.placement.PlacementHelper;
+import net.danygames2014.microblocks.util.ShrinkHelper;
 import net.danygames2014.nyalib.multipart.MultipartComponent;
+import net.danygames2014.nyalib.multipart.MultipartState;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
@@ -17,12 +20,20 @@ import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.math.Box;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
+import net.modificationstation.stationapi.api.util.math.Direction;
 import org.lwjgl.input.Keyboard;
 
 public abstract class MicroblockMultipartComponent extends MultipartComponent {
 
     public Block block;
     public PlacementSlot slot;
+    public double renderBoundsMinX;
+    public double renderBoundsMinY;
+    public double renderBoundsMinZ;
+    public double renderBoundsMaxX;
+    public double renderBoundsMaxY;
+    public double renderBoundsMaxZ;
+    public int renderMask;
     int size = 1;
 
     public MicroblockMultipartComponent() {}
@@ -62,14 +73,15 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         if (renderLayer != 0) {
             return;
         }
-        ObjectArrayList<Box> boxes = new ObjectArrayList<>();
-        getCollisionBoxes(boxes);
-
-        for(Box box : boxes){
-            block.setBoundingBox((float) (box.minX - x), (float) (box.minY - y), (float) (box.minZ - z), (float) (box.maxX - x), (float) (box.maxY - y), (float) (box.maxZ - z));
-            blockRenderManager.renderBlock(block, x, y + renderLayer, z);
-        }
-        block.setBoundingBox(0f, 0f, 0f, 1f, 1f, 1f);
+        MicroblockRenderer.INSTANCE.renderMicroblock(this, blockRenderManager);
+//        ObjectArrayList<Box> boxes = new ObjectArrayList<>();
+//        getCollisionBoxes(boxes);
+//
+//        for(Box box : boxes){
+//            block.setBoundingBox((float) (box.minX - x), (float) (box.minY - y), (float) (box.minZ - z), (float) (box.maxX - x), (float) (box.maxY - y), (float) (box.maxZ - z));
+//            blockRenderManager.renderBlock(block, x, y + renderLayer, z);
+//        }
+//        block.setBoundingBox(0f, 0f, 0f, 1f, 1f, 1f);
     }
 
     @Override
@@ -82,6 +94,7 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
             this.slot = PlacementSlot.fromOrdinal(nbt.getInt("slot"));
         }
         this.size = nbt.getInt("size");
+        refreshRenderState();
     }
 
     @Override
@@ -106,12 +119,63 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         for(Box box : boxes) {
             System.out.println(box.offset(-x, -y, -z));
         }
+//        System.out.println("renderbounds: " + renderBounds);
         if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
             size++;
             if(size > getMaxSize()){
                 size = 1;
             }
             markDirty();
+        }
+    }
+
+    public void setRenderBounds(Box box){
+        setRenderBounds(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ);
+    }
+
+    public void setRenderBounds(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+        this.renderBoundsMinX = minX;
+        this.renderBoundsMinY = minY;
+        this.renderBoundsMinZ = minZ;
+        this.renderBoundsMaxX = maxX;
+        this.renderBoundsMaxY = maxY;
+        this.renderBoundsMaxZ = maxZ;
+    }
+
+    public Box getRenderBounds(){
+        return Box.create(renderBoundsMinX, renderBoundsMinY, renderBoundsMinZ, renderBoundsMaxX, renderBoundsMaxY, renderBoundsMaxZ);
+    }
+
+    @Override
+    public void onPlaced() {
+        refreshRenderState();
+    }
+
+    @Override
+    public void onStateUpdated(MultipartComponent updateSource, MultipartState.StateUpdateType updateType) {
+        refreshRenderState();
+    }
+
+    public void refreshRenderState(){
+        setRenderBounds(getMicroblockModel().getRenderBounds(slot, size, x, y, z).copy());
+        renderMask = 0;
+        int maxSlot = (slot.ordinal() < 6) ? 6 : (slot.ordinal() < 15) ? 15 : 27;
+        for(MultipartComponent component : state.components){
+            if(component == this) continue;
+            if(component instanceof MicroblockMultipartComponent microblock){
+                if(microblock.slot.ordinal() >= maxSlot){
+                    continue;
+                }
+                if(ShrinkHelper.shouldShrink(this, microblock)){
+                   int side = ShrinkHelper.shrinkSide(slot, microblock.slot);
+                   if(side != -1){
+                       setRenderBounds(ShrinkHelper.shrink(getRenderBounds(), microblock.getRenderBounds(), Direction.byId(side)));
+                   }
+                }
+                else if(microblock.slot.ordinal() < 6 && !microblock.isTransparent()){
+                    this.renderMask |= ShrinkHelper.calculateCulling(microblock, getRenderBounds());
+                }
+            }
         }
     }
 
