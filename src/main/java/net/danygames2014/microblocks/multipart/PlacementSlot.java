@@ -65,7 +65,7 @@ public enum PlacementSlot {
             case 0 -> 6;
             case 1 -> 5;
             case 2 -> 3;
-            default -> throw new IllegalArgumentException("Switch Falloff");
+            default -> 0;
         };
     }
 
@@ -75,7 +75,7 @@ public enum PlacementSlot {
             case 0 -> (e & 3) << 1;
             case 1 -> (e & 2) >> 1 | (e & 1) << 2;
             case 2 -> (e & 3);
-            default -> throw new IllegalArgumentException("Switch Falloff");
+            default -> 0;
         };
     }
 
@@ -85,7 +85,7 @@ public enum PlacementSlot {
             case 0 -> e & 0xC | bits >> 1;
             case 1 -> e & 0xC | (bits & 4) >> 2 | (bits & 1) << 1;
             case 2 -> e & 0xC | bits & 3;
-            default -> throw new IllegalArgumentException("Switch Falloff");
+            default -> 0;
         };
     }
 }

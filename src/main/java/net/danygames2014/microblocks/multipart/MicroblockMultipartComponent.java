@@ -73,7 +73,7 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         if (renderLayer != 0) {
             return;
         }
-        MicroblockRenderer.INSTANCE.renderMicroblock(this, blockRenderManager);
+        MicroblockRenderer.INSTANCE.renderMicroblock(world, this, blockRenderManager);
 //        ObjectArrayList<Box> boxes = new ObjectArrayList<>();
 //        getCollisionBoxes(boxes);
 //
