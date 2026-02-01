@@ -146,38 +146,6 @@ public class MicroblockRenderer {
         Tessellator tessellator = Tessellator.INSTANCE;
         tessellator.color(color);
 
-        double vMaxZ = z + box.maxZ;
-
-        double vMinX = x + box.minX;
-        double vMaxX = x + box.maxX;
-        double vMinY = y + box.minY;
-        double vMaxY = y + box.maxY;
-
-        Atlas.Sprite sprite = Atlases.getTerrain().getTexture(texture);
-        double sMinU = sprite.getStartU();
-        double sMaxU = sprite.getEndU();
-        double sMinV = sprite.getStartV();
-        double sMaxV = sprite.getEndV();
-
-        double sWidth = sMaxU - sMinU;
-        double sHeight = sMaxV - sMinV;
-
-        double uMin = sMinU + (box.minX * sWidth);
-        double uMax = sMinU + (box.maxX * sWidth);
-
-        double vMin = sMinV + ((1.0 - box.maxY) * sHeight);
-        double vMax = sMinV + ((1.0 - box.minY) * sHeight);
-
-        tessellator.vertex(vMaxX, vMaxY, vMaxZ, uMax, vMin);
-        tessellator.vertex(vMinX, vMaxY, vMaxZ, uMin, vMin);
-        tessellator.vertex(vMinX, vMinY, vMaxZ, uMin, vMax);
-        tessellator.vertex(vMaxX, vMinY, vMaxZ, uMax, vMax);
-    }
-
-    void renderWest(Box box, int x, int y, int z, int texture, int color) {
-        Tessellator tessellator = Tessellator.INSTANCE;
-        tessellator.color(color);
-
         double vMinZ = z + box.minZ;
 
         double vMinX = x + box.minX;
@@ -204,6 +172,38 @@ public class MicroblockRenderer {
         tessellator.vertex(vMaxX, vMaxY, vMinZ, uMax, vMin);
         tessellator.vertex(vMaxX, vMinY, vMinZ, uMax, vMax);
         tessellator.vertex(vMinX, vMinY, vMinZ, uMin, vMax);
+    }
+
+    void renderWest(Box box, int x, int y, int z, int texture, int color) {
+        Tessellator tessellator = Tessellator.INSTANCE;
+        tessellator.color(color);
+
+        double vMaxZ = z + box.maxZ;
+
+        double vMinX = x + box.minX;
+        double vMaxX = x + box.maxX;
+        double vMinY = y + box.minY;
+        double vMaxY = y + box.maxY;
+
+        Atlas.Sprite sprite = Atlases.getTerrain().getTexture(texture);
+        double sMinU = sprite.getStartU();
+        double sMaxU = sprite.getEndU();
+        double sMinV = sprite.getStartV();
+        double sMaxV = sprite.getEndV();
+
+        double sWidth = sMaxU - sMinU;
+        double sHeight = sMaxV - sMinV;
+
+        double uMin = sMinU + (box.minX * sWidth);
+        double uMax = sMinU + (box.maxX * sWidth);
+
+        double vMin = sMinV + ((1.0 - box.maxY) * sHeight);
+        double vMax = sMinV + ((1.0 - box.minY) * sHeight);
+
+        tessellator.vertex(vMaxX, vMaxY, vMaxZ, uMax, vMin);
+        tessellator.vertex(vMinX, vMaxY, vMaxZ, uMin, vMin);
+        tessellator.vertex(vMinX, vMinY, vMaxZ, uMin, vMax);
+        tessellator.vertex(vMaxX, vMinY, vMaxZ, uMax, vMax);
     }
 
     void renderNorth(Box box, int x, int y, int z, int texture, int color) {
