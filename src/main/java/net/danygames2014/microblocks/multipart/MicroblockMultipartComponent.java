@@ -173,7 +173,9 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
                    }
                 }
                 else if(microblock.slot.ordinal() < 6 && !microblock.isTransparent()){
-                    this.renderMask |= ShrinkHelper.calculateCulling(microblock, getRenderBounds());
+                    this.renderMask |= ShrinkHelper.calculateCulling(microblock, getRenderBounds().offset(-x, -y, -z));
+                } else {
+                    this.renderMask |= 0;
                 }
             }
         }
