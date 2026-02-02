@@ -3,8 +3,6 @@ package net.danygames2014.microblocks.client.render;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.multipart.MicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
-import net.danygames2014.microblocks.util.ShrinkHelper;
-import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
@@ -12,7 +10,6 @@ import net.minecraft.util.math.Box;
 import net.minecraft.world.BlockView;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
-import org.lwjgl.opengl.GL11;
 
 public class MicroblockRenderer {
     public static final MicroblockRenderer INSTANCE = new MicroblockRenderer();
@@ -548,13 +545,25 @@ public class MicroblockRenderer {
         double vMax = sMinV + (box.maxZ * sHeight);
 
         if(this.useAo) {
-            tessellator.color(this.firstVertexRed, this.firstVertexGreen, this.firstVertexBlue);
+            float minX = (float)box.minX;
+            float maxX = (float)box.maxX;
+            float minZ = (float)box.minZ;
+            float maxZ = (float)box.maxZ;
+
+            float[] c1 = interpolateBottomColor(minX, maxZ);
+            tessellator.color(c1[0], c1[1], c1[2]);
             tessellator.vertex(vMinX, vMinY, vMaxZ, uMin, vMax);
-            tessellator.color(this.secondVertexRed, this.secondVertexGreen, this.secondVertexBlue);
+
+            float[] c2 = interpolateBottomColor(minX, minZ);
+            tessellator.color(c2[0], c2[1], c2[2]);
             tessellator.vertex(vMinX, vMinY, vMinZ, uMin, vMin);
-            tessellator.color(this.thirdVertexRed, this.thirdVertexGreen, this.thirdVertexBlue);
+
+            float[] c3 = interpolateBottomColor(maxX, minZ);
+            tessellator.color(c3[0], c3[1], c3[2]);
             tessellator.vertex(vMaxX, vMinY, vMinZ, uMax, vMin);
-            tessellator.color(this.fourthVertexRed, this.fourthVertexGreen, this.fourthVertexBlue);
+
+            float[] c4 = interpolateBottomColor(maxX, maxZ);
+            tessellator.color(c4[0], c4[1], c4[2]);
             tessellator.vertex(vMaxX, vMinY, vMaxZ, uMax, vMax);
         } else {
             tessellator.vertex(vMinX, vMinY, vMaxZ, uMin, vMax);
@@ -589,13 +598,25 @@ public class MicroblockRenderer {
         double vMax = sMinV + (box.maxZ * sHeight);
 
         if(this.useAo){
-            tessellator.color(this.firstVertexRed, this.firstVertexGreen, this.firstVertexBlue);
+            float minX = (float)box.minX;
+            float maxX = (float)box.maxX;
+            float minZ = (float)box.minZ;
+            float maxZ = (float)box.maxZ;
+
+            float[] c1 = interpolateTopColor(maxX, maxZ);
+            tessellator.color(c1[0], c1[1], c1[2]);
             tessellator.vertex(vMaxX, vMaxY, vMaxZ, uMax, vMax);
-            tessellator.color(this.secondVertexRed, this.secondVertexGreen, this.secondVertexBlue);
+
+            float[] c2 = interpolateTopColor(maxX, minZ);
+            tessellator.color(c2[0], c2[1], c2[2]);
             tessellator.vertex(vMaxX, vMaxY, vMinZ, uMax, vMin);
-            tessellator.color(this.thirdVertexRed, this.thirdVertexGreen, this.thirdVertexBlue);
+
+            float[] c3 = interpolateTopColor(minX, minZ);
+            tessellator.color(c3[0], c3[1], c3[2]);
             tessellator.vertex(vMinX, vMaxY, vMinZ, uMin, vMin);
-            tessellator.color(this.fourthVertexRed, this.fourthVertexGreen, this.fourthVertexBlue);
+
+            float[] c4 = interpolateTopColor(minX, maxZ);
+            tessellator.color(c4[0], c4[1], c4[2]);
             tessellator.vertex(vMinX, vMaxY, vMaxZ, uMin, vMax);
         } else {
             tessellator.vertex(vMaxX, vMaxY, vMaxZ, uMax, vMax);
@@ -631,13 +652,25 @@ public class MicroblockRenderer {
         double vMax = sMinV + ((1.0 - box.minY) * sHeight);
 
         if(this.useAo){
-            tessellator.color(this.firstVertexRed, this.firstVertexGreen, this.firstVertexBlue);
+            float minX = (float)box.minX;
+            float maxX = (float)box.maxX;
+            float minY = (float)box.minY;
+            float maxY = (float)box.maxY;
+
+            float[] c1 = interpolateEastColor(minX, maxY);
+            tessellator.color(c1[0], c1[1], c1[2]);
             tessellator.vertex(vMinX, vMaxY, vMinZ, uMin, vMin);
-            tessellator.color(this.secondVertexRed, this.secondVertexGreen, this.secondVertexBlue);
+
+            float[] c2 = interpolateEastColor(maxX, maxY);
+            tessellator.color(c2[0], c2[1], c2[2]);
             tessellator.vertex(vMaxX, vMaxY, vMinZ, uMax, vMin);
-            tessellator.color(this.thirdVertexRed, this.thirdVertexGreen, this.thirdVertexBlue);
+
+            float[] c3 = interpolateEastColor(maxX, minY);
+            tessellator.color(c3[0], c3[1], c3[2]);
             tessellator.vertex(vMaxX, vMinY, vMinZ, uMax, vMax);
-            tessellator.color(this.fourthVertexRed, this.fourthVertexGreen, this.fourthVertexBlue);
+
+            float[] c4 = interpolateEastColor(minX, minY);
+            tessellator.color(c4[0], c4[1], c4[2]);
             tessellator.vertex(vMinX, vMinY, vMinZ, uMin, vMax);
         } else {
             tessellator.vertex(vMinX, vMaxY, vMinZ, uMin, vMin);
@@ -673,13 +706,25 @@ public class MicroblockRenderer {
         double vMax = sMinV + ((1.0 - box.minY) * sHeight);
 
         if(this.useAo){
-            tessellator.color(this.fourthVertexRed, this.fourthVertexGreen, this.fourthVertexBlue);
+            float minX = (float)box.minX;
+            float maxX = (float)box.maxX;
+            float minY = (float)box.minY;
+            float maxY = (float)box.maxY;
+
+            float[] c1 = interpolateWestColor(maxX, maxY);
+            tessellator.color(c1[0], c1[1], c1[2]);
             tessellator.vertex(vMaxX, vMaxY, vMaxZ, uMax, vMin);
-            tessellator.color(this.firstVertexRed, this.firstVertexGreen, this.firstVertexBlue);
+
+            float[] c2 = interpolateWestColor(minX, maxY);
+            tessellator.color(c2[0], c2[1], c2[2]);
             tessellator.vertex(vMinX, vMaxY, vMaxZ, uMin, vMin);
-            tessellator.color(this.secondVertexRed, this.secondVertexGreen, this.secondVertexBlue);
+
+            float[] c3 = interpolateWestColor(minX, minY);
+            tessellator.color(c3[0], c3[1], c3[2]);
             tessellator.vertex(vMinX, vMinY, vMaxZ, uMin, vMax);
-            tessellator.color(this.thirdVertexRed, this.thirdVertexGreen, this.thirdVertexBlue);
+
+            float[] c4 = interpolateWestColor(maxX, minY);
+            tessellator.color(c4[0], c4[1], c4[2]);
             tessellator.vertex(vMaxX, vMinY, vMaxZ, uMax, vMax);
         } else {
             tessellator.vertex(vMaxX, vMaxY, vMaxZ, uMax, vMin);
@@ -715,13 +760,25 @@ public class MicroblockRenderer {
         double vMax = sMinV + ((1.0 - box.minY) * sHeight);
 
         if(this.useAo){
-            tessellator.color(this.firstVertexRed, this.firstVertexGreen, this.firstVertexBlue);
+            float minZ = (float)box.minZ;
+            float maxZ = (float)box.maxZ;
+            float minY = (float)box.minY;
+            float maxY = (float)box.maxY;
+
+            float[] c1 = interpolateNorthColor(maxZ, maxY);
+            tessellator.color(c1[0], c1[1], c1[2]);
             tessellator.vertex(vMinX, vMaxY, vMaxZ, uMin, vMin);
-            tessellator.color(this.secondVertexRed, this.secondVertexGreen, this.secondVertexBlue);
+
+            float[] c2 = interpolateNorthColor(minZ, maxY);
+            tessellator.color(c2[0], c2[1], c2[2]);
             tessellator.vertex(vMinX, vMaxY, vMinZ, uMax, vMin);
-            tessellator.color(this.thirdVertexRed, this.thirdVertexGreen, this.thirdVertexBlue);
+
+            float[] c3 = interpolateNorthColor(minZ, minY);
+            tessellator.color(c3[0], c3[1], c3[2]);
             tessellator.vertex(vMinX, vMinY, vMinZ, uMax, vMax);
-            tessellator.color(this.fourthVertexRed, this.fourthVertexGreen, this.fourthVertexBlue);
+
+            float[] c4 = interpolateNorthColor(maxZ, minY);
+            tessellator.color(c4[0], c4[1], c4[2]);
             tessellator.vertex(vMinX, vMinY, vMaxZ, uMin, vMax);
         } else {
             tessellator.vertex(vMinX, vMaxY, vMaxZ, uMin, vMin);
@@ -757,13 +814,25 @@ public class MicroblockRenderer {
         double vMax = sMinV + ( (1.0 - box.minY) * sHeight);
 
         if(this.useAo){
-            tessellator.color(this.thirdVertexRed, this.thirdVertexGreen, this.thirdVertexBlue);
+            float minZ = (float)box.minZ;
+            float maxZ = (float)box.maxZ;
+            float minY = (float)box.minY;
+            float maxY = (float)box.maxY;
+
+            float[] c1 = interpolateSouthColor(minZ, maxY);
+            tessellator.color(c1[0], c1[1], c1[2]);
             tessellator.vertex(vMaxX, vMaxY, vMinZ, uMin, vMin);
-            tessellator.color(this.fourthVertexRed, this.fourthVertexGreen, this.fourthVertexBlue);
+
+            float[] c2 = interpolateSouthColor(maxZ, maxY);
+            tessellator.color(c2[0], c2[1], c2[2]);
             tessellator.vertex(vMaxX, vMaxY, vMaxZ, uMax, vMin);
-            tessellator.color(this.firstVertexRed, this.firstVertexGreen, this.firstVertexBlue);
+
+            float[] c3 = interpolateSouthColor(maxZ, minY);
+            tessellator.color(c3[0], c3[1], c3[2]);
             tessellator.vertex(vMaxX, vMinY, vMaxZ, uMax, vMax);
-            tessellator.color(this.secondVertexRed, this.secondVertexGreen, this.secondVertexBlue);
+
+            float[] c4 = interpolateSouthColor(minZ, minY);
+            tessellator.color(c4[0], c4[1], c4[2]);
             tessellator.vertex(vMaxX, vMinY, vMinZ, uMin, vMax);
         } else {
             tessellator.vertex(vMaxX, vMaxY, vMinZ, uMin, vMin);
@@ -771,5 +840,62 @@ public class MicroblockRenderer {
             tessellator.vertex(vMaxX, vMinY, vMaxZ, uMax, vMax);
             tessellator.vertex(vMaxX, vMinY, vMinZ, uMin, vMax);
         }
+    }
+
+    private float[] interpolateTopColor(float x, float z) {
+        float r = lerp2d(this.thirdVertexRed, this.secondVertexRed, this.fourthVertexRed, this.firstVertexRed, x, z);
+        float g = lerp2d(this.thirdVertexGreen, this.secondVertexGreen, this.fourthVertexGreen, this.firstVertexGreen, x, z);
+        float b = lerp2d(this.thirdVertexBlue, this.secondVertexBlue, this.fourthVertexBlue, this.firstVertexBlue, x, z);
+
+        return new float[]{r, g, b};
+    }
+
+    private float[] interpolateBottomColor(float x, float z) {
+        float r = lerp2d(this.secondVertexRed, this.thirdVertexRed, this.firstVertexRed, this.fourthVertexRed, x, z);
+        float g = lerp2d(this.secondVertexGreen, this.thirdVertexGreen, this.firstVertexGreen, this.fourthVertexGreen, x, z);
+        float b = lerp2d(this.secondVertexBlue, this.thirdVertexBlue, this.firstVertexBlue, this.fourthVertexBlue, x, z);
+
+        return new float[]{r, g, b};
+    }
+
+    private float[] interpolateWestColor(float x, float y) {
+        float r = lerp2d(this.secondVertexRed, this.thirdVertexRed, this.firstVertexRed, this.fourthVertexRed, x, y);
+        float g = lerp2d(this.secondVertexGreen, this.thirdVertexGreen, this.firstVertexGreen, this.fourthVertexGreen, x, y);
+        float b = lerp2d(this.secondVertexBlue, this.thirdVertexBlue, this.firstVertexBlue, this.fourthVertexBlue, x, y);
+
+        return new float[]{r, g, b};
+    }
+
+    private float[] interpolateSouthColor(float z, float y) {
+        float r = lerp2d(this.secondVertexRed, this.firstVertexRed, this.thirdVertexRed, this.fourthVertexRed, z, y);
+        float g = lerp2d(this.secondVertexGreen, this.firstVertexGreen, this.thirdVertexGreen, this.fourthVertexGreen, z, y);
+        float b = lerp2d(this.secondVertexBlue, this.firstVertexBlue, this.thirdVertexBlue, this.fourthVertexBlue, z, y);
+
+        return new float[]{r, g, b};
+    }
+
+    private float[] interpolateNorthColor(float z, float y) {
+        float r = lerp2d(this.thirdVertexRed, this.fourthVertexRed, this.secondVertexRed, this.firstVertexRed, z, y);
+        float g = lerp2d(this.thirdVertexGreen, this.fourthVertexGreen, this.secondVertexGreen, this.firstVertexGreen, z, y);
+        float b = lerp2d(this.thirdVertexBlue, this.fourthVertexBlue, this.secondVertexBlue, this.firstVertexBlue, z, y);
+
+        return new float[]{r, g, b};
+    }
+
+    private float[] interpolateEastColor(float x, float y) {
+        float r = lerp2d(this.fourthVertexRed, this.thirdVertexRed, this.firstVertexRed, this.secondVertexRed, x, y);
+        float g = lerp2d(this.fourthVertexGreen, this.thirdVertexGreen, this.firstVertexGreen, this.secondVertexGreen, x, y);
+        float b = lerp2d(this.fourthVertexBlue, this.thirdVertexBlue, this.firstVertexBlue, this.secondVertexBlue, x, y);
+
+        return new float[]{r, g, b};
+    }
+
+    private float lerp2d(float c00, float c10, float c01, float c11, float tx, float tz) {
+        // lerp horizontally across the bottom
+        float x0 = c00 + (c10 - c00) * tx;
+        // lerp horizontally across the top
+        float x1 = c01 + (c11 - c01) * tx;
+        // lerp vertically between the two results
+        return x0 + (x1 - x0) * tz;
     }
 }
