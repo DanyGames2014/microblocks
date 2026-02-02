@@ -46,6 +46,6 @@ public class HollowMicroblockModel extends MicroblockModel{
 
     @Override
     public Box getRenderBounds(PlacementSlot slot, int size, double offsetX, double offsetY, double offsetZ) {
-        return Box.create(0D, 0D, 0D, size * PIXEL_SIZE, 1D, 1D);
+        return BoxUtil.rotate(Box.create(0D, 0D, 0D, size * PIXEL_SIZE, 1D, 1D), DirectionUtil.faceSlotToDirection(slot)).offset(offsetX, offsetY, offsetZ);
     }
 }

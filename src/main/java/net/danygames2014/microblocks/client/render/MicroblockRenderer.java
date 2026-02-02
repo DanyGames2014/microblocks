@@ -3,6 +3,7 @@ package net.danygames2014.microblocks.client.render;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.multipart.MicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
+import net.danygames2014.microblocks.util.ShrinkHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
@@ -86,13 +87,16 @@ public class MicroblockRenderer {
 
 
 
-        ObjectArrayList<Box> boxes = model.getBoxesForSlot(component.slot, component.getSize(), 0, 0, 0);
+        ObjectArrayList<Box> boxes = ShrinkHelper.getClippedBoxes(model.getBoxesForSlot(component.slot, component.getSize(), component.x, component.y, component.z), component.getRenderBounds());
+
+
         for(Box box : boxes){
 //            component.block.setBoundingBox((float) (box.minX), (float) (box.minY), (float) (box.minZ), (float) (box.maxX), (float) (box.maxY), (float) (box.maxZ));
 //            Box b = component.renderBounds.offset(-component.x, -component.y, -component.z);
 //            component.block.setBoundingBox((float) (component.renderBoundsMinX - component.x), (float) (component.renderBoundsMinY - component.y), (float) (component.renderBoundsMinZ - component.z), (float) (component.renderBoundsMaxX - component.x), (float) (component.renderBoundsMaxY - component.y), (float) (component.renderBoundsMaxZ - component.z));
-            Box b = Box.create((float) (component.renderBoundsMinX - component.x), (float) (component.renderBoundsMinY - component.y), (float) (component.renderBoundsMinZ - component.z), (float) (component.renderBoundsMaxX - component.x), (float) (component.renderBoundsMaxY - component.y), (float) (component.renderBoundsMaxZ - component.z));
-            renderBox(blockView, component.block, b, component.x, component.y, component.z, 1f, 1f, 1f, new int[]{component.block.getTexture(0), component.block.getTexture(1), component.block.getTexture(2), component.block.getTexture(3), component.block.getTexture(4), component.block.getTexture(5)}, new int[]{0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}, component.renderMask);
+//            Box b = Box.create((float) (component.renderBoundsMinX - component.x), (float) (component.renderBoundsMinY - component.y), (float) (component.renderBoundsMinZ - component.z), (float) (component.renderBoundsMaxX - component.x), (float) (component.renderBoundsMaxY - component.y), (float) (component.renderBoundsMaxZ - component.z));
+
+            renderBox(blockView, component.block, box.offset(-component.x, -component.y, -component.z), component.x, component.y, component.z, 1f, 1f, 1f, new int[]{component.block.getTexture(0), component.block.getTexture(1), component.block.getTexture(2), component.block.getTexture(3), component.block.getTexture(4), component.block.getTexture(5)}, new int[]{0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}, component.renderMask);
             //            if((component.renderMask & 1) == 0){
 //                renderBottom(b, component.x, component.y, component.z, component.block.getTexture(0), 0xFFFFFF);
 //            }
