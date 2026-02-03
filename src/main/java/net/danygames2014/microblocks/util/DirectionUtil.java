@@ -15,4 +15,12 @@ public class DirectionUtil {
             default -> Direction.DOWN;
         };
     }
+
+    public static Direction.Axis postSlotToAxis(PlacementSlot slot) {
+        return switch (slot) {
+            default -> Direction.Axis.X;
+            case POST_Y -> Direction.Axis.Y;
+            case POST_Z -> Direction.Axis.Z;
+        };
+    }
 }
