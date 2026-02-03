@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 
 public abstract class MicroblockModel {
-    protected static double PIXEL_SIZE = 1D / 16D;
+    public static double PIXEL_SIZE = 1D / 16D;
     public abstract ObjectArrayList<Box> getBoxesForSlot(@Nullable PlacementSlot slot, int size, double offsetX, double offsetY, double offsetZ);
     public abstract Box getRenderBounds(PlacementSlot slot, int size, double offsetX, double offsetY, double offsetZ);
 }

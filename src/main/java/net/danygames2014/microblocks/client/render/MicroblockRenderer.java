@@ -87,7 +87,7 @@ public class MicroblockRenderer {
 
 
 
-        ObjectArrayList<Box> boxes = ShrinkHelper.getClippedBoxes(model.getBoxesForSlot(component.slot, component.getSize(), component.x, component.y, component.z), component.getRenderBounds());
+        ObjectArrayList<Box> boxes = component.getClippedBoxes(model.getBoxesForSlot(component.slot, component.getSize(), component.x, component.y, component.z));
 
 
         for(Box box : boxes){

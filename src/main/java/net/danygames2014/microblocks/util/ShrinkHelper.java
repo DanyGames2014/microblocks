@@ -129,27 +129,4 @@ public class ShrinkHelper {
             };
         }
     }
-
-    public static ObjectArrayList<Box> getClippedBoxes(ObjectArrayList<Box> boxes, Box renderBounds) {
-        ObjectArrayList<Box> clippedList = new ObjectArrayList<>();
-
-        for (Box box : boxes) {
-            if (box.maxX <= renderBounds.minX || box.minX >= renderBounds.maxX || box.maxY <= renderBounds.minY || box.minY >= renderBounds.maxY || box.maxZ <= renderBounds.minZ || box.minZ >= renderBounds.maxZ) {
-                continue;
-            }
-
-            double newMinX = Math.max(box.minX, renderBounds.minX);
-            double newMaxX = Math.min(box.maxX, renderBounds.maxX);
-
-            double newMinY = Math.max(box.minY, renderBounds.minY);
-            double newMaxY = Math.min(box.maxY, renderBounds.maxY);
-
-            double newMinZ = Math.max(box.minZ, renderBounds.minZ);
-            double newMaxZ = Math.min(box.maxZ, renderBounds.maxZ);
-
-            clippedList.add(Box.create(newMinX, newMinY, newMinZ, newMaxX, newMaxY, newMaxZ));
-        }
-
-        return clippedList;
-    }
 }
