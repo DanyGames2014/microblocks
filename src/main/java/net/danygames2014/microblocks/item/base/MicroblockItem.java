@@ -79,16 +79,16 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
         net.modificationstation.stationapi.api.util.math.Vec3d stapiRelativeVec = new net.modificationstation.stationapi.api.util.math.Vec3d(relativeHitVec.x, relativeHitVec.y, relativeHitVec.z);
 
         if (state != null && MathHelper.getHitDepth(stapiRelativeVec, direction) < 1) {
-            if (tryPlace(world, x, y, z, direction, stapiVec, size)) {
+            if (tryPlace(world, x, y, z, direction, stapiVec, size, player)) {
                 return true;
             }
         }
 
         BlockPos pPos = MathHelper.getPlacementPos(x, y, z, direction);
-        return tryPlace(world, pPos.getX(), pPos.getY(), pPos.getZ(), direction, stapiVec, size);
+        return tryPlace(world, pPos.getX(), pPos.getY(), pPos.getZ(), direction, stapiVec, size, player);
     }
 
-    protected abstract boolean tryPlace(World world, int x, int y, int z, Direction dir, net.modificationstation.stationapi.api.util.math.Vec3d vec, int size);
+    protected abstract boolean tryPlace(World world, int x, int y, int z, Direction dir, net.modificationstation.stationapi.api.util.math.Vec3d vec, int size, PlayerEntity player);
 
     // Rendering
 

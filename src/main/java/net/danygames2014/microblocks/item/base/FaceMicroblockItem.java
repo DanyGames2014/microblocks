@@ -31,10 +31,10 @@ public abstract class FaceMicroblockItem extends MicroblockItem{
         placementHelper.renderGrid(player, blockX, blockY, blockZ, hit, face, 1/4D, tickDelta);
     }
 
-    protected boolean tryPlace(World world, int x, int y, int z, Direction dir, net.modificationstation.stationapi.api.util.math.Vec3d vec, int size) {
+    protected boolean tryPlace(World world, int x, int y, int z, Direction dir, net.modificationstation.stationapi.api.util.math.Vec3d vec, int size, PlayerEntity player) {
         PlacementSlot slot = placementHelper.getSlot(x, y, z, dir, vec, 0.25D);
 
-        if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
+        if (player != null && player.isSneaking()) {
             slot = placementHelper.getOppositeSlot(slot, dir);
         }
 

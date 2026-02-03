@@ -35,6 +35,10 @@ public class WorldRendererMixin {
             PlacementHelper placementHelper = microblockItem.getPlacementHelper();
             BlockPos placementPos = MathHelper.getPlacementPos(hitResult.blockX, hitResult.blockY, hitResult.blockZ, Direction.byId(hitResult.side));
             PlacementSlot placementSlot = placementHelper.getSlot(placementPos.x, placementPos.y, placementPos.z, Direction.byId(hitResult.side), new Vec3d(hitResult.pos.x, hitResult.pos.y, hitResult.pos.z), 1/4D);
+            if (player.isSneaking()) {
+                placementSlot = placementHelper.getOppositeSlot(placementSlot, Direction.byId(hitResult.side));
+            }
+
             if(placementHelper.canPlace(world, placementPos.x, placementPos.y, placementPos.z, placementSlot, microblockItem.getSize(), microblockItem.getMicroblockModel())){
                 MicroblockRenderer renderer = MicroblockRenderer.INSTANCE;
                 GL11.glPushMatrix();

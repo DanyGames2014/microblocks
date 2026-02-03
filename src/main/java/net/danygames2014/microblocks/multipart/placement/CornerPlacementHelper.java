@@ -12,7 +12,6 @@ public class CornerPlacementHelper extends PlacementHelper {
 
     @Override
     public PlacementSlot getSlot(int x, int y, int z, Direction face, Vec3d hit, double size) {
-        System.out.println(face);
         Vec3d relativeHit = getRelativeHitVec(x, y, z, face, hit);
 
         int s1 = ((face.ordinal() & 6) + 3) % 6;
