@@ -2,6 +2,7 @@ package net.danygames2014.microblocks.client.render;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.multipart.MicroblockMultipartComponent;
+import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
 import net.danygames2014.microblocks.util.ShrinkHelper;
 import net.minecraft.block.Block;
@@ -130,6 +131,27 @@ public class MicroblockRenderer {
         overrideWest = false;
         overrideNorth = false;
         overrideSouth = false;
+    }
+
+    public void renderMicroblockPreview(MicroblockModel model, PlacementSlot slot, Block block, int meta, int size, int x, int y, int z){
+        Tessellator tessellator = Tessellator.INSTANCE;
+
+        tessellator.startQuads();
+
+        tessellator.color(1F, 1F, 1F, 0.4F);
+        this.useAo = false;
+
+        ObjectArrayList<Box> boxes = model.getBoxesForSlot(slot, size, 0, 0, 0);
+        for(Box box : boxes){
+            renderBottom(box, x, y, z, block.getTexture(0, meta), 0xFFFFFF);
+            renderTop(box, x, y, z, block.getTexture(1, meta), 0xFFFFFF);
+            renderEast(box, x, y, z, block.getTexture(2, meta), 0xFFFFFF);
+            renderWest(box, x, y, z, block.getTexture(3, meta), 0xFFFFFF);
+            renderNorth(box, x, y, z, block.getTexture(4, meta), 0xFFFFFF);
+            renderSouth(box, x, y, z, block.getTexture(5, meta), 0xFFFFFF);
+        }
+
+        tessellator.draw();
     }
 
     public void renderBox(BlockView blockView, Block block, Box box, int x, int y, int z, float red, float green, float blue, int[] textures, int[] sideColors, int renderMask){

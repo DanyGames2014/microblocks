@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.client.render.CustomItemRenderer;
 import net.danygames2014.microblocks.client.render.MicroblockRenderer;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
+import net.danygames2014.microblocks.multipart.placement.PlacementHelper;
 import net.danygames2014.microblocks.util.MathHelper;
 import net.danygames2014.microblocks.util.MicroblockBoxUtil;
 import net.danygames2014.nyalib.item.EnhancedPlacementContextItem;
@@ -64,6 +65,8 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
     public abstract String getTypeTranslationKey();
 
     public abstract MicroblockModel getMicroblockModel();
+
+    public abstract PlacementHelper getPlacementHelper();
 
     @Override
     public boolean useOnBlock(ItemStack stack, PlayerEntity player, World world, int x, int y, int z, int side, net.minecraft.util.math.Vec3d hitVec) {

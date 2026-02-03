@@ -6,6 +6,7 @@ import net.danygames2014.microblocks.multipart.HollowMicroblockMultipartComponen
 import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
 import net.danygames2014.microblocks.multipart.placement.FacePlacementHelper;
+import net.danygames2014.microblocks.multipart.placement.PlacementHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -45,5 +46,10 @@ public abstract class HollowFaceMicroblockItem extends MicroblockItem{
     @Override
     public MicroblockModel getMicroblockModel() {
         return HollowMicroblockMultipartComponent.MODEL;
+    }
+
+    @Override
+    public PlacementHelper getPlacementHelper() {
+        return placementHelper;
     }
 }

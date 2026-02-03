@@ -7,6 +7,7 @@ import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.multipart.model.CornerMicroblockModel;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
 import net.danygames2014.microblocks.multipart.placement.CornerPlacementHelper;
+import net.danygames2014.microblocks.multipart.placement.PlacementHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -46,5 +47,10 @@ public abstract class CornerMicroblockItem extends MicroblockItem {
     @Override
     public MicroblockModel getMicroblockModel() {
         return CornerMicroblockMultipartComponent.MODEL;
+    }
+
+    @Override
+    public PlacementHelper getPlacementHelper() {
+        return placementHelper;
     }
 }

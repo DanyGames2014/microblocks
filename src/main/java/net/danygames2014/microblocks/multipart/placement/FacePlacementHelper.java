@@ -23,7 +23,6 @@ public class FacePlacementHelper extends PlacementHelper{
         double u = MathHelper.scalarProject(offset, new Vec3d(v1.getX(), v1.getY(), v1.getZ()));
         double v = MathHelper.scalarProject(offset, new Vec3d(v2.getX(), v2.getY(), v2.getZ()));
 
-        System.out.println(Math.abs(u) + " " + Math.abs(v));
         if(Math.abs(u) < size && Math.abs(v) < size){
             return PlacementSlot.fromOrdinal(face.ordinal()^1);
         }
