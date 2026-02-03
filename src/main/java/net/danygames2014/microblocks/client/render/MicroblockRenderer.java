@@ -102,7 +102,7 @@ public class MicroblockRenderer {
 
             setOverrideBox(boxes.get(i).offset(-component.x, -component.y, -component.z));
 
-            if(component.slot.ordinal() < 6){
+            if(component.slot.ordinal() < 6 && !component.isTransparent()){
                 switch (component.slot){
                     case FACE_POS_Y -> overrideBottom = true;
                     case FACE_NEG_Y -> overrideTop = true;
