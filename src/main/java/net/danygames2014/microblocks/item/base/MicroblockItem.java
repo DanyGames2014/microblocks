@@ -140,7 +140,52 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
 
     @Override
     public void renderInHand(SpriteAtlasTexture atlas, Sprite texture, Tessellator tessellator, LivingEntity entity, ItemStack stack) {
+    }
 
+    @Override
+    public boolean renderInHandBlock(SpriteAtlasTexture atlas, Tessellator tessellator, LivingEntity entity, ItemStack stack) {
+        MicroblockRenderer microblockRenderer = MicroblockRenderer.INSTANCE;
+        microblockRenderer.useAo = false;
+        ObjectArrayList<Box> boxes = MicroblockBoxUtil.getCenteredBoxes(getMicroblockModel().getBoxesForSlot(null, getSize(), 0, 0, 0), getMicroblockModel().getRenderBounds(null, getSize(), 0, 0, 0));
+
+        GL11.glPushMatrix();
+//        glTranslated(0, 3D / 16, -5D / 16);
+//        glRotatef(20, 1, 0, 0);
+//        glRotatef(45, 0, 1, 0);
+//        glScalef(-1, -1, 1);
+
+
+        GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+
+        tessellator.startQuads();
+        for(Box box : boxes){
+            tessellator.normal(0.0F, -1.0F, 0.0F);
+            microblockRenderer.renderBottom(box, 0, 0, 0, block.getTexture(0, stack.getDamage()), 0xFFFFFF);
+            tessellator.draw();
+            tessellator.startQuads();
+            tessellator.normal(0.0F, 1.0F, 0.0F);
+            microblockRenderer.renderTop(box, 0, 0, 0, block.getTexture(1, stack.getDamage()), 0xFFFFFF);
+            tessellator.draw();
+            tessellator.startQuads();
+            tessellator.normal(0.0F, 0.0F, -1.0F);
+            microblockRenderer.renderEast(box, 0, 0, 0, block.getTexture(2, stack.getDamage()), 0xFFFFFF);
+            tessellator.draw();
+            tessellator.startQuads();
+            tessellator.normal(0.0F, 0.0F, 1.0F);
+            microblockRenderer.renderWest(box, 0, 0, 0, block.getTexture(3, stack.getDamage()), 0xFFFFFF);
+            tessellator.draw();
+            tessellator.startQuads();
+            tessellator.normal(-1.0F, 0.0F, 0.0F);
+            microblockRenderer.renderNorth(box, 0, 0, 0, block.getTexture(4, stack.getDamage()), 0xFFFFFF);
+            tessellator.draw();
+            tessellator.startQuads();
+            tessellator.normal(1.0F, 0.0F, 0.0F);
+            microblockRenderer.renderSouth(box, 0, 0, 0, block.getTexture(5, stack.getDamage()), 0xFFFFFF);
+        }
+        tessellator.draw();
+
+        GL11.glPopMatrix();
+        return true;
     }
 
     @Override
