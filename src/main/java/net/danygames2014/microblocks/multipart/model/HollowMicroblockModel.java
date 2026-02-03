@@ -15,6 +15,9 @@ public class HollowMicroblockModel extends MicroblockModel{
 
     @Override
     public ObjectArrayList<Box> getBoxesForSlot(PlacementSlot slot, int size, double offsetX, double offsetY, double offsetZ) {
+        if(slot == null){
+            slot = PlacementSlot.FACE_NEG_Z;
+        }
         ObjectArrayList<Box> boxes = new ObjectArrayList<>();
         Box box_top = bounds_top.copy();
         box_top.maxX = size * PIXEL_SIZE;
@@ -46,6 +49,9 @@ public class HollowMicroblockModel extends MicroblockModel{
 
     @Override
     public Box getRenderBounds(PlacementSlot slot, int size, double offsetX, double offsetY, double offsetZ) {
+        if(slot == null){
+            slot = PlacementSlot.FACE_NEG_Z;
+        }
         return BoxUtil.rotate(Box.create(0D, 0D, 0D, size * PIXEL_SIZE, 1D, 1D), DirectionUtil.faceSlotToDirection(slot)).offset(offsetX, offsetY, offsetZ);
     }
 }

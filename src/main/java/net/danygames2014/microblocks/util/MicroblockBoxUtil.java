@@ -1,5 +1,6 @@
 package net.danygames2014.microblocks.util;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.nyalib.util.BoxUtil;
 import net.minecraft.util.math.Box;
@@ -122,5 +123,20 @@ public class MicroblockBoxUtil {
         return Box.create(box.minX + x, box.minY + y, box.minZ + z, box.maxX + x, box.maxY + y, box.maxZ + z);
     }
 
+    public static ObjectArrayList<Box> getCenteredBoxes(ObjectArrayList<Box> boxes, Box renderBounds) {
+        double centerX = (renderBounds.minX + renderBounds.maxX) / 2.0;
+        double centerY = (renderBounds.minY + renderBounds.maxY) / 2.0;
+        double centerZ = (renderBounds.minZ + renderBounds.maxZ) / 2.0;
 
+        double shiftX = 0.5 - centerX;
+        double shiftY = 0.5 - centerY;
+        double shiftZ = 0.5 - centerZ;
+
+        ObjectArrayList<Box> centeredBoxes = new ObjectArrayList<>();
+        for (Box box : boxes) {
+            centeredBoxes.add(MicroblockBoxUtil.offset(box, shiftX, shiftY, shiftZ));
+        }
+
+        return centeredBoxes;
+    }
 }

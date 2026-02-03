@@ -1,6 +1,7 @@
 package net.danygames2014.microblocks.item.base;
 
 import net.danygames2014.microblocks.multipart.*;
+import net.danygames2014.microblocks.multipart.model.MicroblockModel;
 import net.danygames2014.microblocks.multipart.placement.EdgePlacementHelper;
 import net.danygames2014.microblocks.multipart.placement.PostPlacementHelper;
 import net.minecraft.block.Block;
@@ -46,5 +47,10 @@ public abstract class EdgeMicroblockItem extends MicroblockItem {
             }
         }
         return false;
+    }
+
+    @Override
+    public MicroblockModel getMicroblockModel() {
+        return EdgeMicroblockMultipartComponent.MODEL;
     }
 }

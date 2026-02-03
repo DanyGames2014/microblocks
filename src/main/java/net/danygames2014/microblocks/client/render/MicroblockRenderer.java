@@ -15,7 +15,7 @@ import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 public class MicroblockRenderer {
     public static final MicroblockRenderer INSTANCE = new MicroblockRenderer();
 
-    private boolean useAo;
+    public boolean useAo;
     private float selfBrightness;
     private float northBrightness;
     private float bottomBrightness;
@@ -525,7 +525,7 @@ public class MicroblockRenderer {
         }
     }
 
-    void renderBottom(Box box, int x, int y, int z, int texture, int color){
+    public void renderBottom(Box box, int x, int y, int z, int texture, int color){
         Tessellator tessellator = Tessellator.INSTANCE;
         double vMinY = y + box.minY;
 
@@ -534,7 +534,7 @@ public class MicroblockRenderer {
         double vMinZ = z + box.minZ;
         double vMaxZ = z + box.maxZ;
 
-        Atlas.Sprite sprite = Atlases.getTerrain().getTexture(texture);
+        Atlas.Sprite sprite = Atlases.getTerrain().getTexture(Math.abs(texture));
         double sMinU = sprite.getStartU();
         double sMaxU = sprite.getEndU();
         double sMinV = sprite.getStartV();
@@ -577,7 +577,7 @@ public class MicroblockRenderer {
         }
     }
 
-    void renderTop(Box box, int x, int y, int z, int texture, int color){
+    public void renderTop(Box box, int x, int y, int z, int texture, int color){
         Tessellator tessellator = Tessellator.INSTANCE;
 
         double vMaxY = y + box.maxY;
@@ -587,7 +587,7 @@ public class MicroblockRenderer {
         double vMinZ = z + box.minZ;
         double vMaxZ = z + box.maxZ;
 
-        Atlas.Sprite sprite = Atlases.getTerrain().getTexture(texture);
+        Atlas.Sprite sprite = Atlases.getTerrain().getTexture(Math.abs(texture));
         double sMinU = sprite.getStartU();
         double sMaxU = sprite.getEndU();
         double sMinV = sprite.getStartV();
@@ -630,7 +630,7 @@ public class MicroblockRenderer {
         }
     }
 
-    void renderEast(Box box, int x, int y, int z, int texture, int color) {
+    public void renderEast(Box box, int x, int y, int z, int texture, int color) {
         Tessellator tessellator = Tessellator.INSTANCE;
 
         double vMinZ = z + box.minZ;
@@ -640,7 +640,7 @@ public class MicroblockRenderer {
         double vMinY = y + box.minY;
         double vMaxY = y + box.maxY;
 
-        Atlas.Sprite sprite = Atlases.getTerrain().getTexture(texture);
+        Atlas.Sprite sprite = Atlases.getTerrain().getTexture(Math.abs(texture));
         double sMinU = sprite.getStartU();
         double sMaxU = sprite.getEndU();
         double sMinV = sprite.getStartV();
@@ -684,7 +684,7 @@ public class MicroblockRenderer {
         }
     }
 
-    void renderWest(Box box, int x, int y, int z, int texture, int color) {
+    public void renderWest(Box box, int x, int y, int z, int texture, int color) {
         Tessellator tessellator = Tessellator.INSTANCE;
 
         double vMaxZ = z + box.maxZ;
@@ -694,7 +694,7 @@ public class MicroblockRenderer {
         double vMinY = y + box.minY;
         double vMaxY = y + box.maxY;
 
-        Atlas.Sprite sprite = Atlases.getTerrain().getTexture(texture);
+        Atlas.Sprite sprite = Atlases.getTerrain().getTexture(Math.abs(texture));
         double sMinU = sprite.getStartU();
         double sMaxU = sprite.getEndU();
         double sMinV = sprite.getStartV();
@@ -738,7 +738,7 @@ public class MicroblockRenderer {
         }
     }
 
-    void renderNorth(Box box, int x, int y, int z, int texture, int color) {
+    public void renderNorth(Box box, int x, int y, int z, int texture, int color) {
         Tessellator tessellator = Tessellator.INSTANCE;
 
         double vMinX = x + box.minX;
@@ -748,7 +748,7 @@ public class MicroblockRenderer {
         double vMinZ = z + box.minZ;
         double vMaxZ = z + box.maxZ;
 
-        Atlas.Sprite sprite = Atlases.getTerrain().getTexture(texture);
+        Atlas.Sprite sprite = Atlases.getTerrain().getTexture(Math.abs(texture));
         double sMinU = sprite.getStartU();
         double sMaxU = sprite.getEndU();
         double sMinV = sprite.getStartV();
@@ -792,7 +792,7 @@ public class MicroblockRenderer {
         }
     }
 
-    void renderSouth(Box box, int x, int y, int z, int texture, int color) {
+    public void renderSouth(Box box, int x, int y, int z, int texture, int color) {
         Tessellator tessellator = Tessellator.INSTANCE;
 
         double vMaxX = x + box.maxX;
@@ -802,7 +802,7 @@ public class MicroblockRenderer {
         double vMinZ = z + box.minZ;
         double vMaxZ = z + box.maxZ;
 
-        Atlas.Sprite sprite = Atlases.getTerrain().getTexture(texture);
+        Atlas.Sprite sprite = Atlases.getTerrain().getTexture(Math.abs(texture));
         double sMinU = sprite.getStartU();
         double sMaxU = sprite.getEndU();
         double sMinV = sprite.getStartV();

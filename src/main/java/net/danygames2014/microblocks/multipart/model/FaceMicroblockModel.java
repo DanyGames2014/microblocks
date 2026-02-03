@@ -12,6 +12,9 @@ public class FaceMicroblockModel extends MicroblockModel{
 
     @Override
     public ObjectArrayList<Box> getBoxesForSlot(PlacementSlot slot, int size, double offsetX, double offsetY, double offsetZ) {
+        if(slot == null){
+            slot = PlacementSlot.FACE_NEG_Z;
+        }
         ObjectArrayList<Box> boxes = new ObjectArrayList<>();
         Box box = MicroblockBoxUtil.copy(bounds);
         box.maxX = size * PIXEL_SIZE;
@@ -21,6 +24,9 @@ public class FaceMicroblockModel extends MicroblockModel{
 
     @Override
     public Box getRenderBounds(PlacementSlot slot, int size, double offsetX, double offsetY, double offsetZ) {
+        if(slot == null){
+            slot = PlacementSlot.FACE_NEG_Z;
+        }
         return getBoxesForSlot(slot, size, offsetX, offsetY, offsetZ).get(0);
     }
 }

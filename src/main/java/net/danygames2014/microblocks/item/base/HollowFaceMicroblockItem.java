@@ -4,6 +4,7 @@ import net.danygames2014.microblocks.multipart.CornerMicroblockMultipartComponen
 import net.danygames2014.microblocks.multipart.FaceMicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.HollowMicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.PlacementSlot;
+import net.danygames2014.microblocks.multipart.model.MicroblockModel;
 import net.danygames2014.microblocks.multipart.placement.FacePlacementHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
@@ -39,5 +40,10 @@ public abstract class HollowFaceMicroblockItem extends MicroblockItem{
             return true;
         }
         return false;
+    }
+
+    @Override
+    public MicroblockModel getMicroblockModel() {
+        return HollowMicroblockMultipartComponent.MODEL;
     }
 }

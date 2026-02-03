@@ -9,7 +9,9 @@
   "server": [
   ],
   "client": [
-    "WorldRendererMixin"
+    "WorldRendererMixin",
+    "ArsenicItemRendererMixin",
+    "ArsenicOverlayRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -11,6 +11,9 @@ public class CornerMicroblockModel extends MicroblockModel{
 
     @Override
     public ObjectArrayList<Box> getBoxesForSlot(PlacementSlot slot, int size, double offsetX, double offsetY, double offsetZ) {
+        if(slot == null){
+            slot = PlacementSlot.CORNER_BOT_NEG_X_NEG_Z;
+        }
         ObjectArrayList<Box> boxes = new ObjectArrayList<>();
         Box box = bounds.copy();
         box.maxX = size * PIXEL_SIZE;
@@ -22,6 +25,9 @@ public class CornerMicroblockModel extends MicroblockModel{
 
     @Override
     public Box getRenderBounds(PlacementSlot slot, int size, double offsetX, double offsetY, double offsetZ) {
+        if(slot == null){
+            slot = PlacementSlot.CORNER_BOT_NEG_X_NEG_Z;
+        }
         return getBoxesForSlot(slot, size, offsetX, offsetY, offsetZ).get(0);
     }
 }

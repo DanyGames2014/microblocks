@@ -10,6 +10,9 @@ public class PostMicroblockModel extends MicroblockModel{
 
     @Override
     public ObjectArrayList<Box> getBoxesForSlot(PlacementSlot slot, int size, double offsetX, double offsetY, double offsetZ) {
+        if(slot == null){
+            slot = PlacementSlot.POST_Y;
+        }
         ObjectArrayList<Box> boxes = new ObjectArrayList<>();
         Box box = bounds.copy();
         box.minX -= ((float)size * 0.5f) * PIXEL_SIZE;
@@ -22,6 +25,9 @@ public class PostMicroblockModel extends MicroblockModel{
 
     @Override
     public Box getRenderBounds(PlacementSlot slot, int size, double offsetX, double offsetY, double offsetZ) {
+        if(slot == null){
+            slot = PlacementSlot.POST_Y;
+        }
         return getBoxesForSlot(slot, size, offsetX, offsetY, offsetZ).get(0);
     }
 }
