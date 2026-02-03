@@ -73,16 +73,16 @@ public class MicroblockRenderer {
     public void renderMicroblock(BlockView blockView, MicroblockMultipartComponent component, BlockRenderManager blockRenderManager){
         MicroblockModel model = component.getMicroblockModel();
         Tessellator.INSTANCE.color(1f, 1f, 1f, 1f);
-        if(
-                (component.renderMask & 1) != 0 ||
-                (component.renderMask & 2) != 0 ||
-                (component.renderMask & 4) != 0 ||
-                (component.renderMask & 8) != 0 ||
-                (component.renderMask & 16) != 0 ||
-                (component.renderMask & 32) != 0
-        ){
-            Tessellator.INSTANCE.color(1f, 0f, 0f, 1f);
-        }
+//        if(
+//                (component.renderMask & 1) != 0 ||
+//                (component.renderMask & 2) != 0 ||
+//                (component.renderMask & 4) != 0 ||
+//                (component.renderMask & 8) != 0 ||
+//                (component.renderMask & 16) != 0 ||
+//                (component.renderMask & 32) != 0
+//        ){
+//            Tessellator.INSTANCE.color(1f, 0f, 0f, 1f);
+//        }
 
 
 
@@ -96,7 +96,17 @@ public class MicroblockRenderer {
 //            component.block.setBoundingBox((float) (component.renderBoundsMinX - component.x), (float) (component.renderBoundsMinY - component.y), (float) (component.renderBoundsMinZ - component.z), (float) (component.renderBoundsMaxX - component.x), (float) (component.renderBoundsMaxY - component.y), (float) (component.renderBoundsMaxZ - component.z));
 //            Box b = Box.create((float) (component.renderBoundsMinX - component.x), (float) (component.renderBoundsMinY - component.y), (float) (component.renderBoundsMinZ - component.z), (float) (component.renderBoundsMaxX - component.x), (float) (component.renderBoundsMaxY - component.y), (float) (component.renderBoundsMaxZ - component.z));
 
-            renderBox(blockView, component.block, box.offset(-component.x, -component.y, -component.z), component.x, component.y, component.z, 1f, 1f, 1f, new int[]{component.block.getTexture(0), component.block.getTexture(1), component.block.getTexture(2), component.block.getTexture(3), component.block.getTexture(4), component.block.getTexture(5)}, new int[]{0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}, component.renderMask);
+            int localMask = 0;
+            Box localBox = box.offset(-component.x, -component.y, -component.z);
+
+            if ((component.renderMask & 1) != 0 && localBox.minY <= 0.0) localMask |= 1;  // Bottom
+            if ((component.renderMask & 2) != 0 && localBox.maxY >= 1.0) localMask |= 2;  // Top
+            if ((component.renderMask & 4) != 0 && localBox.minZ <= 0.0) localMask |= 4;  // East
+            if ((component.renderMask & 8) != 0 && localBox.maxZ >= 1.0) localMask |= 8;  // West
+            if ((component.renderMask & 16) != 0 && localBox.minX <= 0.0) localMask |= 16; // North
+            if ((component.renderMask & 32) != 0 && localBox.maxX >= 1.0) localMask |= 32; // South
+
+            renderBox(blockView, component.block, localBox, component.x, component.y, component.z, 1f, 1f, 1f, new int[]{component.block.getTexture(0), component.block.getTexture(1), component.block.getTexture(2), component.block.getTexture(3), component.block.getTexture(4), component.block.getTexture(5)}, new int[]{0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}, localMask);
             //            if((component.renderMask & 1) == 0){
 //                renderBottom(b, component.x, component.y, component.z, component.block.getTexture(0), 0xFFFFFF);
 //            }

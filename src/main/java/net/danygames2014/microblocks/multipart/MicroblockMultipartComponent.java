@@ -159,7 +159,7 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
     public void refreshRenderState(){
         setRenderBounds(getMicroblockModel().getRenderBounds(slot, size, x, y, z).copy());
         renderMask = 0;
-        int maxSlot = (slot.ordinal() < 6 || slot.ordinal() > 26) ? 6 : (slot.ordinal() < 15) ? 15 : 26;
+        int maxSlot = (slot.ordinal() < 6) ? 6 : (slot.ordinal() < 15) ? 15 : 26;
         for(MultipartComponent component : state.components){
             if(component == this) continue;
             if(component instanceof MicroblockMultipartComponent microblock){
