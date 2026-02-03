@@ -159,14 +159,14 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
     public void refreshRenderState(){
         setRenderBounds(getMicroblockModel().getRenderBounds(slot, size, x, y, z).copy());
         renderMask = 0;
-        int maxSlot = (slot.ordinal() < 6) ? 6 : (slot.ordinal() < 15) ? 15 : 27;
+        int maxSlot = (slot.ordinal() < 6 || slot.ordinal() > 26) ? 6 : (slot.ordinal() < 15) ? 15 : 26;
         for(MultipartComponent component : state.components){
             if(component == this) continue;
             if(component instanceof MicroblockMultipartComponent microblock){
                 if(microblock.slot.ordinal() >= maxSlot){
                     continue;
                 }
-                if(ShrinkHelper.shouldShrink(this, microblock)){
+                if(shouldShrink(microblock)){
                    int side = ShrinkHelper.shrinkSide(slot, microblock.slot);
                    if(side != -1){
                        setRenderBounds(ShrinkHelper.shrink(getRenderBounds(), microblock.getRenderBounds(), Direction.byId(side)));
@@ -179,6 +179,31 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
                 }
             }
         }
+    }
+
+    public boolean shouldShrink(MicroblockMultipartComponent other){
+        int componentPriority = this.getPriority();
+        int otherPriority = other.getPriority();
+        if(componentPriority != otherPriority) {
+            return componentPriority < otherPriority;
+        }
+        if(this.slot.ordinal() < 6) {
+            if(this.isTransparent() != other.isTransparent()) {
+                return this.isTransparent();
+            }
+            if(this.getSize() != other.getSize()) {
+                return this.getSize() < other.getSize();
+            }
+        }
+        else {
+            if(this.getSize() != other.getSize()) {
+                return this.getSize() < other.getSize();
+            }
+            if(this.isTransparent() != other.isTransparent()) {
+                return this.isTransparent();
+            }
+        }
+        return this.slot.ordinal() < other.slot.ordinal();
     }
 
     public abstract MicroblockModel getMicroblockModel();

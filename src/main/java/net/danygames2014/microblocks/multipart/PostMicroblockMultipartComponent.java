@@ -27,4 +27,11 @@ public class PostMicroblockMultipartComponent extends MicroblockMultipartCompone
     public MicroblockModel getMicroblockModel() {
         return MODEL;
     }
+
+    @Override
+    public boolean shouldShrink(MicroblockMultipartComponent other) {
+        if(size != other.size) return size < other.size;
+        if(isTransparent() != other.isTransparent()) return isTransparent();
+        return other.slot.ordinal() < 6;
+    }
 }
