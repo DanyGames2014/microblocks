@@ -100,7 +100,9 @@ public class MicroblockRenderer {
             overrideNorth = false;
             overrideSouth = false;
 
-            setOverrideBox(boxes.get(i).offset(-component.x, -component.y, -component.z));
+            if(clippedBoxes.size() == boxes.size()){
+                setOverrideBox(boxes.get(i).offset(-component.x, -component.y, -component.z));
+            }
 
             if(component.slot.ordinal() < 6 && !component.isTransparent()){
                 switch (component.slot){
