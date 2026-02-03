@@ -11,6 +11,7 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.client.texture.SpriteAtlasTexture;
 import net.modificationstation.stationapi.impl.client.arsenic.renderer.render.ArsenicItemRenderer;
+import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -49,6 +50,16 @@ public class ArsenicItemRendererMixin {
         cancelVanillaVertex = false;
         if (stack.getItem() instanceof CustomItemRenderer customItemRenderer) {
             cancelVanillaVertex = customItemRenderer.renderOnGround(ArsenicItemRenderer.class.cast(this), this.itemRenderer, tessellator, itemEntity, x, y, z, delta, stack, yOffset, angle, renderedAmount, atlas);
+        }
+    }
+
+    @Inject(method = "renderVanilla", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glTranslatef(FFF)V", ordinal = 0, shift = At.Shift.AFTER), cancellable = true)
+    public void renderOnGroundBlock(ItemEntity itemEntity, float x, float y, float z, float delta, ItemStack stack, float yOffset, float angle, byte renderedAmount, SpriteAtlasTexture atlas, CallbackInfo ci){
+        if (stack.getItem() instanceof CustomItemRenderer customItemRenderer) {
+            if(customItemRenderer.renderOnGroundBlock(ArsenicItemRenderer.class.cast(this), this.itemRenderer, Tessellator.INSTANCE, itemEntity, x, y, z, delta, stack, yOffset, angle, renderedAmount, atlas)){
+                GL11.glPopMatrix();
+                ci.cancel();
+            }
         }
     }
 
