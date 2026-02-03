@@ -69,35 +69,49 @@ public class MicroblockRenderer {
     private boolean bottomWestEdgeTranslucent;
     private boolean bottomSouthEdgeTranslucent;
 
+    private double overrideMinX = 0.0F;
+    private double overrideMaxX = 0.0F;
+    private double overrideMinY = 0.0F;
+    private double overrideMaxY = 0.0F;
+    private double overrideMinZ = 0.0F;
+    private double overrideMaxZ = 0.0F;
+    private boolean overrideBottom = false;
+    private boolean overrideTop = false;
+    private boolean overrideEast = false;
+    private boolean overrideWest = false;
+    private boolean overrideNorth = false;
+    private boolean overrideSouth = false;
+
 
     public void renderMicroblock(BlockView blockView, MicroblockMultipartComponent component, BlockRenderManager blockRenderManager){
         MicroblockModel model = component.getMicroblockModel();
         Tessellator.INSTANCE.color(1f, 1f, 1f, 1f);
-//        if(
-//                (component.renderMask & 1) != 0 ||
-//                (component.renderMask & 2) != 0 ||
-//                (component.renderMask & 4) != 0 ||
-//                (component.renderMask & 8) != 0 ||
-//                (component.renderMask & 16) != 0 ||
-//                (component.renderMask & 32) != 0
-//        ){
-//            Tessellator.INSTANCE.color(1f, 0f, 0f, 1f);
-//        }
+        ObjectArrayList<Box> boxes = model.getBoxesForSlot(component.slot, component.getSize(), component.x, component.y, component.z);
+        ObjectArrayList<Box> clippedBoxes = component.getClippedBoxes(boxes);
 
-
-
-
-        ObjectArrayList<Box> boxes = component.getClippedBoxes(model.getBoxesForSlot(component.slot, component.getSize(), component.x, component.y, component.z));
-
-
-        for(Box box : boxes){
-//            component.block.setBoundingBox((float) (box.minX), (float) (box.minY), (float) (box.minZ), (float) (box.maxX), (float) (box.maxY), (float) (box.maxZ));
-//            Box b = component.renderBounds.offset(-component.x, -component.y, -component.z);
-//            component.block.setBoundingBox((float) (component.renderBoundsMinX - component.x), (float) (component.renderBoundsMinY - component.y), (float) (component.renderBoundsMinZ - component.z), (float) (component.renderBoundsMaxX - component.x), (float) (component.renderBoundsMaxY - component.y), (float) (component.renderBoundsMaxZ - component.z));
-//            Box b = Box.create((float) (component.renderBoundsMinX - component.x), (float) (component.renderBoundsMinY - component.y), (float) (component.renderBoundsMinZ - component.z), (float) (component.renderBoundsMaxX - component.x), (float) (component.renderBoundsMaxY - component.y), (float) (component.renderBoundsMaxZ - component.z));
-
+        for(int i = 0; i < clippedBoxes.size(); i++){
             int localMask = 0;
-            Box localBox = box.offset(-component.x, -component.y, -component.z);
+            Box localBox = clippedBoxes.get(i).offset(-component.x, -component.y, -component.z);
+
+            overrideBottom = false;
+            overrideTop = false;
+            overrideEast = false;
+            overrideWest = false;
+            overrideNorth = false;
+            overrideSouth = false;
+
+            setOverrideBox(boxes.get(i).offset(-component.x, -component.y, -component.z));
+
+            if(component.slot.ordinal() < 6){
+                switch (component.slot){
+                    case FACE_POS_Y -> overrideBottom = true;
+                    case FACE_NEG_Y -> overrideTop = true;
+                    case FACE_POS_Z -> overrideEast = true;
+                    case FACE_NEG_Z -> overrideWest = true;
+                    case FACE_POS_X -> overrideNorth = true;
+                    case FACE_NEG_X -> overrideSouth = true;
+                }
+            }
 
             if ((component.renderMask & 1) != 0 && localBox.minY <= 0.0) localMask |= 1;  // Bottom
             if ((component.renderMask & 2) != 0 && localBox.maxY >= 1.0) localMask |= 2;  // Top
@@ -107,46 +121,13 @@ public class MicroblockRenderer {
             if ((component.renderMask & 32) != 0 && localBox.maxX >= 1.0) localMask |= 32; // South
 
             renderBox(blockView, component.block, localBox, component.x, component.y, component.z, 1f, 1f, 1f, new int[]{component.block.getTexture(0), component.block.getTexture(1), component.block.getTexture(2), component.block.getTexture(3), component.block.getTexture(4), component.block.getTexture(5)}, new int[]{0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}, localMask);
-            //            if((component.renderMask & 1) == 0){
-//                renderBottom(b, component.x, component.y, component.z, component.block.getTexture(0), 0xFFFFFF);
-//            }
-//
-//            if((component.renderMask & 2) == 0){
-//                renderTop(b, component.x, component.y, component.z, component.block.getTexture(0), 0xFFFFFF);
-//            }
-//
-//            if((component.renderMask & 4) == 0){
-//                renderEast(b, component.x, component.y, component.z, component.block.getTexture(0), 0xFFFFFF);
-////                blockRenderManager.renderEastFace(component.block, component.x, component.y, component.z, component.block.getTexture(2));
-//            }
-//            if((component.renderMask & 8) == 0){
-//                renderWest(b, component.x, component.y, component.z, component.block.getTexture(0), 0xFFFFFF);
-////                blockRenderManager.renderWestFace(component.block, component.x, component.y, component.z, component.block.getTexture(3));
-//            }
-//            if((component.renderMask & 16) == 0){
-//                renderNorth(b, component.x, component.y, component.z, component.block.getTexture(0), 0xFFFFFF);
-//            }
-//            if((component.renderMask & 32) == 0){
-//                renderSouth(b, component.x, component.y, component.z, component.block.getTexture(0), 0xFFFFFF);
-////                blockRenderManager.renderSouthFace(component.block, component.x, component.y, component.z, component.block.getTexture(5));
-//            }
-
-
-//            for(int side = 0; side < 6; side++) {
-//                if ((component.renderMask & (1 << side)) != 0) {
-//                    continue;
-//                }
-//                switch (side) {
-//                    case 0 -> blockRenderManager.renderTopFace(component.block, component.x, component.y, component.z, component.block.getTexture(0));
-//                    case 1 -> blockRenderManager.renderBottomFace(component.block, component.x, component.y, component.z, component.block.getTexture(1));
-//                    case 2 -> blockRenderManager.renderEastFace(component.block, component.x, component.y, component.z, component.block.getTexture(2));
-//                    case 3 -> blockRenderManager.renderWestFace(component.block, component.x, component.y, component.z, component.block.getTexture(3));
-//                    case 4 -> blockRenderManager.renderNorthFace(component.block, component.x, component.y, component.z, component.block.getTexture(4));
-//                    case 5 -> blockRenderManager.renderSouthFace(component.block, component.x, component.y, component.z, component.block.getTexture(5));
-//                }
-//            }
         }
-//        component.block.setBoundingBox(0f, 0f, 0f, 1f, 1f, 1f);
+        overrideBottom = false;
+        overrideTop = false;
+        overrideEast = false;
+        overrideWest = false;
+        overrideNorth = false;
+        overrideSouth = false;
     }
 
     public void renderBox(BlockView blockView, Block block, Box box, int x, int y, int z, float red, float green, float blue, int[] textures, int[] sideColors, int renderMask){
@@ -537,12 +518,20 @@ public class MicroblockRenderer {
 
     public void renderBottom(Box box, int x, int y, int z, int texture, int color){
         Tessellator tessellator = Tessellator.INSTANCE;
-        double vMinY = y + box.minY;
 
-        double vMinX = x + box.minX;
-        double vMaxX = x + box.maxX;
-        double vMinZ = z + box.minZ;
-        double vMaxZ = z + box.maxZ;
+        double boxMinX = overrideBottom ? overrideMinX : box.minX;
+        double boxMinY = overrideBottom ? overrideMinY : box.minY;
+        double boxMinZ = overrideBottom ? overrideMinZ : box.minZ;
+        double boxMaxX = overrideBottom ? overrideMaxX : box.maxX;
+        double boxMaxY = overrideBottom ? overrideMaxY : box.maxY;
+        double boxMaxZ = overrideBottom ? overrideMaxZ : box.maxZ;
+
+        double vMinY = y + boxMinY;
+
+        double vMinX = x + boxMinX;
+        double vMaxX = x + boxMaxX;
+        double vMinZ = z + boxMinZ;
+        double vMaxZ = z + boxMaxZ;
 
         Atlas.Sprite sprite = Atlases.getTerrain().getTexture(Math.abs(texture));
         double sMinU = sprite.getStartU();
@@ -553,16 +542,16 @@ public class MicroblockRenderer {
         double sWidth = sMaxU - sMinU;
         double sHeight = sMaxV - sMinV;
 
-        double uMin  = sMinU + (box.minX * sWidth);
-        double uMax = sMinU + (box.maxX * sWidth);
-        double vMin = sMinV + (box.minZ * sHeight);
-        double vMax = sMinV + (box.maxZ * sHeight);
+        double uMin  = sMinU + (boxMinX * sWidth);
+        double uMax = sMinU + (boxMaxX * sWidth);
+        double vMin = sMinV + (boxMinZ * sHeight);
+        double vMax = sMinV + (boxMaxZ * sHeight);
 
         if(this.useAo) {
-            float minX = (float)box.minX;
-            float maxX = (float)box.maxX;
-            float minZ = (float)box.minZ;
-            float maxZ = (float)box.maxZ;
+            float minX = (float)boxMinX;
+            float maxX = (float)boxMaxX;
+            float minZ = (float)boxMinZ;
+            float maxZ = (float)boxMaxZ;
 
             float[] c1 = interpolateBottomColor(minX, maxZ);
             tessellator.color(c1[0], c1[1], c1[2]);
@@ -590,12 +579,19 @@ public class MicroblockRenderer {
     public void renderTop(Box box, int x, int y, int z, int texture, int color){
         Tessellator tessellator = Tessellator.INSTANCE;
 
-        double vMaxY = y + box.maxY;
+        double boxMinX = overrideTop ? overrideMinX : box.minX;
+        double boxMinY = overrideTop ? overrideMinY : box.minY;
+        double boxMinZ = overrideTop ? overrideMinZ : box.minZ;
+        double boxMaxX = overrideTop ? overrideMaxX : box.maxX;
+        double boxMaxY = overrideTop ? overrideMaxY : box.maxY;
+        double boxMaxZ = overrideTop ? overrideMaxZ : box.maxZ;
 
-        double vMinX = x + box.minX;
-        double vMaxX = x + box.maxX;
-        double vMinZ = z + box.minZ;
-        double vMaxZ = z + box.maxZ;
+        double vMaxY = y + boxMaxY;
+
+        double vMinX = x + boxMinX;
+        double vMaxX = x + boxMaxX;
+        double vMinZ = z + boxMinZ;
+        double vMaxZ = z + boxMaxZ;
 
         Atlas.Sprite sprite = Atlases.getTerrain().getTexture(Math.abs(texture));
         double sMinU = sprite.getStartU();
@@ -606,16 +602,16 @@ public class MicroblockRenderer {
         double sWidth = sMaxU - sMinU;
         double sHeight = sMaxV - sMinV;
 
-        double uMin = sMinU + (box.minX * sWidth);
-        double uMax = sMinU + (box.maxX * sWidth);
-        double vMin = sMinV + (box.minZ * sHeight);
-        double vMax = sMinV + (box.maxZ * sHeight);
+        double uMin = sMinU + (boxMinX * sWidth);
+        double uMax = sMinU + (boxMaxX * sWidth);
+        double vMin = sMinV + (boxMinZ * sHeight);
+        double vMax = sMinV + (boxMaxZ * sHeight);
 
         if(this.useAo){
-            float minX = (float)box.minX;
-            float maxX = (float)box.maxX;
-            float minZ = (float)box.minZ;
-            float maxZ = (float)box.maxZ;
+            float minX = (float)boxMinX;
+            float maxX = (float)boxMaxX;
+            float minZ = (float)boxMinZ;
+            float maxZ = (float)boxMaxZ;
 
             float[] c1 = interpolateTopColor(maxX, maxZ);
             tessellator.color(c1[0], c1[1], c1[2]);
@@ -643,12 +639,19 @@ public class MicroblockRenderer {
     public void renderEast(Box box, int x, int y, int z, int texture, int color) {
         Tessellator tessellator = Tessellator.INSTANCE;
 
-        double vMinZ = z + box.minZ;
+        double boxMinX = overrideEast ? overrideMinX : box.minX;
+        double boxMinY = overrideEast ? overrideMinY : box.minY;
+        double boxMinZ = overrideEast ? overrideMinZ : box.minZ;
+        double boxMaxX = overrideEast ? overrideMaxX : box.maxX;
+        double boxMaxY = overrideEast ? overrideMaxY : box.maxY;
+        double boxMaxZ = overrideEast ? overrideMaxZ : box.maxZ;
 
-        double vMinX = x + box.minX;
-        double vMaxX = x + box.maxX;
-        double vMinY = y + box.minY;
-        double vMaxY = y + box.maxY;
+        double vMinZ = z + boxMinZ;
+
+        double vMinX = x + boxMinX;
+        double vMaxX = x + boxMaxX;
+        double vMinY = y + boxMinY;
+        double vMaxY = y + boxMaxY;
 
         Atlas.Sprite sprite = Atlases.getTerrain().getTexture(Math.abs(texture));
         double sMinU = sprite.getStartU();
@@ -659,17 +662,17 @@ public class MicroblockRenderer {
         double sWidth = sMaxU - sMinU;
         double sHeight = sMaxV - sMinV;
 
-        double uMin = sMinU + ((1.0 - box.minX) * sWidth);
-        double uMax = sMinU + ((1.0 - box.maxX) * sWidth);
+        double uMin = sMinU + ((1.0 - boxMinX) * sWidth);
+        double uMax = sMinU + ((1.0 - boxMaxX) * sWidth);
 
-        double vMin = sMinV + ((1.0 - box.maxY) * sHeight);
-        double vMax = sMinV + ((1.0 - box.minY) * sHeight);
+        double vMin = sMinV + ((1.0 - boxMaxY) * sHeight);
+        double vMax = sMinV + ((1.0 - boxMinY) * sHeight);
 
         if(this.useAo){
-            float minX = (float)box.minX;
-            float maxX = (float)box.maxX;
-            float minY = (float)box.minY;
-            float maxY = (float)box.maxY;
+            float minX = (float)boxMinX;
+            float maxX = (float)boxMaxX;
+            float minY = (float)boxMinY;
+            float maxY = (float)boxMaxY;
 
             float[] c1 = interpolateEastColor(minX, maxY);
             tessellator.color(c1[0], c1[1], c1[2]);
@@ -697,12 +700,19 @@ public class MicroblockRenderer {
     public void renderWest(Box box, int x, int y, int z, int texture, int color) {
         Tessellator tessellator = Tessellator.INSTANCE;
 
-        double vMaxZ = z + box.maxZ;
+        double boxMinX = overrideWest ? overrideMinX : box.minX;
+        double boxMinY = overrideWest ? overrideMinY : box.minY;
+        double boxMinZ = overrideWest ? overrideMinZ : box.minZ;
+        double boxMaxX = overrideWest ? overrideMaxX : box.maxX;
+        double boxMaxY = overrideWest ? overrideMaxY : box.maxY;
+        double boxMaxZ = overrideWest ? overrideMaxZ : box.maxZ;
 
-        double vMinX = x + box.minX;
-        double vMaxX = x + box.maxX;
-        double vMinY = y + box.minY;
-        double vMaxY = y + box.maxY;
+        double vMaxZ = z + boxMaxZ;
+
+        double vMinX = x + boxMinX;
+        double vMaxX = x + boxMaxX;
+        double vMinY = y + boxMinY;
+        double vMaxY = y + boxMaxY;
 
         Atlas.Sprite sprite = Atlases.getTerrain().getTexture(Math.abs(texture));
         double sMinU = sprite.getStartU();
@@ -713,17 +723,17 @@ public class MicroblockRenderer {
         double sWidth = sMaxU - sMinU;
         double sHeight = sMaxV - sMinV;
 
-        double uMin = sMinU + (box.minX * sWidth);
-        double uMax = sMinU + (box.maxX * sWidth);
+        double uMin = sMinU + (boxMinX * sWidth);
+        double uMax = sMinU + (boxMaxX * sWidth);
 
-        double vMin = sMinV + ((1.0 - box.maxY) * sHeight);
-        double vMax = sMinV + ((1.0 - box.minY) * sHeight);
+        double vMin = sMinV + ((1.0 - boxMaxY) * sHeight);
+        double vMax = sMinV + ((1.0 - boxMinY) * sHeight);
 
         if(this.useAo){
-            float minX = (float)box.minX;
-            float maxX = (float)box.maxX;
-            float minY = (float)box.minY;
-            float maxY = (float)box.maxY;
+            float minX = (float)boxMinX;
+            float maxX = (float)boxMaxX;
+            float minY = (float)boxMinY;
+            float maxY = (float)boxMaxY;
 
             float[] c1 = interpolateWestColor(maxX, maxY);
             tessellator.color(c1[0], c1[1], c1[2]);
@@ -751,12 +761,19 @@ public class MicroblockRenderer {
     public void renderNorth(Box box, int x, int y, int z, int texture, int color) {
         Tessellator tessellator = Tessellator.INSTANCE;
 
-        double vMinX = x + box.minX;
+        double boxMinX = overrideNorth ? overrideMinX : box.minX;
+        double boxMinY = overrideNorth ? overrideMinY : box.minY;
+        double boxMinZ = overrideNorth ? overrideMinZ : box.minZ;
+        double boxMaxX = overrideNorth ? overrideMaxX : box.maxX;
+        double boxMaxY = overrideNorth ? overrideMaxY : box.maxY;
+        double boxMaxZ = overrideNorth ? overrideMaxZ : box.maxZ;
 
-        double vMinY = y + box.minY;
-        double vMaxY = y + box.maxY;
-        double vMinZ = z + box.minZ;
-        double vMaxZ = z + box.maxZ;
+        double vMinX = x + boxMinX;
+
+        double vMinY = y + boxMinY;
+        double vMaxY = y + boxMaxY;
+        double vMinZ = z + boxMinZ;
+        double vMaxZ = z + boxMaxZ;
 
         Atlas.Sprite sprite = Atlases.getTerrain().getTexture(Math.abs(texture));
         double sMinU = sprite.getStartU();
@@ -767,17 +784,17 @@ public class MicroblockRenderer {
         double sWidth = sMaxU - sMinU;
         double sHeight = sMaxV - sMinV;
 
-        double uMin = sMinU + (box.maxZ * sWidth);
-        double uMax = sMinU + (box.minZ * sWidth);
+        double uMin = sMinU + (boxMaxZ * sWidth);
+        double uMax = sMinU + (boxMinZ * sWidth);
 
-        double vMin = sMinV + ((1.0 - box.maxY) * sHeight);
-        double vMax = sMinV + ((1.0 - box.minY) * sHeight);
+        double vMin = sMinV + ((1.0 - boxMaxY) * sHeight);
+        double vMax = sMinV + ((1.0 - boxMinY) * sHeight);
 
         if(this.useAo){
-            float minZ = (float)box.minZ;
-            float maxZ = (float)box.maxZ;
-            float minY = (float)box.minY;
-            float maxY = (float)box.maxY;
+            float minZ = (float)boxMinZ;
+            float maxZ = (float)boxMaxZ;
+            float minY = (float)boxMinY;
+            float maxY = (float)boxMaxY;
 
             float[] c1 = interpolateNorthColor(maxZ, maxY);
             tessellator.color(c1[0], c1[1], c1[2]);
@@ -805,12 +822,19 @@ public class MicroblockRenderer {
     public void renderSouth(Box box, int x, int y, int z, int texture, int color) {
         Tessellator tessellator = Tessellator.INSTANCE;
 
-        double vMaxX = x + box.maxX;
+        double boxMinX = overrideSouth ? overrideMinX : box.minX;
+        double boxMinY = overrideSouth ? overrideMinY : box.minY;
+        double boxMinZ = overrideSouth ? overrideMinZ : box.minZ;
+        double boxMaxX = overrideSouth ? overrideMaxX : box.maxX;
+        double boxMaxY = overrideSouth ? overrideMaxY : box.maxY;
+        double boxMaxZ = overrideSouth ? overrideMaxZ : box.maxZ;
 
-        double vMinY = y + box.minY;
-        double vMaxY = y + box.maxY;
-        double vMinZ = z + box.minZ;
-        double vMaxZ = z + box.maxZ;
+        double vMaxX = x + boxMaxX;
+
+        double vMinY = y + boxMinY;
+        double vMaxY = y + boxMaxY;
+        double vMinZ = z + boxMinZ;
+        double vMaxZ = z + boxMaxZ;
 
         Atlas.Sprite sprite = Atlases.getTerrain().getTexture(Math.abs(texture));
         double sMinU = sprite.getStartU();
@@ -821,17 +845,17 @@ public class MicroblockRenderer {
         double sWidth = sMaxU - sMinU;
         double sHeight = sMaxV - sMinV;
 
-        double uMin = sMinU + ((1 - box.minZ) * sWidth);
-        double uMax = sMinU + ((1 - box.maxZ) * sWidth);
+        double uMin = sMinU + ((1 - boxMinZ) * sWidth);
+        double uMax = sMinU + ((1 - boxMaxZ) * sWidth);
 
-        double vMin = sMinV + ( (1.0 - box.maxY) * sHeight);
-        double vMax = sMinV + ( (1.0 - box.minY) * sHeight);
+        double vMin = sMinV + ( (1.0 - boxMaxY) * sHeight);
+        double vMax = sMinV + ( (1.0 - boxMinY) * sHeight);
 
         if(this.useAo){
-            float minZ = (float)box.minZ;
-            float maxZ = (float)box.maxZ;
-            float minY = (float)box.minY;
-            float maxY = (float)box.maxY;
+            float minZ = (float)boxMinZ;
+            float maxZ = (float)boxMaxZ;
+            float minY = (float)boxMinY;
+            float maxY = (float)boxMaxY;
 
             float[] c1 = interpolateSouthColor(minZ, maxY);
             tessellator.color(c1[0], c1[1], c1[2]);
@@ -911,5 +935,18 @@ public class MicroblockRenderer {
         float x1 = c01 + (c11 - c01) * tx;
         // lerp vertically between the two results
         return x0 + (x1 - x0) * tz;
+    }
+
+    public void setOverrideBox(Box box){
+        setOverrideBox(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ);
+    }
+
+    public void setOverrideBox(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+        this.overrideMinX = minX;
+        this.overrideMinY = minY;
+        this.overrideMinZ = minZ;
+        this.overrideMaxX = maxX;
+        this.overrideMaxY = maxY;
+        this.overrideMaxZ = maxZ;
     }
 }
