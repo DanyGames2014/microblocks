@@ -8,17 +8,19 @@ import net.danygames2014.microblocks.item.base.MicroblockItem;
 import net.danygames2014.microblocks.microblock.MicroblockRegistry;
 import net.danygames2014.microblocks.multipart.*;
 import net.danygames2014.nyalib.event.MultipartComponentRegistryEvent;
+import net.fabricmc.loader.api.FabricLoader;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.*;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.item.Item;
 import net.modificationstation.stationapi.api.StationAPI;
+import net.modificationstation.stationapi.api.event.mod.InitEvent;
 import net.modificationstation.stationapi.api.event.registry.ItemRegistryEvent;
 import net.modificationstation.stationapi.api.event.resource.language.TranslationInvalidationEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
+import net.modificationstation.stationapi.api.mod.entrypoint.EntrypointManager;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
-import net.modificationstation.stationapi.api.tag.TagKey;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.Namespace;
 import org.apache.logging.log4j.Logger;
@@ -45,16 +47,13 @@ public class Microblocks {
 
         StationAPI.EVENT_BUS.post(new MicroblockRegistryEvent(MicroblockRegistry.getInstance()));
 
-        TagKey<Block> tag = TagKey.of(BlockRegistry.INSTANCE.getKey(), NAMESPACE.id("can_be_microblock"));
-        for (Block block : BlockRegistry.INSTANCE) {
-            if (block == Block.LAVA) {
-                System.err.println("a");
-            }
-            
-            if (block.getDefaultState().isIn(tag)) {
-                MicroblockRegistry.register(block, 0);
-            }
-        }
+//        TagKey<Block> tag = TagKey.of(BlockRegistry.INSTANCE.getKey(), NAMESPACE.id("can_be_microblock"));
+//        for (Block block : BlockRegistry.INSTANCE) {
+//            RegistryEntry<Block> entry = BlockRegistry.INSTANCE.getEntry(block);
+//            if (entry.isIn(tag)) {
+//                MicroblockRegistry.register(block, 0);
+//            }
+//        }
         
         for (Map.Entry<Block, int[]> entry : MicroblockRegistry.getInstance().registry.entrySet()) {
             Block block = entry.getKey();
@@ -175,5 +174,10 @@ public class Microblocks {
             String translation = I18n.getTranslation(microblockItem.getTypeTranslationKey(), microblockItem.block.getTranslatedName());
             translations.put(microblockItem.getTranslationKey() + ".name", translation);
         }
+    }
+
+    @EventListener(phase = InitEvent.PRE_INIT_PHASE)
+    public void preInit(InitEvent event) {
+        FabricLoader.getInstance().getEntrypointContainers("microblocks:event_bus", Object.class).forEach(EntrypointManager::setup);
     }
 }
