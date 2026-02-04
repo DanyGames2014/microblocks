@@ -296,7 +296,7 @@ tasks.register("update") {
         updateDependency(lines, "Spawn Eggs", "spawneggs_version", "https://maven.glass-launcher.net/releases/net/danygames2014/spawneggs")
         updateDependency(lines, "Retro Commands", "retrocommands_version", "https://api.modrinth.com/maven/maven/modrinth/retrocommands")
         updateDependency(lines, "Accessory API", "accessoryapi_version", "https://api.modrinth.com/maven/maven/modrinth/accessory-api")
-        updateDependency(lines, "RetroAuth", "retroauth_version", "https://api.modrinth.com/maven/maven/modrinth/retroauth")
+        //updateDependency(lines, "RetroAuth", "retroauth_version", "https://api.modrinth.com/maven/maven/modrinth/retroauth")
         updateDependency(lines, "UniTweaks", "unitweaks_version", "https://api.modrinth.com/maven/maven/modrinth/unitweaks")
         updateDependency(lines, "Whats This", "whatsthis_version", "https://maven.glass-launcher.net/releases/net/danygames2014/WhatsThis")
         updateDependency(lines, "NyaLib", "nyalib_version", "https://maven.glass-launcher.net/releases/net/danygames2014/NyaLib")
