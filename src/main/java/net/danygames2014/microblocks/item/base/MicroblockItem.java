@@ -118,27 +118,27 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
         tessellator.startQuads();
         for(Box box : boxes){
             tessellator.normal(0.0F, -1.0F, 0.0F);
-            microblockRenderer.renderBottom(box, 0, 0, 0, block.getTexture(0, stack.getDamage()), 0xFFFFFF);
+            microblockRenderer.renderBottom(box, 0, 0, 0, block.getTexture(0, meta), 0xFFFFFF);
             tessellator.draw();
             tessellator.startQuads();
             tessellator.normal(0.0F, 1.0F, 0.0F);
-            microblockRenderer.renderTop(box, 0, 0, 0, block.getTexture(1, stack.getDamage()), 0xFFFFFF);
+            microblockRenderer.renderTop(box, 0, 0, 0, block.getTexture(1, meta), 0xFFFFFF);
             tessellator.draw();
             tessellator.startQuads();
             tessellator.normal(0.0F, 0.0F, -1.0F);
-            microblockRenderer.renderEast(box, 0, 0, 0, block.getTexture(2, stack.getDamage()), 0xFFFFFF);
+            microblockRenderer.renderEast(box, 0, 0, 0, block.getTexture(2, meta), 0xFFFFFF);
             tessellator.draw();
             tessellator.startQuads();
             tessellator.normal(0.0F, 0.0F, 1.0F);
-            microblockRenderer.renderWest(box, 0, 0, 0, block.getTexture(3, stack.getDamage()), 0xFFFFFF);
+            microblockRenderer.renderWest(box, 0, 0, 0, block.getTexture(3, meta), 0xFFFFFF);
             tessellator.draw();
             tessellator.startQuads();
             tessellator.normal(-1.0F, 0.0F, 0.0F);
-            microblockRenderer.renderNorth(box, 0, 0, 0, block.getTexture(4, stack.getDamage()), 0xFFFFFF);
+            microblockRenderer.renderNorth(box, 0, 0, 0, block.getTexture(4, meta), 0xFFFFFF);
             tessellator.draw();
             tessellator.startQuads();
             tessellator.normal(1.0F, 0.0F, 0.0F);
-            microblockRenderer.renderSouth(box, 0, 0, 0, block.getTexture(5, stack.getDamage()), 0xFFFFFF);
+            microblockRenderer.renderSouth(box, 0, 0, 0, block.getTexture(5, meta), 0xFFFFFF);
         }
         tessellator.draw();
         GL11.glPopMatrix();
@@ -166,27 +166,27 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
         tessellator.startQuads();
         for(Box box : boxes){
             tessellator.normal(0.0F, -1.0F, 0.0F);
-            microblockRenderer.renderBottom(box, 0, 0, 0, block.getTexture(0, stack.getDamage()), 0xFFFFFF);
+            microblockRenderer.renderBottom(box, 0, 0, 0, block.getTexture(0, meta), 0xFFFFFF);
             tessellator.draw();
             tessellator.startQuads();
             tessellator.normal(0.0F, 1.0F, 0.0F);
-            microblockRenderer.renderTop(box, 0, 0, 0, block.getTexture(1, stack.getDamage()), 0xFFFFFF);
+            microblockRenderer.renderTop(box, 0, 0, 0, block.getTexture(1, meta), 0xFFFFFF);
             tessellator.draw();
             tessellator.startQuads();
             tessellator.normal(0.0F, 0.0F, -1.0F);
-            microblockRenderer.renderEast(box, 0, 0, 0, block.getTexture(2, stack.getDamage()), 0xFFFFFF);
+            microblockRenderer.renderEast(box, 0, 0, 0, block.getTexture(2, meta), 0xFFFFFF);
             tessellator.draw();
             tessellator.startQuads();
             tessellator.normal(0.0F, 0.0F, 1.0F);
-            microblockRenderer.renderWest(box, 0, 0, 0, block.getTexture(3, stack.getDamage()), 0xFFFFFF);
+            microblockRenderer.renderWest(box, 0, 0, 0, block.getTexture(3, meta), 0xFFFFFF);
             tessellator.draw();
             tessellator.startQuads();
             tessellator.normal(-1.0F, 0.0F, 0.0F);
-            microblockRenderer.renderNorth(box, 0, 0, 0, block.getTexture(4, stack.getDamage()), 0xFFFFFF);
+            microblockRenderer.renderNorth(box, 0, 0, 0, block.getTexture(4, meta), 0xFFFFFF);
             tessellator.draw();
             tessellator.startQuads();
             tessellator.normal(1.0F, 0.0F, 0.0F);
-            microblockRenderer.renderSouth(box, 0, 0, 0, block.getTexture(5, stack.getDamage()), 0xFFFFFF);
+            microblockRenderer.renderSouth(box, 0, 0, 0, block.getTexture(5, meta), 0xFFFFFF);
         }
         tessellator.draw();
 
@@ -225,27 +225,27 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
             tessellator.startQuads();
             for(Box box : boxes){
                 tessellator.normal(0.0F, -1.0F, 0.0F);
-                microblockRenderer.renderBottom(box, 0, 0, 0, block.getTexture(0, stack.getDamage()), 0xFFFFFF);
+                microblockRenderer.renderBottom(box, 0, 0, 0, block.getTexture(0, meta), 0xFFFFFF);
                 tessellator.draw();
                 tessellator.startQuads();
                 tessellator.normal(0.0F, 1.0F, 0.0F);
-                microblockRenderer.renderTop(box, 0, 0, 0, block.getTexture(1, stack.getDamage()), 0xFFFFFF);
+                microblockRenderer.renderTop(box, 0, 0, 0, block.getTexture(1, meta), 0xFFFFFF);
                 tessellator.draw();
                 tessellator.startQuads();
                 tessellator.normal(0.0F, 0.0F, -1.0F);
-                microblockRenderer.renderEast(box, 0, 0, 0, block.getTexture(2, stack.getDamage()), 0xFFFFFF);
+                microblockRenderer.renderEast(box, 0, 0, 0, block.getTexture(2, meta), 0xFFFFFF);
                 tessellator.draw();
                 tessellator.startQuads();
                 tessellator.normal(0.0F, 0.0F, 1.0F);
-                microblockRenderer.renderWest(box, 0, 0, 0, block.getTexture(3, stack.getDamage()), 0xFFFFFF);
+                microblockRenderer.renderWest(box, 0, 0, 0, block.getTexture(3, meta), 0xFFFFFF);
                 tessellator.draw();
                 tessellator.startQuads();
                 tessellator.normal(-1.0F, 0.0F, 0.0F);
-                microblockRenderer.renderNorth(box, 0, 0, 0, block.getTexture(4, stack.getDamage()), 0xFFFFFF);
+                microblockRenderer.renderNorth(box, 0, 0, 0, block.getTexture(4, meta), 0xFFFFFF);
                 tessellator.draw();
                 tessellator.startQuads();
                 tessellator.normal(1.0F, 0.0F, 0.0F);
-                microblockRenderer.renderSouth(box, 0, 0, 0, block.getTexture(5, stack.getDamage()), 0xFFFFFF);
+                microblockRenderer.renderSouth(box, 0, 0, 0, block.getTexture(5, meta), 0xFFFFFF);
             }
             tessellator.draw();
             GL11.glPopMatrix();

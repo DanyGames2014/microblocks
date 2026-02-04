@@ -123,7 +123,7 @@ public class MicroblockRenderer {
             if ((component.renderMask & 16) != 0 && localBox.minX <= 0.0) localMask |= 16; // North
             if ((component.renderMask & 32) != 0 && localBox.maxX >= 1.0) localMask |= 32; // South
 
-            renderBox(blockView, component.block, localBox, component.x, component.y, component.z, 1f, 1f, 1f, new int[]{component.block.getTexture(0), component.block.getTexture(1), component.block.getTexture(2), component.block.getTexture(3), component.block.getTexture(4), component.block.getTexture(5)}, new int[]{0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}, localMask);
+            renderBox(blockView, component.block, localBox, component.x, component.y, component.z, 1f, 1f, 1f, new int[]{component.block.getTexture(0, component.meta), component.block.getTexture(1, component.meta), component.block.getTexture(2, component.meta), component.block.getTexture(3, component.meta), component.block.getTexture(4, component.meta), component.block.getTexture(5, component.meta)}, new int[]{0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}, localMask);
         }
         overrideBottom = false;
         overrideTop = false;

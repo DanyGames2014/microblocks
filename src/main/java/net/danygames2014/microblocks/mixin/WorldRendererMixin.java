@@ -43,7 +43,7 @@ public class WorldRendererMixin {
             Vec3d relativeHitVec = stapiVec.add(-hitResult.blockX, -hitResult.blockY, -hitResult.blockZ);
 
             if(state != null && MathHelper.getHitDepth(relativeHitVec, direction) < 1){
-                if(tryRenderPreview(world, hitResult.blockX, hitResult.blockY, hitResult.blockZ, direction, stapiVec, microblockItem.getSize(), microblockItem.getMicroblockModel(), microblockItem.block, handStack.getDamage(), microblockItem.getPlacementHelper(), player, tickDelta)){
+                if(tryRenderPreview(world, hitResult.blockX, hitResult.blockY, hitResult.blockZ, direction, stapiVec, microblockItem.getSize(), microblockItem.getMicroblockModel(), microblockItem.block, microblockItem.meta, microblockItem.getPlacementHelper(), player, tickDelta)){
                     ci.cancel();
                     return;
                 }
@@ -51,7 +51,7 @@ public class WorldRendererMixin {
 
             BlockPos pPos = MathHelper.getPlacementPos(hitResult.blockX, hitResult.blockY, hitResult.blockZ, direction);
 
-            tryRenderPreview(world, pPos.getX(), pPos.getY(), pPos.getZ(), direction, stapiVec, microblockItem.getSize(), microblockItem.getMicroblockModel(), microblockItem.block, handStack.getDamage(), microblockItem.getPlacementHelper(), player, tickDelta);
+            tryRenderPreview(world, pPos.getX(), pPos.getY(), pPos.getZ(), direction, stapiVec, microblockItem.getSize(), microblockItem.getMicroblockModel(), microblockItem.block, microblockItem.meta, microblockItem.getPlacementHelper(), player, tickDelta);
 
             ci.cancel();
         }
