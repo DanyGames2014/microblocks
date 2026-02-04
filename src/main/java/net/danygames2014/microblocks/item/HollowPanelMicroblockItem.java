@@ -5,8 +5,8 @@ import net.minecraft.block.Block;
 import net.modificationstation.stationapi.api.util.Identifier;
 
 public class HollowPanelMicroblockItem extends HollowFaceMicroblockItem {
-    public HollowPanelMicroblockItem(Identifier identifier, Block block) {
-        super(identifier, block);
+    public HollowPanelMicroblockItem(Identifier identifier, Block block, int meta) {
+        super(identifier, block, meta);
     }
 
     @Override

@@ -5,8 +5,8 @@ import net.minecraft.block.Block;
 import net.modificationstation.stationapi.api.util.Identifier;
 
 public class StripMicroblockItem extends EdgeMicroblockItem {
-    public StripMicroblockItem(Identifier identifier, Block block) {
-        super(identifier, block);
+    public StripMicroblockItem(Identifier identifier, Block block, int meta) {
+        super(identifier, block, meta);
     }
 
     @Override

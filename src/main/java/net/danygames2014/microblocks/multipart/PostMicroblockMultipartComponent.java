@@ -4,10 +4,8 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
 import net.danygames2014.microblocks.multipart.model.PostMicroblockModel;
 import net.danygames2014.microblocks.util.DirectionUtil;
-import net.danygames2014.microblocks.util.MicroblockBoxUtil;
 import net.danygames2014.microblocks.util.ShrinkHelper;
 import net.danygames2014.nyalib.multipart.MultipartComponent;
-import net.danygames2014.nyalib.util.BoxUtil;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.Box;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -25,8 +23,8 @@ public class PostMicroblockMultipartComponent extends MicroblockMultipartCompone
 
     public PostMicroblockMultipartComponent(){}
 
-    public PostMicroblockMultipartComponent(Block block, PlacementSlot slot, int size) {
-        super(block, slot, size);
+    public PostMicroblockMultipartComponent(Block block, int meta, PlacementSlot slot, int size) {
+        super(block, meta, slot, size);
     }
 
     @Override

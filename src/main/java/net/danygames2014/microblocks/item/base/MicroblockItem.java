@@ -35,17 +35,16 @@ import net.modificationstation.stationapi.api.util.math.Vec3d;
 import net.modificationstation.stationapi.impl.client.arsenic.renderer.render.ArsenicItemRenderer;
 import org.lwjgl.opengl.GL11;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.glRotatef;
-import static org.lwjgl.opengl.GL11.glScalef;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
 public abstract class MicroblockItem extends TemplateItem implements EnhancedPlacementContextItem, CustomItemRenderer {
     public Block block;
+    public int meta;
 
-    public MicroblockItem(Identifier identifier, Block block) {
+    public MicroblockItem(Identifier identifier, Block block, int meta) {
         super(identifier);
         this.block = block;
+        this.meta = meta;
     }
 
     @Override

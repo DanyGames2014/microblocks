@@ -24,6 +24,7 @@ import org.lwjgl.input.Keyboard;
 public abstract class MicroblockMultipartComponent extends MultipartComponent {
 
     public Block block;
+    public int meta;
     public PlacementSlot slot;
     public double renderBoundsMinX;
     public double renderBoundsMinY;
@@ -34,9 +35,13 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
     public int renderMask;
     int size = 1;
 
-    public MicroblockMultipartComponent() {}
-    public MicroblockMultipartComponent(Block block, PlacementSlot slot, int size) {
+    public MicroblockMultipartComponent() {
+        
+    }
+    
+    public MicroblockMultipartComponent(Block block, int meta, PlacementSlot slot, int size) {
         this.block = block;
+        this.meta = meta;
         this.slot = slot;
         this.size = size;
         
@@ -89,9 +94,17 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
             this.block = BlockRegistry.INSTANCE.get(Identifier.of(nbt.getString("blockId")));
             this.hardness = block == null ? 1.0F : block.getHardness();
         }
-        if(nbt.contains("slot")) {
+        
+        if (nbt.contains("meta")) {
+           meta = nbt.getInt("meta"); 
+        } else {
+            meta = 0;
+        }
+        
+        if (nbt.contains("slot")) {
             this.slot = PlacementSlot.fromOrdinal(nbt.getInt("slot"));
         }
+        
         this.size = nbt.getInt("size");
         refreshRenderState();
     }
@@ -102,9 +115,13 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         if (blockId != null) {
             nbt.putString("blockId", blockId.toString());
         }
+        
+        nbt.putInt("meta", meta);
+        
         if(slot != null){
             nbt.putInt("slot", slot.ordinal());
         }
+        
         nbt.putInt("size", size);
     }
 

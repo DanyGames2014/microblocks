@@ -5,8 +5,8 @@ import net.minecraft.block.Block;
 import net.modificationstation.stationapi.api.util.Identifier;
 
 public class PanelStripMicroblockItem extends EdgeMicroblockItem {
-    public PanelStripMicroblockItem(Identifier identifier, Block block) {
-        super(identifier, block);
+    public PanelStripMicroblockItem(Identifier identifier, Block block, int meta) {
+        super(identifier, block, meta);
     }
 
     @Override

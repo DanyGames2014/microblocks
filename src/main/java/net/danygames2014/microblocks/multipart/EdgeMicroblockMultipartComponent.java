@@ -1,19 +1,16 @@
 package net.danygames2014.microblocks.multipart;
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.multipart.model.EdgeMicroblockModel;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
-import net.danygames2014.microblocks.util.MicroblockBoxUtil;
 import net.minecraft.block.Block;
-import net.minecraft.util.math.Box;
 
 public class EdgeMicroblockMultipartComponent extends MicroblockMultipartComponent{
     public static final EdgeMicroblockModel MODEL = new EdgeMicroblockModel();
 
     public EdgeMicroblockMultipartComponent(){}
 
-    public EdgeMicroblockMultipartComponent(Block block, PlacementSlot slot, int size) {
-        super(block, slot, size);
+    public EdgeMicroblockMultipartComponent(Block block, int meta, PlacementSlot slot, int size) {
+        super(block, meta, slot, size);
     }
 
     @Override
