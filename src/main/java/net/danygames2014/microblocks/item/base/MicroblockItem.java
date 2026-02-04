@@ -3,13 +3,17 @@ package net.danygames2014.microblocks.item.base;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.client.render.CustomItemRenderer;
 import net.danygames2014.microblocks.client.render.MicroblockRenderer;
+import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
 import net.danygames2014.microblocks.multipart.placement.PlacementHelper;
 import net.danygames2014.microblocks.util.MathHelper;
 import net.danygames2014.microblocks.util.MicroblockBoxUtil;
 import net.danygames2014.nyalib.item.EnhancedPlacementContextItem;
+import net.danygames2014.nyalib.item.multipart.CustomMultipartOutlineRenderer;
 import net.danygames2014.nyalib.multipart.MultipartComponent;
+import net.danygames2014.nyalib.multipart.MultipartHitResult;
 import net.danygames2014.nyalib.multipart.MultipartState;
+import net.danygames2014.nyalib.util.PlayerUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
@@ -37,7 +41,7 @@ import org.lwjgl.opengl.GL11;
 
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
-public abstract class MicroblockItem extends TemplateItem implements EnhancedPlacementContextItem, CustomItemRenderer {
+public abstract class MicroblockItem extends TemplateItem implements EnhancedPlacementContextItem, CustomItemRenderer, CustomMultipartOutlineRenderer {
     public Block block;
     public int meta;
 
@@ -94,6 +98,59 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
     protected abstract boolean tryPlace(World world, int x, int y, int z, Direction dir, net.modificationstation.stationapi.api.util.math.Vec3d vec, int size, PlayerEntity player);
 
     // Rendering
+
+
+    @Override
+    public boolean renderOutline(PlayerEntity player, MultipartHitResult hitResult, float tickDelta) {
+        if(hitResult != null){
+            return renderOutline(player, new BlockPos(hitResult.blockX, hitResult.blockY, hitResult.blockZ), new Vec3d(hitResult.pos.x, hitResult.pos.y, hitResult.pos.z), hitResult.face, tickDelta);
+        }
+        return false;
+    }
+
+    public boolean renderOutline(PlayerEntity player, BlockPos pos, Vec3d vec, Direction side, float tickDelta){
+
+        Vec3d stapiVec = new Vec3d(vec.x, vec.y, vec.z);
+
+        MultipartState state = player.world.getMultipartState(pos.getX(), pos.getY(), pos.getZ());
+        Vec3d relativeHitVec = stapiVec.add(-pos.getX(), -pos.getY(), -pos.getZ());
+
+        renderGrid(player, pos.getX(), pos.getY(), pos.getZ(), stapiVec, side, tickDelta);
+
+        if(state != null && MathHelper.getHitDepth(relativeHitVec, side) < 1){
+            if(tryRenderPreview(player.world, pos.getX(), pos.getY(), pos.getZ(), side, stapiVec, getSize(), getMicroblockModel(), block, meta, getPlacementHelper(), player, tickDelta)){
+                return true;
+            }
+        }
+
+        BlockPos pPos = MathHelper.getPlacementPos(pos.getX(), pos.getY(), pos.getZ(), side);
+
+        tryRenderPreview(player.world, pPos.getX(), pPos.getY(), pPos.getZ(), side, stapiVec, getSize(), getMicroblockModel(), block, meta, getPlacementHelper(), player, tickDelta);
+        return true;
+    }
+
+    public boolean tryRenderPreview(World world, int x, int y, int z, Direction dir, Vec3d vec, int size, MicroblockModel microblockModel, Block block, int meta, PlacementHelper placementHelper, PlayerEntity player, float tickDelta){
+        PlacementSlot placementSlot = placementHelper.getSlot(x, y, z, dir, vec, 1/4D);
+        if (player.isSneaking()) {
+            placementSlot = placementHelper.getOppositeSlot(placementSlot, dir);
+        }
+
+        if(placementHelper.canPlace(world, x, y, z, placementSlot, size, microblockModel)){
+            MicroblockRenderer renderer = MicroblockRenderer.INSTANCE;
+            GL11.glPushMatrix();
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+            Vec3d playerPos = PlayerUtil.getRenderPosition(player, tickDelta);
+            GL11.glTranslated(x - playerPos.x, y - playerPos.y, z - playerPos.z);
+
+            renderer.renderMicroblockPreview(microblockModel, placementSlot, block, meta, size, 0, 0, 0);
+            GL11.glDisable(GL11.GL_BLEND);
+            GL11.glPopMatrix();
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public void renderInGui(ArsenicItemRenderer arsenicItemRenderer, ItemRenderer itemRenderer, TextRenderer textRenderer, TextureManager textureManager, ItemStack stack, int x, int y) {
