@@ -70,6 +70,10 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
 
     @Override
     public boolean useOnBlock(ItemStack stack, PlayerEntity player, World world, int x, int y, int z, int side, net.minecraft.util.math.Vec3d hitVec) {
+        if (world.isRemote) {
+            return true;
+        }
+        
         int size = getSize();
         Direction direction = Direction.byId(side);
         net.modificationstation.stationapi.api.util.math.Vec3d stapiVec = new net.modificationstation.stationapi.api.util.math.Vec3d(hitVec.x, hitVec.y, hitVec.z);

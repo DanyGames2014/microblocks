@@ -3,18 +3,16 @@ package net.danygames2014.microblocks.multipart;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.client.render.MicroblockRenderer;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
-import net.danygames2014.microblocks.multipart.placement.PlacementHelper;
 import net.danygames2014.microblocks.util.ShrinkHelper;
 import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.danygames2014.nyalib.multipart.MultipartState;
 import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.math.Box;
@@ -110,11 +108,9 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
     }
 
     @Override
-    public void onBreakStart() {
+    public void onBreakStart(PlayerEntity player) {
         System.out.println(slot + " " + (slot.ordinal() - 14));
-        if(Minecraft.INSTANCE.getMultipartCrosshairTarget() != null){
-            System.out.println("side: " + Minecraft.INSTANCE.getMultipartCrosshairTarget().face.ordinal());
-        }
+        
         ObjectArrayList<Box> boxes = getBoundingBoxes();
         for(Box box : boxes) {
             System.out.println(box.offset(-x, -y, -z));
@@ -157,12 +153,20 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
     }
 
     public void refreshRenderState(){
+        if (slot == null) {
+            return;
+        }
+        
         setRenderBounds(getMicroblockModel().getRenderBounds(slot, size, x, y, z).copy());
         renderMask = 0;
         int maxSlot = (slot.ordinal() < 6) ? 6 : (slot.ordinal() < 15) ? 15 : 26;
         for(MultipartComponent component : state.components){
             if(component == this) continue;
             if(component instanceof MicroblockMultipartComponent microblock){
+                if (microblock.slot == null) {
+                    continue;
+                }
+                
                 if(microblock.slot.ordinal() >= maxSlot){
                     continue;
                 }
