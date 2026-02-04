@@ -10,7 +10,6 @@ import net.danygames2014.nyalib.multipart.MultipartState;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -25,10 +24,23 @@ public abstract class PlacementHelper {
     }
 
     public boolean canPlace(World world, int x, int y, int z, PlacementSlot slot, int size, MicroblockModel model) {
+        if (y >= world.getTopY() - 1) {
+            return false;
+        }
+        
         MultipartState state = world.getMultipartState(x, y, z);
-        if(state == null) return true;
-
         ObjectArrayList<Box> newBoxes = model.getBoxesForSlot(slot, size, x, y, z);
+
+        for(Box newBox : newBoxes) {
+            if (!world.getEntities(null, newBox).isEmpty()) {
+                return false;
+            }
+        }
+        
+        if(state == null) {
+            return true;
+        }
+        
         ObjectArrayList<Box> existingBoxes = new ObjectArrayList<>();
 
         for(MultipartComponent component : state.components) {
@@ -39,6 +51,10 @@ public abstract class PlacementHelper {
         }
 
         for(Box newBox : newBoxes) {
+            if (!world.getEntities(null, newBox).isEmpty()) {
+                return false;
+            }
+            
             if(isFullyCovered(newBox, existingBoxes)) {
                 return false;
             }
