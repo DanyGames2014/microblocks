@@ -10,6 +10,7 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.BlockView;
+import net.modificationstation.stationapi.api.client.StationRenderAPI;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 
@@ -137,6 +138,8 @@ public class MicroblockRenderer {
         Tessellator tessellator = Tessellator.INSTANCE;
 
         tessellator.startQuads();
+
+        StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
 
         tessellator.color(1F, 1F, 1F, 0.4F);
         this.useAo = false;
