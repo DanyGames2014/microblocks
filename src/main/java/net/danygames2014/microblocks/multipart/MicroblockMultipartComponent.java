@@ -2,7 +2,9 @@ package net.danygames2014.microblocks.multipart;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.client.render.MicroblockRenderer;
+import net.danygames2014.microblocks.item.base.MicroblockItem;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
+import net.danygames2014.microblocks.util.MathHelper;
 import net.danygames2014.microblocks.util.ShrinkHelper;
 import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.danygames2014.nyalib.multipart.MultipartState;
@@ -16,6 +18,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -251,6 +254,29 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         }
 
         return clippedList;
+    }
+
+    @Override
+    public boolean onUse(PlayerEntity player, Vec3d pos, Direction face) {
+        if(!player.isSneaking() && player.getHand() != null && player.getHand().getItem() instanceof MicroblockItem microblockItem){
+
+            if(MathHelper.getHitDepth(new net.modificationstation.stationapi.api.util.math.Vec3d(pos.x - x, pos.y - y, pos.z - z), face) < 1){
+                size += microblockItem.getSize();
+                markDirty();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void markDirty() {
+        super.markDirty();
+        for(MultipartComponent component : state.components){
+            if(component instanceof MicroblockMultipartComponent microblock){
+                microblock.refreshRenderState();
+            }
+        }
     }
 
     public abstract MicroblockModel getMicroblockModel();
