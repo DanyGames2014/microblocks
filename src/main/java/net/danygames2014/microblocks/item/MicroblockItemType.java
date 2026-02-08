@@ -1,7 +1,6 @@
 package net.danygames2014.microblocks.item;
 
 import net.modificationstation.stationapi.api.util.Identifier;
-import net.modificationstation.stationapi.api.util.Namespace;
 
 public enum MicroblockItemType {
     COVER("cover", CoverMicroblockItem::new),
@@ -27,5 +26,21 @@ public enum MicroblockItemType {
     
     public String constructIdentifier(Identifier blockIdentifier, int meta) {
         return blockIdentifier.namespace + "_" + blockIdentifier.path + "_" + microblockType + "_" + meta;
+    }
+
+    public boolean isFace() {
+        return this == COVER || this == PANEL || this == SLAB;
+    }
+
+    public boolean isHollowFace() {
+        return this == HOLLOW_COVER || this == HOLLOW_PANEL || this == HOLLOW_SLAB;
+    }
+
+    public boolean isStrip() {
+        return this == STRIP || this == PANEL_STRIP || this == SLAB_STRIP;
+    }
+    
+    public boolean isCorner() {
+        return this == CORNER || this == PANEL_CORNER || this == SLAB_CORNER;
     }
 }
