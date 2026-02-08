@@ -1,7 +1,9 @@
 package net.danygames2014.microblocks.multipart;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.danygames2014.microblocks.Microblocks;
 import net.danygames2014.microblocks.client.render.MicroblockRenderer;
+import net.danygames2014.microblocks.item.MicroblockItemType;
 import net.danygames2014.microblocks.item.base.MicroblockItem;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
 import net.danygames2014.microblocks.util.MathHelper;
@@ -15,6 +17,7 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.math.Box;
@@ -54,6 +57,16 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
     @Override
     public boolean isHandHarvestable() {
         return block.material.isHandHarvestable();
+    }
+
+    @Override
+    public ObjectArrayList<ItemStack> getDropList() {
+        MicroblockItem microblockItem = Microblocks.microblockItems.get(MicroblockItemType.COVER).get(this.block).get(this.meta);
+        if (microblockItem != null) {
+            return ObjectArrayList.of(new ItemStack(microblockItem, 1));            
+        }
+        
+        return null;
     }
 
     @Override

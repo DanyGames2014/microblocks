@@ -4,14 +4,15 @@
   "package": "net.danygames2014.microblocks.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "CraftingRecipeManagerMixin",
     "ToolItemMixin"
   ],
   "server": [
   ],
   "client": [
-    "WorldRendererMixin",
     "ArsenicItemRendererMixin",
-    "ArsenicOverlayRendererMixin"
+    "ArsenicOverlayRendererMixin",
+    "WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

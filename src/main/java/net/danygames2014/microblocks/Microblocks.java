@@ -1,21 +1,25 @@
 package net.danygames2014.microblocks;
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.danygames2014.microblocks.event.MicroblockRegistryEvent;
-import net.danygames2014.microblocks.item.*;
+import net.danygames2014.microblocks.item.MicroblockItemType;
 import net.danygames2014.microblocks.item.base.HandSawItem;
 import net.danygames2014.microblocks.item.base.MicroblockItem;
 import net.danygames2014.microblocks.microblock.MicroblockRegistry;
 import net.danygames2014.microblocks.multipart.*;
+import net.danygames2014.microblocks.recipe.MicroblockRecipeManager;
 import net.danygames2014.nyalib.event.MultipartComponentRegistryEvent;
 import net.fabricmc.loader.api.FabricLoader;
 import net.mine_diver.unsafeevents.listener.EventListener;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.item.Item;
 import net.modificationstation.stationapi.api.StationAPI;
 import net.modificationstation.stationapi.api.event.mod.InitEvent;
+import net.modificationstation.stationapi.api.event.recipe.RecipeRegisterEvent;
 import net.modificationstation.stationapi.api.event.registry.ItemRegistryEvent;
 import net.modificationstation.stationapi.api.event.resource.language.TranslationInvalidationEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
@@ -38,13 +42,16 @@ public class Microblocks {
     public static Item ironHandsaw;
     public static Item diamondHandsaw;
 
-    public static ObjectArrayList<MicroblockItem> microblockItems = new ObjectArrayList<>();
+    public static Object2ObjectOpenHashMap<MicroblockItemType, Object2ObjectOpenHashMap<Block, Int2ObjectOpenHashMap<MicroblockItem>>> microblockItems = new Object2ObjectOpenHashMap<>();
+    
+    public static MicroblockRecipeManager recipeManager;
 
     @EventListener
     public void registerItems(ItemRegistryEvent event) {
         ironHandsaw = new HandSawItem(NAMESPACE.id("iron_handsaw"), 100).setTranslationKey(NAMESPACE, "iron_handsaw");
         diamondHandsaw = new HandSawItem(NAMESPACE.id("diamond_handsaw"), 1000).setTranslationKey(NAMESPACE, "diamond_handsaw");
 
+        // Let mods register their own blocks to get the micro treatment
         StationAPI.EVENT_BUS.post(new MicroblockRegistryEvent(MicroblockRegistry.getInstance()));
 
 //        TagKey<Block> tag = TagKey.of(BlockRegistry.INSTANCE.getKey(), NAMESPACE.id("can_be_microblock"));
@@ -54,48 +61,26 @@ public class Microblocks {
 //                MicroblockRegistry.register(block, 0);
 //            }
 //        }
-        
+
+        // Init the HashMaps for all microblock item types
+        for (MicroblockItemType type : MicroblockItemType.values()) {
+            microblockItems.put(type, new Object2ObjectOpenHashMap<>());
+        }
+
+        // Could use Block.isFullBlock()
+        // Register all of the microblock items
         for (Map.Entry<Block, int[]> entry : MicroblockRegistry.getInstance().registry.entrySet()) {
             Block block = entry.getKey();
             Identifier identifier = BlockRegistry.INSTANCE.getId(block);
 
             if (identifier != null) {
                 for (int meta : entry.getValue()) {
-                    String coverId = identifier.namespace + "_" + identifier.path + "_cover_" + meta;
-                    microblockItems.add((MicroblockItem) new CoverMicroblockItem(NAMESPACE.id(coverId), block, meta).setTranslationKey(NAMESPACE, coverId));
+                    for (MicroblockItemType type : MicroblockItemType.values()) {
+                        String id = type.constructIdentifier(identifier, meta);
 
-                    String panelId = identifier.namespace + "_" + identifier.path + "_panel_" + meta;
-                    microblockItems.add((MicroblockItem) new PanelMicroblockItem(NAMESPACE.id(panelId), block, meta).setTranslationKey(NAMESPACE, panelId));
-
-                    String slabId = identifier.namespace + "_" + identifier.path + "_slab_" + meta;
-                    microblockItems.add((MicroblockItem) new SlabMicroblockItem(NAMESPACE.id(slabId), block, meta).setTranslationKey(NAMESPACE, slabId));
-
-                    String hollowCoverId = identifier.namespace + "_" + identifier.path + "_hollow_cover_" + meta;
-                    microblockItems.add((MicroblockItem) new HollowCoverMicroblockItem(NAMESPACE.id(hollowCoverId), block, meta).setTranslationKey(NAMESPACE, hollowCoverId));
-
-                    String hollowPanelId = identifier.namespace + "_" + identifier.path + "_hollow_panel_" + meta;
-                    microblockItems.add((MicroblockItem) new HollowPanelMicroblockItem(NAMESPACE.id(hollowPanelId), block, meta).setTranslationKey(NAMESPACE, hollowPanelId));
-
-                    String hollowSlabId = identifier.namespace + "_" + identifier.path + "_hollow_slab_" + meta;
-                    microblockItems.add((MicroblockItem) new HollowSlabMicroblockItem(NAMESPACE.id(hollowSlabId), block, meta).setTranslationKey(NAMESPACE, hollowSlabId));
-
-                    String stripCornerId = identifier.namespace + "_" + identifier.path + "_corner_" + meta;
-                    microblockItems.add((MicroblockItem) new StripCornerMicroblockItem(NAMESPACE.id(stripCornerId), block, meta).setTranslationKey(NAMESPACE, stripCornerId));
-
-                    String panelCornerId = identifier.namespace + "_" + identifier.path + "_panel_corner_" + meta;
-                    microblockItems.add((MicroblockItem) new PanelCornerMicroblockItem(NAMESPACE.id(panelCornerId), block, meta).setTranslationKey(NAMESPACE, panelCornerId));
-
-                    String slabCornerId = identifier.namespace + "_" + identifier.path + "_slab_corner_" + meta;
-                    microblockItems.add((MicroblockItem) new SlabCornerMicroblockItem(NAMESPACE.id(slabCornerId), block, meta).setTranslationKey(NAMESPACE, slabCornerId));
-
-                    String stripId = identifier.namespace + "_" + identifier.path + "_strip_" + meta;
-                    microblockItems.add((MicroblockItem) new StripMicroblockItem(NAMESPACE.id(stripId), block, meta).setTranslationKey(NAMESPACE, stripId));
-
-                    String panelStripId = identifier.namespace + "_" + identifier.path + "_panel_strip_" + meta;
-                    microblockItems.add((MicroblockItem) new PanelStripMicroblockItem(NAMESPACE.id(panelStripId), block, meta).setTranslationKey(NAMESPACE, panelStripId));
-
-                    String slabStripId = identifier.namespace + "_" + identifier.path + "_slab_strip_" + meta;
-                    microblockItems.add((MicroblockItem) new SlabStripMicroblockItem(NAMESPACE.id(slabStripId), block, meta).setTranslationKey(NAMESPACE, slabStripId));
+                        microblockItems.get(type).computeIfAbsent(block, k -> new Int2ObjectOpenHashMap<>());
+                        microblockItems.get(type).get(block).put(meta, (MicroblockItem) type.factory.create(NAMESPACE.id(id), block, meta).setTranslationKey(NAMESPACE, id));
+                    }
                 }
             }
         }
@@ -155,7 +140,88 @@ public class Microblocks {
         event.register(Block.JACK_O_LANTERN);
         event.register(Block.TRAPDOOR);
     }
-    
+
+    @EventListener
+    public void registerRecipes(RecipeRegisterEvent event) {
+        RecipeRegisterEvent.Vanilla type = RecipeRegisterEvent.Vanilla.fromType(event.recipeId);
+
+        if (type == RecipeRegisterEvent.Vanilla.CRAFTING_SHAPED) {
+            recipeManager = new MicroblockRecipeManager();
+            
+            // Cutting
+            // Slab -> Panel -> Cover
+            recipeManager.addRecipe(MicroblockItemType.SLAB, 2,"S", "B");
+            recipeManager.addRecipe(MicroblockItemType.PANEL, 2,"S", "L", 'L', MicroblockItemType.SLAB);
+            recipeManager.addRecipe(MicroblockItemType.COVER, 2,"S", "P", 'P', MicroblockItemType.PANEL);
+            
+            // Hollow Slab -> Hollow Panel -> Hollow Cover
+            recipeManager.addRecipe(MicroblockItemType.HOLLOW_PANEL, 2,"S", "L", 'L', MicroblockItemType.HOLLOW_SLAB);
+            recipeManager.addRecipe(MicroblockItemType.HOLLOW_COVER, 2,"S", "P", 'P', MicroblockItemType.HOLLOW_PANEL);
+            
+            // Slab -> Slab Strip -> Slab Corner
+            recipeManager.addRecipe(MicroblockItemType.SLAB_STRIP, 2,"SL", 'L', MicroblockItemType.SLAB);
+            recipeManager.addRecipe(MicroblockItemType.SLAB_CORNER, 2,"SL", 'L', MicroblockItemType.SLAB_STRIP);
+            
+            // Panel -> Panel Strip -> Panel Corner
+            recipeManager.addRecipe(MicroblockItemType.PANEL_STRIP, 2,"SP", 'P', MicroblockItemType.PANEL);
+            recipeManager.addRecipe(MicroblockItemType.PANEL_CORNER, 2,"SP", 'P', MicroblockItemType.PANEL_STRIP);
+
+            recipeManager.addRecipe(MicroblockItemType.STRIP, 2,"SC", 'C', MicroblockItemType.COVER);
+            recipeManager.addRecipe(MicroblockItemType.CORNER, 2,"SC", 'C', MicroblockItemType.STRIP);
+            
+            // Combining
+            // TODO: 2 Slabs -> Full Block
+            
+            // 2x Slab Corner -> Slab Strip
+            recipeManager.addRecipe(MicroblockItemType.SLAB_STRIP, 1,"CC", 'C', MicroblockItemType.SLAB_CORNER);
+            recipeManager.addRecipe(MicroblockItemType.SLAB_STRIP, 1,"C", "C", 'C', MicroblockItemType.SLAB_CORNER);
+
+            // 2x Slab Strip -> Slab
+            recipeManager.addRecipe(MicroblockItemType.SLAB, 1,"LL", 'L', MicroblockItemType.SLAB_STRIP);
+            recipeManager.addRecipe(MicroblockItemType.SLAB, 1,"L", "L", 'L', MicroblockItemType.SLAB_STRIP);
+
+            // 2x Panel Corner -> Panel Strip
+            recipeManager.addRecipe(MicroblockItemType.PANEL_STRIP, 1,"CC", 'C', MicroblockItemType.PANEL_CORNER);
+            recipeManager.addRecipe(MicroblockItemType.PANEL_STRIP, 1,"C", "C", 'C', MicroblockItemType.PANEL_CORNER);
+            
+            // 2x Panel Strip -> Panel
+            recipeManager.addRecipe(MicroblockItemType.PANEL, 1,"SS", 'S', MicroblockItemType.PANEL_STRIP);
+            recipeManager.addRecipe(MicroblockItemType.PANEL, 1,"S", "S", 'S', MicroblockItemType.PANEL_STRIP);
+            
+            // 2x Corner -> Strip
+            recipeManager.addRecipe(MicroblockItemType.STRIP, 1,"CC", 'C', MicroblockItemType.CORNER);
+            recipeManager.addRecipe(MicroblockItemType.STRIP, 1,"C", "C", 'C', MicroblockItemType.CORNER);
+            
+            // 2x Strip -> Cover
+            recipeManager.addRecipe(MicroblockItemType.COVER, 1,"SS", 'S', MicroblockItemType.STRIP);
+            recipeManager.addRecipe(MicroblockItemType.COVER, 1,"S", "S", 'S', MicroblockItemType.STRIP);
+            
+            // 2x Panel -> Slab
+            recipeManager.addRecipe(MicroblockItemType.SLAB, 1,"PP", 'P', MicroblockItemType.PANEL);
+            recipeManager.addRecipe(MicroblockItemType.SLAB, 1,"P", "P", 'P', MicroblockItemType.PANEL);
+            
+            // 2x Cover -> Panel
+            recipeManager.addRecipe(MicroblockItemType.PANEL, 1,"CC", 'C', MicroblockItemType.COVER);
+            recipeManager.addRecipe(MicroblockItemType.PANEL, 1,"C", "C", 'C', MicroblockItemType.COVER);
+            
+            // Hollowing
+            // 8x Slab -> 8x Hollow Slab
+            recipeManager.addRecipe(MicroblockItemType.HOLLOW_SLAB, 8,"LLL", "L L", "LLL", 'L', MicroblockItemType.SLAB);
+            recipeManager.addRecipe(MicroblockItemType.HOLLOW_SLAB, 1, "L", 'L', MicroblockItemType.SLAB);
+            recipeManager.addRecipe(MicroblockItemType.SLAB, 1, "L", 'L', MicroblockItemType.HOLLOW_SLAB);
+            
+            // 8x Panel -> 8x Hollow Panel
+            recipeManager.addRecipe(MicroblockItemType.HOLLOW_PANEL, 8,"PPP", "P P", "PPP", 'P', MicroblockItemType.PANEL);
+            recipeManager.addRecipe(MicroblockItemType.HOLLOW_PANEL, 1, "P", 'P', MicroblockItemType.PANEL);
+            recipeManager.addRecipe(MicroblockItemType.PANEL, 1, "P", 'P', MicroblockItemType.HOLLOW_PANEL);
+            
+            // 8x Cover -> 8x Hollow Cover
+            recipeManager.addRecipe(MicroblockItemType.HOLLOW_COVER, 8,"CCC", "C C", "CCC", 'C', MicroblockItemType.COVER);
+            recipeManager.addRecipe(MicroblockItemType.HOLLOW_COVER, 1, "C", 'C', MicroblockItemType.COVER);
+            recipeManager.addRecipe(MicroblockItemType.COVER, 1, "C", 'C', MicroblockItemType.HOLLOW_COVER);
+        }
+    }
+
     @EventListener
     public void registerMultiparts(MultipartComponentRegistryEvent event) {
         event.register(NAMESPACE.id("face_microblock_component"), FaceMicroblockMultipartComponent.class, FaceMicroblockMultipartComponent::new);
@@ -170,9 +236,13 @@ public class Microblocks {
         TranslationStorage storage = TranslationStorage.getInstance();
         Properties translations = storage.translations;
 
-        for (MicroblockItem microblockItem : microblockItems) {
-            String translation = I18n.getTranslation(microblockItem.getTypeTranslationKey(), microblockItem.block.getTranslatedName());
-            translations.put(microblockItem.getTranslationKey() + ".name", translation);
+        for (var microblockItemsOfType : microblockItems.values()) {
+            for (var microblockItems : microblockItemsOfType.values()) {
+                for (Int2ObjectMap.Entry<MicroblockItem> microblockItem : microblockItems.int2ObjectEntrySet()) {
+                    String translation = I18n.getTranslation(microblockItem.getValue().getTypeTranslationKey(), microblockItem.getValue().block.getTranslatedName());
+                    translations.put(microblockItem.getValue().getTranslationKey() + ".name", translation);
+                }
+            }
         }
     }
 
