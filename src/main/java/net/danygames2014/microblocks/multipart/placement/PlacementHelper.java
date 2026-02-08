@@ -46,8 +46,7 @@ public abstract class PlacementHelper {
 
         for(MultipartComponent component : state.components) {
             if(component instanceof MicroblockMultipartComponent microblock) {
-                // TODO: set the type of the second check to the correct item type for the component
-                if(!microblock.getMicroblockModel().canOverlap(type, slot) || !model.canOverlap(MicroblockItemType.STRIP, microblock.slot)){
+                if(!microblock.getMicroblockModel().canOverlap(type, slot) || !model.canOverlap(microblock.getClosestItemType(), microblock.slot)){
                     ObjectArrayList<Box> otherBoxes = microblock.getBoundingBoxes();
                     for(Box box : newBoxes){
                         for(Box otherBox : otherBoxes){
