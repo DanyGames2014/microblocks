@@ -10,8 +10,6 @@ import net.danygames2014.microblocks.util.MathHelper;
 import net.danygames2014.microblocks.util.ShrinkHelper;
 import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.danygames2014.nyalib.multipart.MultipartState;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
@@ -25,7 +23,6 @@ import net.minecraft.util.math.Vec3d;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
-import org.lwjgl.input.Keyboard;
 
 public abstract class MicroblockMultipartComponent extends MultipartComponent {
 
@@ -59,15 +56,11 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         return block.material.isHandHarvestable();
     }
 
-    @Override
-    public ObjectArrayList<ItemStack> getDropList() {
-        MicroblockItem microblockItem = Microblocks.microblockItems.get(MicroblockItemType.COVER).get(this.block).get(this.meta);
-        if (microblockItem != null) {
-            return ObjectArrayList.of(new ItemStack(microblockItem, 1));            
-        }
-        
-        return null;
+    public ItemStack createStack(MicroblockItemType type) {
+        return new ItemStack(Microblocks.microblockItems.get(type).get(this.block).get(this.meta));
     }
+    
+    public abstract MicroblockItemType getClosestItemType();
 
     @Override
     public float getBlastResistance(Entity source) {
