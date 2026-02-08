@@ -6,7 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 
-public enum MicroblockRecipeInput {
+public enum MicroblockRecipeIngredient {
     SAW,
     BLOCK,
     COVER,
@@ -22,7 +22,7 @@ public enum MicroblockRecipeInput {
     PANEL_STRIP,
     SLAB_STRIP;
     
-    public static MicroblockRecipeInput fromItem(Item item) {
+    public static MicroblockRecipeIngredient fromItem(Item item) {
         if (item instanceof HandSawItem) {
             return SAW;
         } else if (item instanceof BlockItem blockItem && blockItem.getBlock() instanceof Block) {
@@ -56,7 +56,7 @@ public enum MicroblockRecipeInput {
         return null;
     }
     
-    public static MicroblockRecipeInput fromMicroblockItemType(MicroblockItemType type) {
+    public static MicroblockRecipeIngredient fromItemType(MicroblockItemType type) {
         return switch (type) {
             case COVER -> COVER;
             case PANEL -> PANEL;
@@ -70,6 +70,24 @@ public enum MicroblockRecipeInput {
             case STRIP -> STRIP;
             case PANEL_STRIP -> PANEL_STRIP;
             case SLAB_STRIP -> SLAB_STRIP;
+        };
+    }
+    
+    public static MicroblockItemType toItemType(MicroblockRecipeIngredient input) {
+        return switch (input) {
+            case COVER -> MicroblockItemType.COVER;
+            case PANEL -> MicroblockItemType.PANEL;
+            case SLAB -> MicroblockItemType.SLAB;
+            case HOLLOW_COVER -> MicroblockItemType.HOLLOW_COVER;
+            case HOLLOW_PANEL -> MicroblockItemType.HOLLOW_PANEL;
+            case HOLLOW_SLAB -> MicroblockItemType.HOLLOW_SLAB;
+            case CORNER -> MicroblockItemType.CORNER;
+            case PANEL_CORNER -> MicroblockItemType.PANEL_CORNER;
+            case SLAB_CORNER -> MicroblockItemType.SLAB_CORNER;
+            case STRIP -> MicroblockItemType.STRIP;
+            case PANEL_STRIP -> MicroblockItemType.PANEL_STRIP;
+            case SLAB_STRIP -> MicroblockItemType.SLAB_STRIP;
+            default -> null;
         };
     }
 }

@@ -61,7 +61,7 @@ public class MicroblockRecipeManager {
         return null;
     }
     
-    public void addRecipe(MicroblockItemType outputType, int outputAmount, Object... pattern) {
+    public void addRecipe(MicroblockRecipeIngredient outputType, int outputAmount, Object... pattern) {
         String var3 = "";
         int i = 0;
         int width = 0;
@@ -86,25 +86,25 @@ public class MicroblockRecipeManager {
         }
 
         // Resolve Ingredients
-        HashMap<Character, MicroblockRecipeInput> ingredientMap = new HashMap<>();
-        ingredientMap.put('S', MicroblockRecipeInput.SAW);
-        ingredientMap.put('B', MicroblockRecipeInput.BLOCK);
+        HashMap<Character, MicroblockRecipeIngredient> ingredientMap = new HashMap<>();
+        ingredientMap.put('S', MicroblockRecipeIngredient.SAW);
+        ingredientMap.put('B', MicroblockRecipeIngredient.BLOCK);
         
         for(; i < pattern.length; i += 2) {
             Character ingredientKey = (Character)pattern[i];
             
-            MicroblockRecipeInput ingredient = null;
-            if (pattern[i + 1] instanceof MicroblockRecipeInput recipeInput) {
+            MicroblockRecipeIngredient ingredient = null;
+            if (pattern[i + 1] instanceof MicroblockRecipeIngredient recipeInput) {
                 ingredient = recipeInput;
             } else if(pattern[i + 1] instanceof MicroblockItemType itemType) {
-                ingredient = MicroblockRecipeInput.fromMicroblockItemType(itemType);
+                ingredient = MicroblockRecipeIngredient.fromItemType(itemType);
             }
 
             ingredientMap.put(ingredientKey, ingredient);
         }
 
         // Resolve Input
-        MicroblockRecipeInput[] input = new MicroblockRecipeInput[width * height];
+        MicroblockRecipeIngredient[] input = new MicroblockRecipeIngredient[width * height];
 
         for(int index = 0; index < width * height; ++index) {
             char ingredientKey = var3.charAt(index);

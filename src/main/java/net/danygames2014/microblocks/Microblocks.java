@@ -9,6 +9,7 @@ import net.danygames2014.microblocks.item.base.HandSawItem;
 import net.danygames2014.microblocks.item.base.MicroblockItem;
 import net.danygames2014.microblocks.microblock.MicroblockRegistry;
 import net.danygames2014.microblocks.multipart.*;
+import net.danygames2014.microblocks.recipe.MicroblockRecipeIngredient;
 import net.danygames2014.microblocks.recipe.MicroblockRecipeManager;
 import net.danygames2014.nyalib.event.MultipartComponentRegistryEvent;
 import net.fabricmc.loader.api.FabricLoader;
@@ -150,75 +151,76 @@ public class Microblocks {
             
             // Cutting
             // Slab -> Panel -> Cover
-            recipeManager.addRecipe(MicroblockItemType.SLAB, 2,"S", "B");
-            recipeManager.addRecipe(MicroblockItemType.PANEL, 2,"S", "L", 'L', MicroblockItemType.SLAB);
-            recipeManager.addRecipe(MicroblockItemType.COVER, 2,"S", "P", 'P', MicroblockItemType.PANEL);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.SLAB, 2,"S", "B");
+            recipeManager.addRecipe(MicroblockRecipeIngredient.PANEL, 2,"S", "L", 'L', MicroblockItemType.SLAB);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.COVER, 2,"S", "P", 'P', MicroblockItemType.PANEL);
             
             // Hollow Slab -> Hollow Panel -> Hollow Cover
-            recipeManager.addRecipe(MicroblockItemType.HOLLOW_PANEL, 2,"S", "L", 'L', MicroblockItemType.HOLLOW_SLAB);
-            recipeManager.addRecipe(MicroblockItemType.HOLLOW_COVER, 2,"S", "P", 'P', MicroblockItemType.HOLLOW_PANEL);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.HOLLOW_PANEL, 2,"S", "L", 'L', MicroblockItemType.HOLLOW_SLAB);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.HOLLOW_COVER, 2,"S", "P", 'P', MicroblockItemType.HOLLOW_PANEL);
             
             // Slab -> Slab Strip -> Slab Corner
-            recipeManager.addRecipe(MicroblockItemType.SLAB_STRIP, 2,"SL", 'L', MicroblockItemType.SLAB);
-            recipeManager.addRecipe(MicroblockItemType.SLAB_CORNER, 2,"SL", 'L', MicroblockItemType.SLAB_STRIP);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.SLAB_STRIP, 2,"SL", 'L', MicroblockItemType.SLAB);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.SLAB_CORNER, 2,"SL", 'L', MicroblockItemType.SLAB_STRIP);
             
             // Panel -> Panel Strip -> Panel Corner
-            recipeManager.addRecipe(MicroblockItemType.PANEL_STRIP, 2,"SP", 'P', MicroblockItemType.PANEL);
-            recipeManager.addRecipe(MicroblockItemType.PANEL_CORNER, 2,"SP", 'P', MicroblockItemType.PANEL_STRIP);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.PANEL_STRIP, 2,"SP", 'P', MicroblockItemType.PANEL);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.PANEL_CORNER, 2,"SP", 'P', MicroblockItemType.PANEL_STRIP);
 
-            recipeManager.addRecipe(MicroblockItemType.STRIP, 2,"SC", 'C', MicroblockItemType.COVER);
-            recipeManager.addRecipe(MicroblockItemType.CORNER, 2,"SC", 'C', MicroblockItemType.STRIP);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.STRIP, 2,"SC", 'C', MicroblockItemType.COVER);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.CORNER, 2,"SC", 'C', MicroblockItemType.STRIP);
             
             // Combining
-            // TODO: 2 Slabs -> Full Block
+            recipeManager.addRecipe(MicroblockRecipeIngredient.BLOCK, 1,"SS", 'S', MicroblockItemType.SLAB);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.BLOCK, 1,"S", "S", 'S', MicroblockItemType.SLAB);
             
             // 2x Slab Corner -> Slab Strip
-            recipeManager.addRecipe(MicroblockItemType.SLAB_STRIP, 1,"CC", 'C', MicroblockItemType.SLAB_CORNER);
-            recipeManager.addRecipe(MicroblockItemType.SLAB_STRIP, 1,"C", "C", 'C', MicroblockItemType.SLAB_CORNER);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.SLAB_STRIP, 1,"CC", 'C', MicroblockItemType.SLAB_CORNER);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.SLAB_STRIP, 1,"C", "C", 'C', MicroblockItemType.SLAB_CORNER);
 
             // 2x Slab Strip -> Slab
-            recipeManager.addRecipe(MicroblockItemType.SLAB, 1,"LL", 'L', MicroblockItemType.SLAB_STRIP);
-            recipeManager.addRecipe(MicroblockItemType.SLAB, 1,"L", "L", 'L', MicroblockItemType.SLAB_STRIP);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.SLAB, 1,"LL", 'L', MicroblockItemType.SLAB_STRIP);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.SLAB, 1,"L", "L", 'L', MicroblockItemType.SLAB_STRIP);
 
             // 2x Panel Corner -> Panel Strip
-            recipeManager.addRecipe(MicroblockItemType.PANEL_STRIP, 1,"CC", 'C', MicroblockItemType.PANEL_CORNER);
-            recipeManager.addRecipe(MicroblockItemType.PANEL_STRIP, 1,"C", "C", 'C', MicroblockItemType.PANEL_CORNER);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.PANEL_STRIP, 1,"CC", 'C', MicroblockItemType.PANEL_CORNER);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.PANEL_STRIP, 1,"C", "C", 'C', MicroblockItemType.PANEL_CORNER);
             
             // 2x Panel Strip -> Panel
-            recipeManager.addRecipe(MicroblockItemType.PANEL, 1,"SS", 'S', MicroblockItemType.PANEL_STRIP);
-            recipeManager.addRecipe(MicroblockItemType.PANEL, 1,"S", "S", 'S', MicroblockItemType.PANEL_STRIP);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.PANEL, 1,"SS", 'S', MicroblockItemType.PANEL_STRIP);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.PANEL, 1,"S", "S", 'S', MicroblockItemType.PANEL_STRIP);
             
             // 2x Corner -> Strip
-            recipeManager.addRecipe(MicroblockItemType.STRIP, 1,"CC", 'C', MicroblockItemType.CORNER);
-            recipeManager.addRecipe(MicroblockItemType.STRIP, 1,"C", "C", 'C', MicroblockItemType.CORNER);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.STRIP, 1,"CC", 'C', MicroblockItemType.CORNER);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.STRIP, 1,"C", "C", 'C', MicroblockItemType.CORNER);
             
             // 2x Strip -> Cover
-            recipeManager.addRecipe(MicroblockItemType.COVER, 1,"SS", 'S', MicroblockItemType.STRIP);
-            recipeManager.addRecipe(MicroblockItemType.COVER, 1,"S", "S", 'S', MicroblockItemType.STRIP);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.COVER, 1,"SS", 'S', MicroblockItemType.STRIP);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.COVER, 1,"S", "S", 'S', MicroblockItemType.STRIP);
             
             // 2x Panel -> Slab
-            recipeManager.addRecipe(MicroblockItemType.SLAB, 1,"PP", 'P', MicroblockItemType.PANEL);
-            recipeManager.addRecipe(MicroblockItemType.SLAB, 1,"P", "P", 'P', MicroblockItemType.PANEL);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.SLAB, 1,"PP", 'P', MicroblockItemType.PANEL);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.SLAB, 1,"P", "P", 'P', MicroblockItemType.PANEL);
             
             // 2x Cover -> Panel
-            recipeManager.addRecipe(MicroblockItemType.PANEL, 1,"CC", 'C', MicroblockItemType.COVER);
-            recipeManager.addRecipe(MicroblockItemType.PANEL, 1,"C", "C", 'C', MicroblockItemType.COVER);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.PANEL, 1,"CC", 'C', MicroblockItemType.COVER);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.PANEL, 1,"C", "C", 'C', MicroblockItemType.COVER);
             
             // Hollowing
             // 8x Slab -> 8x Hollow Slab
-            recipeManager.addRecipe(MicroblockItemType.HOLLOW_SLAB, 8,"LLL", "L L", "LLL", 'L', MicroblockItemType.SLAB);
-            recipeManager.addRecipe(MicroblockItemType.HOLLOW_SLAB, 1, "L", 'L', MicroblockItemType.SLAB);
-            recipeManager.addRecipe(MicroblockItemType.SLAB, 1, "L", 'L', MicroblockItemType.HOLLOW_SLAB);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.HOLLOW_SLAB, 8,"LLL", "L L", "LLL", 'L', MicroblockItemType.SLAB);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.HOLLOW_SLAB, 1, "L", 'L', MicroblockItemType.SLAB);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.SLAB, 1, "L", 'L', MicroblockItemType.HOLLOW_SLAB);
             
             // 8x Panel -> 8x Hollow Panel
-            recipeManager.addRecipe(MicroblockItemType.HOLLOW_PANEL, 8,"PPP", "P P", "PPP", 'P', MicroblockItemType.PANEL);
-            recipeManager.addRecipe(MicroblockItemType.HOLLOW_PANEL, 1, "P", 'P', MicroblockItemType.PANEL);
-            recipeManager.addRecipe(MicroblockItemType.PANEL, 1, "P", 'P', MicroblockItemType.HOLLOW_PANEL);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.HOLLOW_PANEL, 8,"PPP", "P P", "PPP", 'P', MicroblockItemType.PANEL);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.HOLLOW_PANEL, 1, "P", 'P', MicroblockItemType.PANEL);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.PANEL, 1, "P", 'P', MicroblockItemType.HOLLOW_PANEL);
             
             // 8x Cover -> 8x Hollow Cover
-            recipeManager.addRecipe(MicroblockItemType.HOLLOW_COVER, 8,"CCC", "C C", "CCC", 'C', MicroblockItemType.COVER);
-            recipeManager.addRecipe(MicroblockItemType.HOLLOW_COVER, 1, "C", 'C', MicroblockItemType.COVER);
-            recipeManager.addRecipe(MicroblockItemType.COVER, 1, "C", 'C', MicroblockItemType.HOLLOW_COVER);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.HOLLOW_COVER, 8,"CCC", "C C", "CCC", 'C', MicroblockItemType.COVER);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.HOLLOW_COVER, 1, "C", 'C', MicroblockItemType.COVER);
+            recipeManager.addRecipe(MicroblockRecipeIngredient.COVER, 1, "C", 'C', MicroblockItemType.HOLLOW_COVER);
         }
     }
 
