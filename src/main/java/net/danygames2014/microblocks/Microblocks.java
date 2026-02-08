@@ -49,8 +49,8 @@ public class Microblocks {
 
     @EventListener
     public void registerItems(ItemRegistryEvent event) {
-        ironHandsaw = new HandSawItem(NAMESPACE.id("iron_handsaw"), 100).setTranslationKey(NAMESPACE, "iron_handsaw");
-        diamondHandsaw = new HandSawItem(NAMESPACE.id("diamond_handsaw"), 1000).setTranslationKey(NAMESPACE, "diamond_handsaw");
+        ironHandsaw = new HandSawItem(NAMESPACE.id("iron_handsaw"), 320).setTranslationKey(NAMESPACE, "iron_handsaw");
+        diamondHandsaw = new HandSawItem(NAMESPACE.id("diamond_handsaw"), 1920).setTranslationKey(NAMESPACE, "diamond_handsaw");
 
         // Let mods register their own blocks to get the micro treatment
         StationAPI.EVENT_BUS.post(new MicroblockRegistryEvent(MicroblockRegistry.getInstance()));
