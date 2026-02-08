@@ -18,4 +18,9 @@ public class CoverMicroblockItem extends FaceMicroblockItem {
     public String getTypeTranslationKey() {
         return "microblock.microblocks.cover.name";
     }
+
+    @Override
+    public MicroblockItemType getType() {
+        return MicroblockItemType.COVER;
+    }
 }

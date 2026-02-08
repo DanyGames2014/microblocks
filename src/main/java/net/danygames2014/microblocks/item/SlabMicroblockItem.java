@@ -18,4 +18,8 @@ public class SlabMicroblockItem extends FaceMicroblockItem {
     public String getTypeTranslationKey() {
         return "microblock.microblocks.slab.name";
     }
+    @Override
+    public MicroblockItemType getType() {
+        return MicroblockItemType.SLAB;
+    }
 }

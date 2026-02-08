@@ -141,24 +141,6 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         nbt.putInt("size", size);
     }
 
-    @Override
-    public void onBreakStart(PlayerEntity player) {
-        System.out.println(slot + " " + (slot.ordinal() - 14));
-        
-        ObjectArrayList<Box> boxes = getBoundingBoxes();
-        for(Box box : boxes) {
-            System.out.println(box.offset(-x, -y, -z));
-        }
-//        System.out.println("renderbounds: " + renderBounds);
-        if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
-            size++;
-            if(size > getMaxSize()){
-                size = 1;
-            }
-            markDirty();
-        }
-    }
-
     public void setRenderBounds(Box box){
         setRenderBounds(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ);
     }
@@ -272,8 +254,16 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
     @Override
     public boolean onUse(PlayerEntity player, Vec3d pos, Direction face) {
         if(!player.isSneaking() && player.getHand() != null && player.getHand().getItem() instanceof MicroblockItem microblockItem){
-
+            if(microblockItem.block != block || microblockItem.meta != meta){
+                return false;
+            }
+            if(size + microblockItem.getSize() > 16){
+                return false;
+            }
             if(MathHelper.getHitDepth(new net.modificationstation.stationapi.api.util.math.Vec3d(pos.x - x, pos.y - y, pos.z - z), face) < 1){
+                if(world.isRemote){
+                    return true;
+                }
                 size += microblockItem.getSize();
                 markDirty();
                 return true;

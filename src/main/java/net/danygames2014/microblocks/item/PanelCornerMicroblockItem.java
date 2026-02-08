@@ -18,4 +18,8 @@ public class PanelCornerMicroblockItem extends CornerMicroblockItem {
     public String getTypeTranslationKey() {
         return "microblock.microblocks.panel_corner.name";
     }
+    @Override
+    public MicroblockItemType getType() {
+        return MicroblockItemType.PANEL_CORNER;
+    }
 }

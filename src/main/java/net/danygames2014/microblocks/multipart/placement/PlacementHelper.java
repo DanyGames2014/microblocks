@@ -2,6 +2,7 @@ package net.danygames2014.microblocks.multipart.placement;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.client.render.grid.GridRenderer;
+import net.danygames2014.microblocks.item.MicroblockItemType;
 import net.danygames2014.microblocks.multipart.MicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
@@ -23,7 +24,7 @@ public abstract class PlacementHelper {
         return hit.add(-x, -y, -z);
     }
 
-    public boolean canPlace(World world, int x, int y, int z, PlacementSlot slot, int size, MicroblockModel model) {
+    public boolean canPlace(World world, int x, int y, int z, MicroblockItemType type, PlacementSlot slot, int size, MicroblockModel model) {
         if (y >= world.getTopY() - 1) {
             return false;
         }
@@ -42,6 +43,22 @@ public abstract class PlacementHelper {
         }
         
         ObjectArrayList<Box> existingBoxes = new ObjectArrayList<>();
+
+        for(MultipartComponent component : state.components) {
+            if(component instanceof MicroblockMultipartComponent microblock) {
+                // TODO: set the type of the second check to the correct item type for the component
+                if(!microblock.getMicroblockModel().canOverlap(type, slot) || !model.canOverlap(MicroblockItemType.STRIP, microblock.slot)){
+                    ObjectArrayList<Box> otherBoxes = microblock.getBoundingBoxes();
+                    for(Box box : newBoxes){
+                        for(Box otherBox : otherBoxes){
+                            if(box.intersects(otherBox)){
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         for(MultipartComponent component : state.components) {
             if(component instanceof MicroblockMultipartComponent microblock) {

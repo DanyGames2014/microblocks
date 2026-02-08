@@ -18,4 +18,9 @@ public class HollowPanelMicroblockItem extends HollowFaceMicroblockItem {
     public String getTypeTranslationKey() {
         return "microblock.microblocks.hollow_panel.name";
     }
+
+    @Override
+    public MicroblockItemType getType() {
+        return MicroblockItemType.HOLLOW_PANEL;
+    }
 }

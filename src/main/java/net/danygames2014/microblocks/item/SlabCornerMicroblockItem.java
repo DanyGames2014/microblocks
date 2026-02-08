@@ -18,4 +18,8 @@ public class SlabCornerMicroblockItem extends CornerMicroblockItem {
     public String getTypeTranslationKey() {
         return "microblock.microblocks.slab_corner.name";
     }
+    @Override
+    public MicroblockItemType getType() {
+        return MicroblockItemType.SLAB_CORNER;
+    }
 }

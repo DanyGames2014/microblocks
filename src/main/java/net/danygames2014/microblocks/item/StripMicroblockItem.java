@@ -18,4 +18,9 @@ public class StripMicroblockItem extends EdgeMicroblockItem {
     public String getTypeTranslationKey() {
         return "microblock.microblocks.strip.name";
     }
+
+    @Override
+    public MicroblockItemType getType() {
+        return MicroblockItemType.STRIP;
+    }
 }

@@ -18,4 +18,9 @@ public class HollowSlabMicroblockItem extends HollowFaceMicroblockItem {
     public String getTypeTranslationKey() {
         return "microblock.microblocks.hollow_slab.name";
     }
+
+    @Override
+    public MicroblockItemType getType() {
+        return MicroblockItemType.HOLLOW_SLAB;
+    }
 }

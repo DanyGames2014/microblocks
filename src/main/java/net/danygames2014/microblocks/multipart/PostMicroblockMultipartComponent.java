@@ -1,6 +1,7 @@
 package net.danygames2014.microblocks.multipart;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.danygames2014.microblocks.item.MicroblockItemType;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
 import net.danygames2014.microblocks.multipart.model.PostMicroblockModel;
 import net.danygames2014.microblocks.util.DirectionUtil;

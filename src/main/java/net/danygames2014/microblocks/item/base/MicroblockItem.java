@@ -3,6 +3,7 @@ package net.danygames2014.microblocks.item.base;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.client.render.CustomItemRenderer;
 import net.danygames2014.microblocks.client.render.MicroblockRenderer;
+import net.danygames2014.microblocks.item.MicroblockItemType;
 import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
 import net.danygames2014.microblocks.multipart.placement.PlacementHelper;
@@ -61,6 +62,8 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
     public abstract MicroblockModel getMicroblockModel();
 
     public abstract PlacementHelper getPlacementHelper();
+
+    public abstract MicroblockItemType getType();
 
     @Override
     public boolean useOnBlock(ItemStack stack, PlayerEntity player, World world, int x, int y, int z, int side, net.minecraft.util.math.Vec3d hitVec) {
@@ -126,7 +129,7 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
             placementSlot = placementHelper.getOppositeSlot(placementSlot, dir);
         }
 
-        if(placementHelper.canPlace(world, x, y, z, placementSlot, size, microblockModel)){
+        if(placementHelper.canPlace(world, x, y, z, getType(), placementSlot, size, microblockModel)){
             MicroblockRenderer renderer = MicroblockRenderer.INSTANCE;
             GL11.glPushMatrix();
             GL11.glEnable(GL11.GL_BLEND);

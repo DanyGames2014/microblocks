@@ -1,5 +1,6 @@
 package net.danygames2014.microblocks.item.base;
 
+import net.danygames2014.microblocks.item.MicroblockItemType;
 import net.danygames2014.microblocks.multipart.CornerMicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
@@ -30,7 +31,7 @@ public abstract class CornerMicroblockItem extends MicroblockItem {
             slot = placementHelper.getOppositeSlot(slot, dir);
         }
 
-        if (placementHelper.canPlace(world, x, y, z, slot, size, CornerMicroblockMultipartComponent.MODEL)) {
+        if (placementHelper.canPlace(world, x, y, z, getType(), slot, size, CornerMicroblockMultipartComponent.MODEL)) {
             world.addMultipartComponent(x, y, z, new CornerMicroblockMultipartComponent(this.block, meta, slot, size));
             return true;
         }

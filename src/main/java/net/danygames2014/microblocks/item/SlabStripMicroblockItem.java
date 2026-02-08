@@ -18,4 +18,9 @@ public class SlabStripMicroblockItem extends EdgeMicroblockItem {
     public String getTypeTranslationKey() {
         return "microblock.microblocks.slab_strip.name";
     }
+
+    @Override
+    public MicroblockItemType getType() {
+        return MicroblockItemType.SLAB_STRIP;
+    }
 }

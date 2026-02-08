@@ -1,6 +1,7 @@
 package net.danygames2014.microblocks.multipart.model;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.danygames2014.microblocks.item.MicroblockItemType;
 import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.util.MicroblockBoxUtil;
 import net.minecraft.util.math.Box;
@@ -29,5 +30,10 @@ public class PostMicroblockModel extends MicroblockModel{
             slot = PlacementSlot.POST_Y;
         }
         return getBoxesForSlot(slot, size, offsetX, offsetY, offsetZ).get(0);
+    }
+
+    @Override
+    public boolean canOverlap(MicroblockItemType type, PlacementSlot slot) {
+        return type.isFace() || slot.ordinal() > 25;
     }
 }

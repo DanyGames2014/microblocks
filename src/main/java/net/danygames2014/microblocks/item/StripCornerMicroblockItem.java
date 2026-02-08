@@ -18,4 +18,9 @@ public class StripCornerMicroblockItem extends CornerMicroblockItem {
     public String getTypeTranslationKey() {
         return "microblock.microblocks.corner.name";
     }
+
+    @Override
+    public MicroblockItemType getType() {
+        return MicroblockItemType.CORNER;
+    }
 }

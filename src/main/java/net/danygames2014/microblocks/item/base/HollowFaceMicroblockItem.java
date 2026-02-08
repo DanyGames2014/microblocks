@@ -30,7 +30,7 @@ public abstract class HollowFaceMicroblockItem extends MicroblockItem{
             slot = placementHelper.getOppositeSlot(slot, dir);
         }
 
-        if (placementHelper.canPlace(world, x, y, z, slot, size, HollowMicroblockMultipartComponent.MODEL)) {
+        if (placementHelper.canPlace(world, x, y, z, getType(), slot, size, HollowMicroblockMultipartComponent.MODEL)) {
             world.addMultipartComponent(x, y, z, new HollowMicroblockMultipartComponent(this.block, meta, slot, size));
             return true;
         }

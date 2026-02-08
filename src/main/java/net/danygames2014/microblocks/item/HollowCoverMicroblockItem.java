@@ -18,4 +18,9 @@ public class HollowCoverMicroblockItem extends HollowFaceMicroblockItem {
     public String getTypeTranslationKey() {
         return "microblock.microblocks.hollow_cover.name";
     }
+
+    @Override
+    public MicroblockItemType getType() {
+        return MicroblockItemType.HOLLOW_COVER;
+    }
 }

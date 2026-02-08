@@ -18,4 +18,8 @@ public class PanelStripMicroblockItem extends EdgeMicroblockItem {
     public String getTypeTranslationKey() {
         return "microblock.microblocks.panel_strip.name";
     }
+    @Override
+    public MicroblockItemType getType() {
+        return MicroblockItemType.PANEL_STRIP;
+    }
 }

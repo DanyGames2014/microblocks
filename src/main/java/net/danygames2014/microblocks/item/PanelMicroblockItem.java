@@ -18,4 +18,8 @@ public class PanelMicroblockItem extends FaceMicroblockItem {
     public String getTypeTranslationKey() {
         return "microblock.microblocks.panel.name";
     }
+    @Override
+    public MicroblockItemType getType() {
+        return MicroblockItemType.PANEL;
+    }
 }
