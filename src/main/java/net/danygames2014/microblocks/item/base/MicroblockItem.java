@@ -51,15 +51,6 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
         this.meta = meta;
     }
 
-    @Override
-    public boolean useOnMultipart(ItemStack stack, PlayerEntity player, World world, int x, int y, int z, Direction face, net.minecraft.util.math.Vec3d hitPos, MultipartComponent component) {
-        if (this.useOnBlock(stack, player, world, x, y, z, face.getId(), hitPos)) {
-            return true;
-        }
-        
-        return super.useOnMultipart(stack, player, world, x, y, z, face, hitPos, component);
-    }
-
     @Environment(EnvType.CLIENT)
     public abstract void renderGrid(PlayerEntity player, int blockX, int blockY, int blockZ, Vec3d hit, Direction face, float tickDelta);
 
