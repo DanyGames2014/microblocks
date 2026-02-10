@@ -6,6 +6,7 @@
   "mixins": [
     "CraftingRecipeManagerMixin",
     "FlowingLiquidBlockMixin",
+    "LiquidBlockMixin",
     "ToolItemMixin"
   ],
   "server": [
