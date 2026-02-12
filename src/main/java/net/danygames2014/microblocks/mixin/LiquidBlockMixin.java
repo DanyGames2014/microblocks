@@ -22,11 +22,11 @@ public class LiquidBlockMixin {
                     MultipartState state = world.getMultipartState(x,y,z);
                     MultipartState targetState = world.getMultipartState(targetX,targetY,targetZ);
 
-                    if (state != null && state.isBoxFullyCoevered(Box.create(x, y, z, x + 0.0625D, y + 1, z + 1))) {
+                    if (state != null && state.isBoxFullyCovered(Box.create(x, y, z, x + 0.0625D, y + 1, z + 1))) {
                         return 0;
                     }
 
-                    if (targetState != null && targetState.isBoxFullyCoevered(Box.create(targetX + 0.9375D, targetY, targetZ, targetX + 1, targetY + 1, targetZ + 1))) {
+                    if (targetState != null && targetState.isBoxFullyCovered(Box.create(targetX + 0.9375D, targetY, targetZ, targetX + 1, targetY + 1, targetZ + 1))) {
                         return 0;
                     }
                 }   
@@ -36,11 +36,11 @@ public class LiquidBlockMixin {
                     MultipartState state = world.getMultipartState(x,y,z);
                     MultipartState targetState = world.getMultipartState(targetX,targetY,targetZ);
 
-                    if (state != null && state.isBoxFullyCoevered(Box.create(x, y, z, x + 1, y + 1, z + 0.0625D))) {
+                    if (state != null && state.isBoxFullyCovered(Box.create(x, y, z, x + 1, y + 1, z + 0.0625D))) {
                         return 0;
                     }
 
-                    if (targetState != null && targetState.isBoxFullyCoevered(Box.create(targetX, targetY, targetZ + 0.9375D, targetX + 1, targetY + 1, targetZ + 1))) {
+                    if (targetState != null && targetState.isBoxFullyCovered(Box.create(targetX, targetY, targetZ + 0.9375D, targetX + 1, targetY + 1, targetZ + 1))) {
                         return 0;
                     }
 
@@ -51,11 +51,11 @@ public class LiquidBlockMixin {
                     MultipartState state = world.getMultipartState(x,y,z);
                     MultipartState targetState = world.getMultipartState(targetX,targetY,targetZ);
 
-                    if (state != null && state.isBoxFullyCoevered(Box.create(x + 0.9375D, y, z, x + 1, y + 1, z + 1))) {
+                    if (state != null && state.isBoxFullyCovered(Box.create(x + 0.9375D, y, z, x + 1, y + 1, z + 1))) {
                         return 0;
                     }
 
-                    if (targetState != null && targetState.isBoxFullyCoevered(Box.create(targetX, targetY, targetZ, targetX + 0.0625D, targetY + 1, targetZ + 1))) {
+                    if (targetState != null && targetState.isBoxFullyCovered(Box.create(targetX, targetY, targetZ, targetX + 0.0625D, targetY + 1, targetZ + 1))) {
                         return 0;
                     }
 
@@ -66,11 +66,11 @@ public class LiquidBlockMixin {
                     MultipartState state = world.getMultipartState(x,y,z);
                     MultipartState targetState = world.getMultipartState(targetX,targetY,targetZ);
 
-                    if (state != null && state.isBoxFullyCoevered(Box.create(x, y, z  + 0.9375D, x + 1, y + 1, z + 1))) {
+                    if (state != null && state.isBoxFullyCovered(Box.create(x, y, z  + 0.9375D, x + 1, y + 1, z + 1))) {
                         return 0;
                     }
 
-                    if (targetState != null && targetState.isBoxFullyCoevered(Box.create(targetX, targetY, targetZ, targetX + 1, targetY + 1, targetZ + 0.0625D))) {
+                    if (targetState != null && targetState.isBoxFullyCovered(Box.create(targetX, targetY, targetZ, targetX + 1, targetY + 1, targetZ + 0.0625D))) {
                         return 0;
                     }
                 }
