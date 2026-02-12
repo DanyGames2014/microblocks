@@ -53,6 +53,11 @@ public class HollowMicroblockMultipartComponent extends MicroblockMultipartCompo
     }
 
     @Override
+    public boolean canOverlap(MicroblockItemType type, PlacementSlot slot, int size) {
+        return (!type.isFace() && !type.isHollowFace()) || slot.ordinal() != (this.slot.ordinal() ^ 1);
+    }
+
+    @Override
     public MicroblockModel getMicroblockModel() {
         return MODEL;
     }

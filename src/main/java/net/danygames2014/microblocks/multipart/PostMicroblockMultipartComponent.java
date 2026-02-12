@@ -88,6 +88,9 @@ public class PostMicroblockMultipartComponent extends MicroblockMultipartCompone
 
     @Override
     public void refreshRenderState() {
+        if(slot == null) {
+            return;
+        }
         setRenderBounds(getMicroblockModel().getRenderBounds(slot, size, x, y, z).copy());
         renderMask = 0;
         useSecondaryRenderbounds = false;

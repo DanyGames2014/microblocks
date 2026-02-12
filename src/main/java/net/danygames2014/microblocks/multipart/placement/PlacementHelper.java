@@ -46,7 +46,7 @@ public abstract class PlacementHelper {
 
         for(MultipartComponent component : state.components) {
             if(component instanceof MicroblockMultipartComponent microblock) {
-                if(!microblock.getMicroblockModel().canOverlap(type, slot) || !model.canOverlap(microblock.getClosestItemType(), microblock.slot)){
+                if(!microblock.getMicroblockModel().canOverlap(type, slot) || !model.canOverlap(microblock.getClosestItemType(), microblock.slot) || !microblock.canOverlap(type, slot, size)){
                     ObjectArrayList<Box> otherBoxes = microblock.getBoundingBoxes();
                     for(Box box : newBoxes){
                         for(Box otherBox : otherBoxes){

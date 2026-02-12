@@ -161,6 +161,10 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         refreshRenderState();
     }
 
+    public boolean canOverlap(MicroblockItemType type, PlacementSlot slot, int size){
+        return true;
+    }
+
     public void refreshRenderState(){
         if (slot == null) {
             return;
@@ -250,7 +254,11 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
             if(microblockItem.block != block || microblockItem.meta != meta){
                 return false;
             }
-            if(size + microblockItem.getSize() > 16){
+            PlacementSlot placementSlot = microblockItem.getPlacementHelper().getSlot(x, y, z, face, new net.modificationstation.stationapi.api.util.math.Vec3d(pos.x, pos.y, pos.z), 1/4D);
+            if(placementSlot != slot){
+                return false;
+            }
+            if(size + microblockItem.getSize() > getMaxSize()){
                 return false;
             }
             if(MathHelper.getHitDepth(new net.modificationstation.stationapi.api.util.math.Vec3d(pos.x - x, pos.y - y, pos.z - z), face) < 1){
@@ -259,6 +267,8 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
                 }
                 size += microblockItem.getSize();
                 markDirty();
+                notifyNeighbors();
+                refreshRenderState();
                 return true;
             }
         }
@@ -266,13 +276,8 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
     }
 
     @Override
-    public void markDirty() {
-        super.markDirty();
-        for(MultipartComponent component : state.components){
-            if(component instanceof MicroblockMultipartComponent microblock){
-                microblock.refreshRenderState();
-            }
-        }
+    public void neighborUpdate(MultipartComponent updateSource, Direction direction) {
+        refreshRenderState();
     }
 
     public abstract MicroblockModel getMicroblockModel();
