@@ -113,7 +113,7 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
 
         renderGrid(player, pos.getX(), pos.getY(), pos.getZ(), stapiVec, side, tickDelta);
 
-        if(Minecraft.INSTANCE.getMultipartCrosshairTarget() != null && Minecraft.INSTANCE.getMultipartCrosshairTarget().component instanceof MicroblockMultipartComponent microblock && microblock.canUse(player, net.minecraft.util.math.Vec3d.create(vec.getX(), vec.getY(), vec.getZ()), side)){
+        if(Minecraft.INSTANCE.getMultipartCrosshairTarget() != null && Minecraft.INSTANCE.getMultipartCrosshairTarget().component instanceof MicroblockMultipartComponent microblock && microblock.canUse(player, net.minecraft.util.math.Vec3d.create(vec.getX(), vec.getY(), vec.getZ()), side, null)){
             MicroblockItem microblockItem = (MicroblockItem) player.getHand().getItem();
             GL11.glPushMatrix();
             GL11.glEnable(GL11.GL_BLEND);

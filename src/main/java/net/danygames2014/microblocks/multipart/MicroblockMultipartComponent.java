@@ -23,6 +23,7 @@ import net.minecraft.util.math.Vec3d;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class MicroblockMultipartComponent extends MultipartComponent {
 
@@ -243,12 +244,15 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         return clippedList;
     }
 
-    public boolean canUse(PlayerEntity player, Vec3d pos, Direction face){
+    public boolean canUse(PlayerEntity player, Vec3d pos, Direction face, @Nullable PlacementSlot slotOverride){
         if(!player.isSneaking() && player.getHand() != null && player.getHand().getItem() instanceof MicroblockItem microblockItem){
             if(microblockItem.block != block || microblockItem.meta != meta){
                 return false;
             }
-            PlacementSlot placementSlot = microblockItem.getPlacementHelper().getSlot(x, y, z, face, new net.modificationstation.stationapi.api.util.math.Vec3d(pos.x, pos.y, pos.z), microblockItem.getPlacementHelper().getGridCenterSize());
+            PlacementSlot placementSlot = slotOverride;
+            if(slotOverride == null){
+                 placementSlot = microblockItem.getPlacementHelper().getSlot(x, y, z, face, new net.modificationstation.stationapi.api.util.math.Vec3d(pos.x, pos.y, pos.z), microblockItem.getPlacementHelper().getGridCenterSize());
+            }
             if(placementSlot != slot){
                 return false;
             }
@@ -267,7 +271,7 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
 
     @Override
     public boolean onUse(PlayerEntity player, Vec3d pos, Direction face) {
-        if(canUse(player, pos, face)){
+        if(canUse(player, pos, face, null)){
             if(player.getHand().getItem() instanceof MicroblockItem microblockItem){
                 if(world.isRemote){
                     return true;

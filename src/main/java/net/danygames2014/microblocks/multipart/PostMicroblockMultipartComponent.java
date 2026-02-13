@@ -8,9 +8,12 @@ import net.danygames2014.microblocks.util.DirectionUtil;
 import net.danygames2014.microblocks.util.ShrinkHelper;
 import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
 import net.modificationstation.stationapi.api.util.math.Direction;
+import org.jetbrains.annotations.Nullable;
 
 public class PostMicroblockMultipartComponent extends MicroblockMultipartComponent{
     public boolean useSecondaryRenderbounds = false;
@@ -119,6 +122,11 @@ public class PostMicroblockMultipartComponent extends MicroblockMultipartCompone
             }
         }
 
+    }
+
+    @Override
+    public boolean canUse(PlayerEntity player, Vec3d pos, Direction face, @Nullable PlacementSlot slotOverride) {
+        return super.canUse(player, pos, face, slot);
     }
 
     private void shrinkFace(MicroblockMultipartComponent other){
