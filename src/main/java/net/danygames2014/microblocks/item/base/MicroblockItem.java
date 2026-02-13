@@ -124,7 +124,7 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
     }
 
     public boolean tryRenderPreview(World world, int x, int y, int z, Direction dir, Vec3d vec, int size, MicroblockModel microblockModel, Block block, int meta, PlacementHelper placementHelper, PlayerEntity player, float tickDelta){
-        PlacementSlot placementSlot = placementHelper.getSlot(x, y, z, dir, vec, 1/4D);
+        PlacementSlot placementSlot = placementHelper.getSlot(x, y, z, dir, vec, placementHelper.getGridCenterSize());
         if (player.isSneaking()) {
             placementSlot = placementHelper.getOppositeSlot(placementSlot, dir);
         }

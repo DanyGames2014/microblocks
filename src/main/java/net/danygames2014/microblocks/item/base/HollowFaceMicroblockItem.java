@@ -4,6 +4,7 @@ import net.danygames2014.microblocks.multipart.HollowMicroblockMultipartComponen
 import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
 import net.danygames2014.microblocks.multipart.placement.FacePlacementHelper;
+import net.danygames2014.microblocks.multipart.placement.HollowPlacementHelper;
 import net.danygames2014.microblocks.multipart.placement.PlacementHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,7 +13,7 @@ import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 public abstract class HollowFaceMicroblockItem extends MicroblockItem{
-    private static final FacePlacementHelper placementHelper = new FacePlacementHelper();
+    private static final HollowPlacementHelper placementHelper = new HollowPlacementHelper();
 
     public HollowFaceMicroblockItem(Identifier identifier, Block block, int meta) {
         super(identifier, block, meta);
@@ -20,7 +21,7 @@ public abstract class HollowFaceMicroblockItem extends MicroblockItem{
 
     @Override
     public void renderGrid(PlayerEntity player, int blockX, int blockY, int blockZ, net.modificationstation.stationapi.api.util.math.Vec3d hit, Direction face, float tickDelta) {
-        placementHelper.renderGrid(player, blockX, blockY, blockZ, hit, face, 1/4D, tickDelta);
+        placementHelper.renderGrid(player, blockX, blockY, blockZ, hit, face, placementHelper.getGridCenterSize(), tickDelta);
     }
 
     protected boolean tryPlace(World world, int x, int y, int z, Direction dir, net.modificationstation.stationapi.api.util.math.Vec3d vec, int size, PlayerEntity player) {

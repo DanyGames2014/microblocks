@@ -194,4 +194,8 @@ public abstract class PlacementHelper {
     protected GridRenderer getGridRenderer(){
         return GridRenderer.INSTANCE;
     }
+
+    public double getGridCenterSize(){
+        return 1/4D;
+    }
 }

@@ -249,7 +249,7 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
             if(microblockItem.block != block || microblockItem.meta != meta){
                 return false;
             }
-            PlacementSlot placementSlot = microblockItem.getPlacementHelper().getSlot(x, y, z, face, new net.modificationstation.stationapi.api.util.math.Vec3d(pos.x, pos.y, pos.z), 1/4D);
+            PlacementSlot placementSlot = microblockItem.getPlacementHelper().getSlot(x, y, z, face, new net.modificationstation.stationapi.api.util.math.Vec3d(pos.x, pos.y, pos.z), microblockItem.getPlacementHelper().getGridCenterSize());
             if(placementSlot != slot){
                 return false;
             }
