@@ -82,19 +82,14 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
 
     @Override
     public boolean render(Tessellator tessellator, BlockRenderManager blockRenderManager, int renderLayer) {
-        if (renderLayer != 0) {
+        if (block == null) {
             return false;
         }
-        MicroblockRenderer.INSTANCE.renderMicroblock(world, this, blockRenderManager);
-        return true;
-//        ObjectArrayList<Box> boxes = new ObjectArrayList<>();
-//        getCollisionBoxes(boxes);
-//
-//        for(Box box : boxes){
-//            block.setBoundingBox((float) (box.minX - x), (float) (box.minY - y), (float) (box.minZ - z), (float) (box.maxX - x), (float) (box.maxY - y), (float) (box.maxZ - z));
-//            blockRenderManager.renderBlock(block, x, y + renderLayer, z);
-//        }
-//        block.setBoundingBox(0f, 0f, 0f, 1f, 1f, 1f);
+        if(renderLayer == block.getRenderLayer()){
+            MicroblockRenderer.INSTANCE.renderMicroblock(world, this, blockRenderManager);
+            return true;
+        }
+        return false;
     }
 
     @Override
