@@ -12,7 +12,7 @@ public abstract class MicroblockModel {
     public abstract ObjectArrayList<Box> getBoxesForSlot(@Nullable PlacementSlot slot, int size, double offsetX, double offsetY, double offsetZ);
     public abstract Box getRenderBounds(PlacementSlot slot, int size, double offsetX, double offsetY, double offsetZ);
 
-    public boolean canOverlap(MicroblockItemType type, PlacementSlot slot){
+    public boolean canOverlap(MicroblockItemType type, PlacementSlot slot, MicroblockItemType otherType, PlacementSlot otherSlot){
         return true;
     }
 }

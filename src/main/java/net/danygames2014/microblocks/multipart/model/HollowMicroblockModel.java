@@ -57,7 +57,7 @@ public class HollowMicroblockModel extends MicroblockModel{
     }
 
     @Override
-    public boolean canOverlap(MicroblockItemType type, PlacementSlot slot) {
-        return !type.isCorner();
+    public boolean canOverlap(MicroblockItemType type, PlacementSlot slot, MicroblockItemType otherType, PlacementSlot otherSlot) {
+        return !otherType.isCorner();
     }
 }

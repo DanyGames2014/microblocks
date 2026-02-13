@@ -58,7 +58,10 @@ public abstract class PlacementHelper {
                 continue;
             }
             if(component instanceof MicroblockMultipartComponent microblock) {
-                if(!microblock.getMicroblockModel().canOverlap(type, slot) || !model.canOverlap(microblock.getClosestItemType(), microblock.slot) || !microblock.canOverlap(type, slot, size)){
+                if(microblock.slot == null){
+                    continue;
+                }
+                if(!microblock.getMicroblockModel().canOverlap(microblock.getClosestItemType(), microblock.slot, type, slot) || !model.canOverlap(type, slot, microblock.getClosestItemType(), microblock.slot) || !microblock.canOverlap(type, slot, size)){
                     ObjectArrayList<Box> otherBoxes = microblock.getBoundingBoxes();
                     for(Box box : newBoxes){
                         for(Box otherBox : otherBoxes){
@@ -76,6 +79,9 @@ public abstract class PlacementHelper {
                 continue;
             }
             if(component instanceof MicroblockMultipartComponent microblock) {
+                if(microblock.slot == null){
+                    continue;
+                }
                 if(microblock.slot == slot) return false;
                 existingBoxes.addAll(microblock.getMicroblockModel().getBoxesForSlot(microblock.slot, microblock.getSize(), x, y, z));
             }
@@ -96,6 +102,9 @@ public abstract class PlacementHelper {
                 continue;
             }
             if(component instanceof MicroblockMultipartComponent microblock) {
+                if(microblock.slot == null){
+                    continue;
+                }
                 ObjectArrayList<Box> currentExistingBoxes = microblock.getMicroblockModel().getBoxesForSlot(microblock.slot, microblock.getSize(), x, y, z);
 
                 ObjectArrayList<Box> everyBox = new ObjectArrayList<>(newBoxes);
@@ -104,6 +113,9 @@ public abstract class PlacementHelper {
                         continue;
                     }
                     if(otherComponent instanceof MicroblockMultipartComponent otherMicro) {
+                        if(otherMicro.slot == null){
+                            continue;
+                        }
                         if(otherMicro != microblock) {
                             everyBox.addAll(otherMicro.getMicroblockModel().getBoxesForSlot(otherMicro.slot, otherMicro.getSize(), x, y, z));
                         }

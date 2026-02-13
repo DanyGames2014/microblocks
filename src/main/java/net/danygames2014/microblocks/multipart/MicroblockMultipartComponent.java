@@ -98,6 +98,8 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         if (nbt.contains("blockId")) {
             this.block = BlockRegistry.INSTANCE.get(Identifier.of(nbt.getString("blockId")));
             this.hardness = block == null ? 1.0F : block.getHardness();
+        } else {
+            throw new IllegalStateException();
         }
         
         if (nbt.contains("meta")) {
@@ -108,6 +110,8 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         
         if (nbt.contains("slot")) {
             this.slot = PlacementSlot.fromOrdinal(nbt.getInt("slot"));
+        } else {
+            throw new IllegalStateException();
         }
         
         this.size = nbt.getInt("size");

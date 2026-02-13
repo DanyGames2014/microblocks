@@ -5,6 +5,7 @@ import net.danygames2014.microblocks.item.MicroblockItemType;
 import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.util.MicroblockBoxUtil;
 import net.minecraft.util.math.Box;
+import net.modificationstation.stationapi.api.util.math.Direction;
 
 public class PostMicroblockModel extends MicroblockModel{
     public Box bounds = Box.create(0.5D, 0.5D, 0D, 0.5D, 0.5D, 1D);
@@ -33,7 +34,11 @@ public class PostMicroblockModel extends MicroblockModel{
     }
 
     @Override
-    public boolean canOverlap(MicroblockItemType type, PlacementSlot slot) {
-        return type.isFace() || slot.ordinal() > 25;
+    public boolean canOverlap(MicroblockItemType type, PlacementSlot slot, MicroblockItemType otherType, PlacementSlot otherSlot) {
+        if(otherType.isFace()){
+            Direction.Axis axis = Direction.byId(otherSlot.ordinal()).getAxis();
+            return axis.ordinal() == slot.ordinal() - PlacementSlot.POST_X.ordinal();
+        }
+        return otherSlot.ordinal() > 25;
     }
 }
