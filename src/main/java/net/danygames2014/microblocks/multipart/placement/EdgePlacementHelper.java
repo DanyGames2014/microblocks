@@ -45,6 +45,13 @@ public class EdgePlacementHelper extends PlacementHelper{
         if(Math.abs(u) < size && Math.abs(v) < size){
             return PlacementSlot.INVALID;
         }
+
+        if (Math.abs(u) > size && Math.abs(v) > size) {
+            int uSign = u > 0 ? 1 : 0;
+            int vSign = v > 0 ? 1 : 0;
+            return getCornerSlot(face, uSign, vSign);
+        }
+
         int b = face.ordinal()&1;
         if(Math.abs(u) > Math.abs(v))
         {
@@ -78,5 +85,60 @@ public class EdgePlacementHelper extends PlacementHelper{
     @Override
     protected GridRenderer getGridRenderer() {
         return EdgeGridRenderer.INSTANCE;
+    }
+
+    private PlacementSlot getCornerSlot(Direction face, int uSign, int vSign){
+        System.out.println(face.getAxis());
+        if(face.getDirection() == Direction.AxisDirection.NEGATIVE){
+            uSign = uSign == 0 ? 1 : 0;
+            vSign = vSign == 0 ? 1 : 0;
+        }
+
+        System.out.println(uSign + " " + vSign);
+        switch (face.getAxis()){
+            case X -> {
+                if(uSign == 0 && vSign == 0){
+                    return PlacementSlot.EDGE_BOT_NEG_Z;
+                }
+                if(uSign == 0 && vSign == 1){
+                    return PlacementSlot.EDGE_BOT_POS_Z;
+                }
+                if(uSign == 1 && vSign == 0){
+                    return PlacementSlot.EDGE_TOP_NEG_Z;
+                }
+                if(uSign == 1 && vSign == 1){
+                    return PlacementSlot.EDGE_TOP_POS_Z;
+                }
+            }
+            case Y -> {
+                if(uSign == 0 && vSign == 0){
+                    return PlacementSlot.EDGE_MID_NEG_X_NEG_Z;
+                }
+                if(uSign == 0 && vSign == 1){
+                    return PlacementSlot.EDGE_MID_POS_X_NEG_Z;
+                }
+                if(uSign == 1 && vSign == 0){
+                    return PlacementSlot.EDGE_MID_NEG_X_POS_Z;
+                }
+                if(uSign == 1 && vSign == 1){
+                    return PlacementSlot.EDGE_MID_POS_X_POS_Z;
+                }
+            }
+            case Z -> {
+                if(uSign == 0 && vSign == 0){
+                    return PlacementSlot.EDGE_BOT_NEG_X;
+                }
+                if(uSign == 0 && vSign == 1){
+                    return PlacementSlot.EDGE_TOP_NEG_X;
+                }
+                if(uSign == 1 && vSign == 0){
+                    return PlacementSlot.EDGE_BOT_POS_X;
+                }
+                if(uSign == 1 && vSign == 1){
+                    return PlacementSlot.EDGE_TOP_POS_X;
+                }
+            }
+        }
+        return PlacementSlot.EDGE_BOT_NEG_X;
     }
 }
