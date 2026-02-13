@@ -13,6 +13,7 @@ import net.minecraft.world.BlockView;
 import net.modificationstation.stationapi.api.client.StationRenderAPI;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
+import org.lwjgl.opengl.GL11;
 
 public class MicroblockRenderer {
     public static final MicroblockRenderer INSTANCE = new MicroblockRenderer();
@@ -144,6 +145,9 @@ public class MicroblockRenderer {
         tessellator.color(1F, 1F, 1F, 0.4F);
         this.useAo = false;
 
+        GL11.glPolygonOffset(-1.0F, -1.0F);
+        GL11.glEnable(GL11.GL_POLYGON_OFFSET_FILL);
+
         ObjectArrayList<Box> boxes = model.getBoxesForSlot(slot, size, 0, 0, 0);
         for(Box box : boxes){
             renderBottom(box, x, y, z, block.getTexture(0, meta), 0xFFFFFF);
@@ -155,6 +159,9 @@ public class MicroblockRenderer {
         }
 
         tessellator.draw();
+
+        GL11.glPolygonOffset(0.0F, 0.0F);
+        GL11.glDisable(GL11.GL_POLYGON_OFFSET_FILL);
     }
 
     public void renderBox(BlockView blockView, Block block, Box box, int x, int y, int z, float red, float green, float blue, int[] textures, int[] sideColors, int renderMask){
