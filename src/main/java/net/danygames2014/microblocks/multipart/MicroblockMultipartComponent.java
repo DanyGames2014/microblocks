@@ -243,8 +243,7 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         return clippedList;
     }
 
-    @Override
-    public boolean onUse(PlayerEntity player, Vec3d pos, Direction face) {
+    public boolean canUse(PlayerEntity player, Vec3d pos, Direction face){
         if(!player.isSneaking() && player.getHand() != null && player.getHand().getItem() instanceof MicroblockItem microblockItem){
             if(microblockItem.block != block || microblockItem.meta != meta){
                 return false;
@@ -260,6 +259,16 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
                 if(!microblockItem.getPlacementHelper().canGrow(this, size + microblockItem.getSize())){
                     return false;
                 }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onUse(PlayerEntity player, Vec3d pos, Direction face) {
+        if(canUse(player, pos, face)){
+            if(player.getHand().getItem() instanceof MicroblockItem microblockItem){
                 if(world.isRemote){
                     return true;
                 }

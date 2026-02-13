@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.client.render.CustomItemRenderer;
 import net.danygames2014.microblocks.client.render.MicroblockRenderer;
 import net.danygames2014.microblocks.item.MicroblockItemType;
+import net.danygames2014.microblocks.multipart.MicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
 import net.danygames2014.microblocks.multipart.placement.PlacementHelper;
@@ -18,6 +19,7 @@ import net.danygames2014.nyalib.util.PlayerUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.item.ItemRenderer;
@@ -110,6 +112,21 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
         Vec3d relativeHitVec = stapiVec.add(-pos.getX(), -pos.getY(), -pos.getZ());
 
         renderGrid(player, pos.getX(), pos.getY(), pos.getZ(), stapiVec, side, tickDelta);
+
+        if(Minecraft.INSTANCE.getMultipartCrosshairTarget() != null && Minecraft.INSTANCE.getMultipartCrosshairTarget().component instanceof MicroblockMultipartComponent microblock && microblock.canUse(player, net.minecraft.util.math.Vec3d.create(vec.getX(), vec.getY(), vec.getZ()), side)){
+            MicroblockItem microblockItem = (MicroblockItem) player.getHand().getItem();
+            GL11.glPushMatrix();
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+            Vec3d playerPos = PlayerUtil.getRenderPosition(player, tickDelta);
+            GL11.glTranslated(microblock.x - playerPos.x, microblock.y - playerPos.y, microblock.z - playerPos.z);
+
+            MicroblockRenderer.INSTANCE.renderMicroblockPreview(microblock.getMicroblockModel(), microblock.slot, block, meta, microblock.getSize() + microblockItem.getSize(), 0, 0, 0);
+            GL11.glDisable(GL11.GL_BLEND);
+            GL11.glPopMatrix();
+            return true;
+        }
 
         if(state != null && MathHelper.getHitDepth(relativeHitVec, side) < 1){
             if(tryRenderPreview(player.world, pos.getX(), pos.getY(), pos.getZ(), side, stapiVec, getSize(), getMicroblockModel(), block, meta, getPlacementHelper(), player, tickDelta)){

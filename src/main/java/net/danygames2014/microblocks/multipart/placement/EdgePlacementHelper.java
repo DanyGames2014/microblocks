@@ -88,13 +88,11 @@ public class EdgePlacementHelper extends PlacementHelper{
     }
 
     private PlacementSlot getCornerSlot(Direction face, int uSign, int vSign){
-        System.out.println(face.getAxis());
         if(face.getDirection() == Direction.AxisDirection.NEGATIVE){
             uSign = uSign == 0 ? 1 : 0;
             vSign = vSign == 0 ? 1 : 0;
         }
 
-        System.out.println(uSign + " " + vSign);
         switch (face.getAxis()){
             case X -> {
                 if(uSign == 0 && vSign == 0){
