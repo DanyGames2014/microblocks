@@ -25,7 +25,7 @@ public abstract class CornerMicroblockItem extends MicroblockItem {
     }
 
     protected boolean tryPlace(World world, int x, int y, int z, Direction dir, net.modificationstation.stationapi.api.util.math.Vec3d vec, int size, PlayerEntity player) {
-        PlacementSlot slot = placementHelper.getSlot(x, y, z, dir, vec, 0.25D);
+        PlacementSlot slot = placementHelper.getSlot(x, y, z, dir, vec, placementHelper.getGridCenterSize());
 
         if (player != null && player.isSneaking()) {
             slot = placementHelper.getOppositeSlot(slot, dir);

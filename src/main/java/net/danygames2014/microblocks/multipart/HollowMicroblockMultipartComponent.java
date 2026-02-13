@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 public class HollowMicroblockMultipartComponent extends MicroblockMultipartComponent{
 
     public static final HollowMicroblockModel MODEL = new HollowMicroblockModel();
+    public int holeSize = 8;
 
     public HollowMicroblockMultipartComponent(){}
 
@@ -54,6 +55,9 @@ public class HollowMicroblockMultipartComponent extends MicroblockMultipartCompo
 
     @Override
     public boolean canOverlap(MicroblockItemType type, PlacementSlot slot, int size) {
+        if(size > 8 - (holeSize / 2)){
+            return false;
+        }
         return (!type.isFace() && !type.isHollowFace()) || slot.ordinal() != (this.slot.ordinal() ^ 1);
     }
 

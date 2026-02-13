@@ -30,7 +30,7 @@ public abstract class EdgeMicroblockItem extends MicroblockItem {
     }
 
     protected boolean tryPlace(World world, int x, int y, int z, Direction dir, net.modificationstation.stationapi.api.util.math.Vec3d vec, int size, PlayerEntity player) {
-        PlacementSlot slot = placementHelper.getSlot(x, y, z, dir, vec, 0.25D);
+        PlacementSlot slot = placementHelper.getSlot(x, y, z, dir, vec, placementHelper.getGridCenterSize());
 
         if (player != null && player.isSneaking()) {
             slot = placementHelper.getOppositeSlot(slot, dir);
@@ -42,7 +42,7 @@ public abstract class EdgeMicroblockItem extends MicroblockItem {
                 return true;
             }
         } else {
-            slot = postPlacementHelper.getSlot(x, y, z, dir, vec, 0.25D);
+            slot = postPlacementHelper.getSlot(x, y, z, dir, vec, placementHelper.getGridCenterSize());
             if (placementHelper.canPlace(world, x, y, z, getType(), slot, size, PostMicroblockMultipartComponent.MODEL)) {
                 world.addMultipartComponent(x, y, z, new PostMicroblockMultipartComponent(this.block, meta, slot, size));
                 return true;
