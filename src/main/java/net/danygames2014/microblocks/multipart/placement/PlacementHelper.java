@@ -15,6 +15,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import net.modificationstation.stationapi.api.util.math.Vec3d;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class PlacementHelper {
     public abstract PlacementSlot getSlot(int x, int y, int z, Direction face, Vec3d hit, double size);
@@ -24,7 +25,15 @@ public abstract class PlacementHelper {
         return hit.add(-x, -y, -z);
     }
 
+    public boolean canGrow(MicroblockMultipartComponent component, int newSize){
+        return canPlace(component.world, component.x, component.y, component.z, component.getClosestItemType(), component.slot, newSize, component.getMicroblockModel(), component);
+    }
+
     public boolean canPlace(World world, int x, int y, int z, MicroblockItemType type, PlacementSlot slot, int size, MicroblockModel model) {
+        return canPlace(world, x, y, z, type, slot, size, model, null);
+    }
+
+    public boolean canPlace(World world, int x, int y, int z, MicroblockItemType type, PlacementSlot slot, int size, MicroblockModel model, @Nullable MicroblockMultipartComponent componentToIgnore) {
         if (y >= world.getTopY() - 1) {
             return false;
         }
@@ -45,6 +54,9 @@ public abstract class PlacementHelper {
         ObjectArrayList<Box> existingBoxes = new ObjectArrayList<>();
 
         for(MultipartComponent component : state.components) {
+            if(component == componentToIgnore){
+                continue;
+            }
             if(component instanceof MicroblockMultipartComponent microblock) {
                 if(!microblock.getMicroblockModel().canOverlap(type, slot) || !model.canOverlap(microblock.getClosestItemType(), microblock.slot) || !microblock.canOverlap(type, slot, size)){
                     ObjectArrayList<Box> otherBoxes = microblock.getBoundingBoxes();
@@ -60,6 +72,9 @@ public abstract class PlacementHelper {
         }
 
         for(MultipartComponent component : state.components) {
+            if(component == componentToIgnore){
+                continue;
+            }
             if(component instanceof MicroblockMultipartComponent microblock) {
                 if(microblock.slot == slot) return false;
                 existingBoxes.addAll(microblock.getMicroblockModel().getBoxesForSlot(microblock.slot, microblock.getSize(), x, y, z));
@@ -77,11 +92,17 @@ public abstract class PlacementHelper {
         }
 
         for(MultipartComponent component : state.components) {
+            if(component == componentToIgnore){
+                continue;
+            }
             if(component instanceof MicroblockMultipartComponent microblock) {
                 ObjectArrayList<Box> currentExistingBoxes = microblock.getMicroblockModel().getBoxesForSlot(microblock.slot, microblock.getSize(), x, y, z);
 
                 ObjectArrayList<Box> everyBox = new ObjectArrayList<>(newBoxes);
                 for(MultipartComponent otherComponent : state.components) {
+                    if(otherComponent == componentToIgnore){
+                        continue;
+                    }
                     if(otherComponent instanceof MicroblockMultipartComponent otherMicro) {
                         if(otherMicro != microblock) {
                             everyBox.addAll(otherMicro.getMicroblockModel().getBoxesForSlot(otherMicro.slot, otherMicro.getSize(), x, y, z));

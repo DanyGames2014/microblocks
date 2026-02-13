@@ -262,6 +262,9 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
                 return false;
             }
             if(MathHelper.getHitDepth(new net.modificationstation.stationapi.api.util.math.Vec3d(pos.x - x, pos.y - y, pos.z - z), face) < 1){
+                if(!microblockItem.getPlacementHelper().canGrow(this, size + microblockItem.getSize())){
+                    return false;
+                }
                 if(world.isRemote){
                     return true;
                 }
