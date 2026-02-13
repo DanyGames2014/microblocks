@@ -1,5 +1,7 @@
 package net.danygames2014.microblocks.multipart.placement;
 
+import net.danygames2014.microblocks.client.render.grid.EdgeGridRenderer;
+import net.danygames2014.microblocks.client.render.grid.GridRenderer;
 import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.util.MathHelper;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -71,5 +73,10 @@ public class EdgePlacementHelper extends PlacementHelper{
         }
         System.out.println("new slot: " + (EDGE_OPPOSITE_MAP[edgeIndex][side.ordinal()]));
         return PlacementSlot.fromOrdinal(14 + EDGE_OPPOSITE_MAP[edgeIndex][side.ordinal()]);
+    }
+
+    @Override
+    protected GridRenderer getGridRenderer() {
+        return EdgeGridRenderer.INSTANCE;
     }
 }
