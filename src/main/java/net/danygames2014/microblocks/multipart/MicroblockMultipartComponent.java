@@ -115,7 +115,6 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         }
         
         this.size = nbt.getInt("size");
-        refreshRenderState();
     }
 
     @Override
@@ -149,6 +148,11 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
 
     public Box getRenderBounds(){
         return Box.create(renderBoundsMinX, renderBoundsMinY, renderBoundsMinZ, renderBoundsMaxX, renderBoundsMaxY, renderBoundsMaxZ);
+    }
+
+    @Override
+    public void init() {
+        refreshRenderState();
     }
 
     @Override
