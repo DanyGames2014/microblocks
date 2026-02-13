@@ -42,7 +42,7 @@ import net.modificationstation.stationapi.api.util.math.Vec3d;
 import net.modificationstation.stationapi.impl.client.arsenic.renderer.render.ArsenicItemRenderer;
 import org.lwjgl.opengl.GL11;
 
-import static org.lwjgl.opengl.GL11.glTranslatef;
+import static org.lwjgl.opengl.GL11.*;
 
 public abstract class MicroblockItem extends TemplateItem implements EnhancedPlacementContextItem, CustomItemRenderer, CustomMultipartOutlineRenderer {
     public Block block;
@@ -166,6 +166,7 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
     @Override
     public void renderInGui(ArsenicItemRenderer arsenicItemRenderer, ItemRenderer itemRenderer, TextRenderer textRenderer, TextureManager textureManager, ItemStack stack, int x, int y) {
         SpriteAtlasTexture atlas = StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE);
+        GL11.glColor3f(1f, 1f, 1f);
         atlas.bindTexture();
         GL11.glPushMatrix();
         GL11.glTranslatef((float)(x - 2), (float)(y + 3), -3.0F);
