@@ -18,7 +18,7 @@ public class EdgeMicroblockMultipartComponent extends MicroblockMultipartCompone
 
     @Override
     public int getMaxSize() {
-        return 8;
+        return 14;
     }
 
     @Override

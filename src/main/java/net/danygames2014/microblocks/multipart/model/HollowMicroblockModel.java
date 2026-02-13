@@ -1,6 +1,7 @@
 package net.danygames2014.microblocks.multipart.model;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.danygames2014.microblocks.item.MicroblockItemType;
 import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.util.DirectionUtil;
 import net.danygames2014.nyalib.util.BoxUtil;
@@ -53,5 +54,10 @@ public class HollowMicroblockModel extends MicroblockModel{
             slot = PlacementSlot.FACE_NEG_Z;
         }
         return BoxUtil.rotate(Box.create(0D, 0D, 0D, size * PIXEL_SIZE, 1D, 1D), DirectionUtil.faceSlotToDirection(slot)).offset(offsetX, offsetY, offsetZ);
+    }
+
+    @Override
+    public boolean canOverlap(MicroblockItemType type, PlacementSlot slot) {
+        return !type.isCorner();
     }
 }

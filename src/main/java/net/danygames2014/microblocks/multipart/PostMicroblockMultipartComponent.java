@@ -34,7 +34,7 @@ public class PostMicroblockMultipartComponent extends MicroblockMultipartCompone
 
     @Override
     public int getMaxSize() {
-        return 8;
+        return 12;
     }
 
     @Override

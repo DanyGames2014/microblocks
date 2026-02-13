@@ -19,7 +19,7 @@ public class HollowMicroblockMultipartComponent extends MicroblockMultipartCompo
 
     @Override
     public int getMaxSize() {
-        return 16;
+        return 14;
     }
 
     @Override

@@ -19,7 +19,7 @@ public class FaceMicroblockMultipartComponent extends MicroblockMultipartCompone
 
     @Override
     public int getMaxSize() {
-        return 16;
+        return 14;
     }
 
     @Override
