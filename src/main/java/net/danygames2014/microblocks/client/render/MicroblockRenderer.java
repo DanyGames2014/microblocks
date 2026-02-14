@@ -6,6 +6,7 @@ import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
 import net.danygames2014.microblocks.util.ShrinkHelper;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.util.math.Box;
@@ -125,7 +126,14 @@ public class MicroblockRenderer {
             if ((component.renderMask & 16) != 0 && localBox.minX <= 0.0) localMask |= 16; // North
             if ((component.renderMask & 32) != 0 && localBox.maxX >= 1.0) localMask |= 32; // South
 
-            renderBox(blockView, component.block, localBox, component.x, component.y, component.z, 1f, 1f, 1f, new int[]{component.block.getTexture(0, component.meta), component.block.getTexture(1, component.meta), component.block.getTexture(2, component.meta), component.block.getTexture(3, component.meta), component.block.getTexture(4, component.meta), component.block.getTexture(5, component.meta)}, new int[]{0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}, localMask);
+            int color = component.block.getColorMultiplier(blockView, component.x, component.y, component.z);
+
+            float r = (float)(color >> 16 & 255) / 255.0F;
+            float g = (float)(color >> 8 & 255) / 255.0F;
+            float b = (float)(color & 255) / 255.0F;
+            float a = (float)(color >> 24 & 255) / 255.0F;
+
+            renderBox(blockView, component.block, localBox, component.x, component.y, component.z, r, g, b, new int[]{component.block.getTexture(0, component.meta), component.block.getTexture(1, component.meta), component.block.getTexture(2, component.meta), component.block.getTexture(3, component.meta), component.block.getTexture(4, component.meta), component.block.getTexture(5, component.meta)}, new int[]{0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}, localMask);
         }
         overrideBottom = false;
         overrideTop = false;
@@ -142,7 +150,13 @@ public class MicroblockRenderer {
 
         StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
 
-        tessellator.color(1F, 1F, 1F, 0.4F);
+        int color = block.getColor(meta);
+
+        float r = (float)(color >> 16 & 255) / 255.0F;
+        float g = (float)(color >> 8 & 255) / 255.0F;
+        float b = (float)(color & 255) / 255.0F;
+
+        tessellator.color(r, g, b, 0.4F);
         this.useAo = false;
 
         GL11.glPolygonOffset(-1.0F, -1.0F);
@@ -170,12 +184,13 @@ public class MicroblockRenderer {
         float var10;
         float var11;
         float var12;
-        boolean var13 = true;
-        boolean var14 = true;
-        boolean var15 = true;
-        boolean var16 = true;
-        boolean var17 = true;
-        boolean var18 = true;
+        boolean bottomColor = textures[0] != 3;
+        boolean topColor = textures[1] != 3;
+        boolean eastColor = textures[2] != 3;
+        boolean westColor = textures[3] != 3;
+        boolean northColor = textures[4] != 3;
+        boolean southColor = textures[5] != 3;
+
         this.selfBrightness = block.getLuminance(blockView, x, y, z);
         this.northBrightness = block.getLuminance(blockView, x - 1, y, z);
         this.bottomBrightness = block.getLuminance(blockView, x, y - 1, z);
@@ -237,9 +252,9 @@ public class MicroblockRenderer {
                 var10 = (this.northBottomBrightness + this.northEastBottomBrightness + this.bottomBrightness + this.eastBottomBrightness) / 4.0F;
             }
 
-            this.firstVertexRed = this.secondVertexRed = this.thirdVertexRed = this.fourthVertexRed = (var13 ? red : 1.0F) * 0.5F;
-            this.firstVertexGreen = this.secondVertexGreen = this.thirdVertexGreen = this.fourthVertexGreen = (var13 ? green : 1.0F) * 0.5F;
-            this.firstVertexBlue = this.secondVertexBlue = this.thirdVertexBlue = this.fourthVertexBlue = (var13 ? blue : 1.0F) * 0.5F;
+            this.firstVertexRed = this.secondVertexRed = this.thirdVertexRed = this.fourthVertexRed = (bottomColor ? red : 1.0F) * 0.5F;
+            this.firstVertexGreen = this.secondVertexGreen = this.thirdVertexGreen = this.fourthVertexGreen = (bottomColor ? green : 1.0F) * 0.5F;
+            this.firstVertexBlue = this.secondVertexBlue = this.thirdVertexBlue = this.fourthVertexBlue = (bottomColor ? blue : 1.0F) * 0.5F;
             this.firstVertexRed *= var9;
             this.firstVertexGreen *= var9;
             this.firstVertexBlue *= var9;
@@ -296,9 +311,9 @@ public class MicroblockRenderer {
                 var11 = (this.northTopBrightness + this.northEastTopBrightness + this.topBrightness + this.eastTopBrightness) / 4.0F;
             }
 
-            this.firstVertexRed = this.secondVertexRed = this.thirdVertexRed = this.fourthVertexRed = var14 ? red : 1.0F;
-            this.firstVertexGreen = this.secondVertexGreen = this.thirdVertexGreen = this.fourthVertexGreen = var14 ? green : 1.0F;
-            this.firstVertexBlue = this.secondVertexBlue = this.thirdVertexBlue = this.fourthVertexBlue = var14 ? blue : 1.0F;
+            this.firstVertexRed = this.secondVertexRed = this.thirdVertexRed = this.fourthVertexRed = topColor ? red : 1.0F;
+            this.firstVertexGreen = this.secondVertexGreen = this.thirdVertexGreen = this.fourthVertexGreen = topColor ? green : 1.0F;
+            this.firstVertexBlue = this.secondVertexBlue = this.thirdVertexBlue = this.fourthVertexBlue = topColor ? blue : 1.0F;
             this.firstVertexRed *= var9;
             this.firstVertexGreen *= var9;
             this.firstVertexBlue *= var9;
@@ -355,9 +370,9 @@ public class MicroblockRenderer {
                 var12 = (this.northEastBottomBrightness + this.northEastBrightness + this.eastBottomBrightness + this.eastBrightness) / 4.0F;
             }
 
-            this.firstVertexRed = this.secondVertexRed = this.thirdVertexRed = this.fourthVertexRed = (var15 ? red : 1.0F) * 0.8F;
-            this.firstVertexGreen = this.secondVertexGreen = this.thirdVertexGreen = this.fourthVertexGreen = (var15 ? green : 1.0F) * 0.8F;
-            this.firstVertexBlue = this.secondVertexBlue = this.thirdVertexBlue = this.fourthVertexBlue = (var15 ? blue : 1.0F) * 0.8F;
+            this.firstVertexRed = this.secondVertexRed = this.thirdVertexRed = this.fourthVertexRed = (eastColor ? red : 1.0F) * 0.8F;
+            this.firstVertexGreen = this.secondVertexGreen = this.thirdVertexGreen = this.fourthVertexGreen = (eastColor ? green : 1.0F) * 0.8F;
+            this.firstVertexBlue = this.secondVertexBlue = this.thirdVertexBlue = this.fourthVertexBlue = (eastColor ? blue : 1.0F) * 0.8F;
             this.firstVertexRed *= var9;
             this.firstVertexGreen *= var9;
             this.firstVertexBlue *= var9;
@@ -371,6 +386,22 @@ public class MicroblockRenderer {
             this.fourthVertexGreen *= var12;
             this.fourthVertexBlue *= var12;
             renderEast(box, x, y, z, textures[2], 0xFFFFFF);
+
+            if (Minecraft.INSTANCE.options.fancyGraphics && textures[2] == 3) {
+                this.firstVertexRed *= red;
+                this.secondVertexRed *= red;
+                this.thirdVertexRed *= red;
+                this.fourthVertexRed *= red;
+                this.firstVertexGreen *= green;
+                this.secondVertexGreen *= green;
+                this.thirdVertexGreen *= green;
+                this.fourthVertexGreen *= green;
+                this.firstVertexBlue *= blue;
+                this.secondVertexBlue *= blue;
+                this.thirdVertexBlue *= blue;
+                this.fourthVertexBlue *= blue;
+                renderEast(box, x, y, z, 38, 0xFFFFFF);
+            }
         }
 
         // West
@@ -414,9 +445,9 @@ public class MicroblockRenderer {
                 var10 = (this.northWestBottomBrightness + this.northWestBrightness + this.westBottomBrightness + this.westBrightness) / 4.0F;
             }
 
-            this.firstVertexRed = this.secondVertexRed = this.thirdVertexRed = this.fourthVertexRed = (var16 ? red : 1.0F) * 0.8F;
-            this.firstVertexGreen = this.secondVertexGreen = this.thirdVertexGreen = this.fourthVertexGreen = (var16 ? green : 1.0F) * 0.8F;
-            this.firstVertexBlue = this.secondVertexBlue = this.thirdVertexBlue = this.fourthVertexBlue = (var16 ? blue : 1.0F) * 0.8F;
+            this.firstVertexRed = this.secondVertexRed = this.thirdVertexRed = this.fourthVertexRed = (westColor ? red : 1.0F) * 0.8F;
+            this.firstVertexGreen = this.secondVertexGreen = this.thirdVertexGreen = this.fourthVertexGreen = (westColor ? green : 1.0F) * 0.8F;
+            this.firstVertexBlue = this.secondVertexBlue = this.thirdVertexBlue = this.fourthVertexBlue = (westColor ? blue : 1.0F) * 0.8F;
             this.firstVertexRed *= var9;
             this.firstVertexGreen *= var9;
             this.firstVertexBlue *= var9;
@@ -430,6 +461,22 @@ public class MicroblockRenderer {
             this.fourthVertexGreen *= var12;
             this.fourthVertexBlue *= var12;
             renderWest(box, x, y, z, textures[3], 0xFFFFFF);
+
+            if (Minecraft.INSTANCE.options.fancyGraphics && textures[3] == 3) {
+                this.firstVertexRed *= red;
+                this.secondVertexRed *= red;
+                this.thirdVertexRed *= red;
+                this.fourthVertexRed *= red;
+                this.firstVertexGreen *= green;
+                this.secondVertexGreen *= green;
+                this.thirdVertexGreen *= green;
+                this.fourthVertexGreen *= green;
+                this.firstVertexBlue *= blue;
+                this.secondVertexBlue *= blue;
+                this.thirdVertexBlue *= blue;
+                this.fourthVertexBlue *= blue;
+                renderWest(box, x, y, z, 38, 0xFFFFFF);
+            }
         }
 
         // North
@@ -473,9 +520,9 @@ public class MicroblockRenderer {
                 var11 = (this.northEastBottomBrightness + this.northBottomBrightness + this.northEastBrightness + this.northBrightness) / 4.0F;
             }
 
-            this.firstVertexRed = this.secondVertexRed = this.thirdVertexRed = this.fourthVertexRed = (var17 ? red : 1.0F) * 0.6F;
-            this.firstVertexGreen = this.secondVertexGreen = this.thirdVertexGreen = this.fourthVertexGreen = (var17 ? green : 1.0F) * 0.6F;
-            this.firstVertexBlue = this.secondVertexBlue = this.thirdVertexBlue = this.fourthVertexBlue = (var17 ? blue : 1.0F) * 0.6F;
+            this.firstVertexRed = this.secondVertexRed = this.thirdVertexRed = this.fourthVertexRed = (northColor ? red : 1.0F) * 0.6F;
+            this.firstVertexGreen = this.secondVertexGreen = this.thirdVertexGreen = this.fourthVertexGreen = (northColor ? green : 1.0F) * 0.6F;
+            this.firstVertexBlue = this.secondVertexBlue = this.thirdVertexBlue = this.fourthVertexBlue = (northColor ? blue : 1.0F) * 0.6F;
             this.firstVertexRed *= var9;
             this.firstVertexGreen *= var9;
             this.firstVertexBlue *= var9;
@@ -489,6 +536,22 @@ public class MicroblockRenderer {
             this.fourthVertexGreen *= var12;
             this.fourthVertexBlue *= var12;
             renderNorth(box, x, y, z, textures[4], 0xFFFFFF);
+
+            if (Minecraft.INSTANCE.options.fancyGraphics && textures[4] == 3) {
+                this.firstVertexRed *= red;
+                this.secondVertexRed *= red;
+                this.thirdVertexRed *= red;
+                this.fourthVertexRed *= red;
+                this.firstVertexGreen *= green;
+                this.secondVertexGreen *= green;
+                this.thirdVertexGreen *= green;
+                this.fourthVertexGreen *= green;
+                this.firstVertexBlue *= blue;
+                this.secondVertexBlue *= blue;
+                this.thirdVertexBlue *= blue;
+                this.fourthVertexBlue *= blue;
+                renderNorth(box, x, y, z, 38, 0xFFFFFF);
+            }
         }
 
         if ((renderMask & 32) == 0) {
@@ -531,9 +594,9 @@ public class MicroblockRenderer {
                 var10 = (this.southEastBottomBrightness + this.southBottomBrightness + this.southEastBrightness + this.southBrightness) / 4.0F;
             }
 
-            this.firstVertexRed = this.secondVertexRed = this.thirdVertexRed = this.fourthVertexRed = (var18 ? red : 1.0F) * 0.6F;
-            this.firstVertexGreen = this.secondVertexGreen = this.thirdVertexGreen = this.fourthVertexGreen = (var18 ? green : 1.0F) * 0.6F;
-            this.firstVertexBlue = this.secondVertexBlue = this.thirdVertexBlue = this.fourthVertexBlue = (var18 ? blue : 1.0F) * 0.6F;
+            this.firstVertexRed = this.secondVertexRed = this.thirdVertexRed = this.fourthVertexRed = (southColor ? red : 1.0F) * 0.6F;
+            this.firstVertexGreen = this.secondVertexGreen = this.thirdVertexGreen = this.fourthVertexGreen = (southColor ? green : 1.0F) * 0.6F;
+            this.firstVertexBlue = this.secondVertexBlue = this.thirdVertexBlue = this.fourthVertexBlue = (southColor ? blue : 1.0F) * 0.6F;
             this.firstVertexRed *= var9;
             this.firstVertexGreen *= var9;
             this.firstVertexBlue *= var9;
@@ -547,6 +610,22 @@ public class MicroblockRenderer {
             this.fourthVertexGreen *= var12;
             this.fourthVertexBlue *= var12;
             renderSouth(box, x, y, z, textures[5], 0xFFFFFF);
+
+            if (Minecraft.INSTANCE.options.fancyGraphics && textures[5] == 3) {
+                this.firstVertexRed *= red;
+                this.secondVertexRed *= red;
+                this.thirdVertexRed *= red;
+                this.fourthVertexRed *= red;
+                this.firstVertexGreen *= green;
+                this.secondVertexGreen *= green;
+                this.thirdVertexGreen *= green;
+                this.fourthVertexGreen *= green;
+                this.firstVertexBlue *= blue;
+                this.secondVertexBlue *= blue;
+                this.thirdVertexBlue *= blue;
+                this.fourthVertexBlue *= blue;
+                renderSouth(box, x, y, z, 38, 0xFFFFFF);
+            }
         }
     }
 
