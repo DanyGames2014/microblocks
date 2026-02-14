@@ -18,6 +18,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.StationAPI;
 import net.modificationstation.stationapi.api.event.mod.InitEvent;
 import net.modificationstation.stationapi.api.event.recipe.RecipeRegisterEvent;
@@ -241,7 +242,8 @@ public class Microblocks {
         for (var microblockItemsOfType : microblockItems.values()) {
             for (var microblockItems : microblockItemsOfType.values()) {
                 for (Int2ObjectMap.Entry<MicroblockItem> microblockItem : microblockItems.int2ObjectEntrySet()) {
-                    String translation = I18n.getTranslation(microblockItem.getValue().getTypeTranslationKey(), microblockItem.getValue().block.getTranslatedName());
+                    ItemStack stack = new ItemStack(microblockItem.getValue().block, 1, microblockItem.getIntKey());
+                    String translation = I18n.getTranslation(microblockItem.getValue().getTypeTranslationKey(), I18n.getTranslation(stack.getItem().getTranslationKey(stack) + ".name"));
                     translations.put(microblockItem.getValue().getTranslationKey() + ".name", translation);
                 }
             }
