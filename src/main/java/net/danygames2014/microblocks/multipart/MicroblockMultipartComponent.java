@@ -40,15 +40,15 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
     int size = 1;
 
     public MicroblockMultipartComponent() {
-        
+
     }
-    
+
     public MicroblockMultipartComponent(Block block, int meta, PlacementSlot slot, int size) {
         this.block = block;
         this.meta = meta;
         this.slot = slot;
         this.size = size;
-        
+
         this.hardness = block.getHardness();
     }
 
@@ -60,7 +60,7 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
     public ItemStack createStack(MicroblockItemType type) {
         return new ItemStack(Microblocks.microblockItems.get(type).get(this.block).get(this.meta));
     }
-    
+
     public abstract MicroblockItemType getClosestItemType();
 
     @Override
@@ -73,11 +73,11 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         return block.soundGroup;
     }
 
-    public int getPriority(){
+    public int getPriority() {
         return slot.getPriority();
     }
 
-    public boolean isTransparent(){
+    public boolean isTransparent() {
         return !block.isOpaque();
     }
 
@@ -86,7 +86,7 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         if (block == null) {
             return false;
         }
-        if(renderLayer == block.getRenderLayer()){
+        if (renderLayer == block.getRenderLayer()) {
             MicroblockRenderer.INSTANCE.renderMicroblock(world, this, blockRenderManager);
             return true;
         }
@@ -101,19 +101,19 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         } else {
             throw new IllegalStateException();
         }
-        
+
         if (nbt.contains("meta")) {
-           meta = nbt.getInt("meta"); 
+            meta = nbt.getInt("meta");
         } else {
             meta = 0;
         }
-        
+
         if (nbt.contains("slot")) {
             this.slot = PlacementSlot.fromOrdinal(nbt.getInt("slot"));
         } else {
             throw new IllegalStateException();
         }
-        
+
         this.size = nbt.getInt("size");
     }
 
@@ -123,17 +123,17 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         if (blockId != null) {
             nbt.putString("blockId", blockId.toString());
         }
-        
+
         nbt.putInt("meta", meta);
-        
-        if(slot != null){
+
+        if (slot != null) {
             nbt.putInt("slot", slot.ordinal());
         }
-        
+
         nbt.putInt("size", size);
     }
 
-    public void setRenderBounds(Box box){
+    public void setRenderBounds(Box box) {
         setRenderBounds(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ);
     }
 
@@ -146,7 +146,7 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         this.renderBoundsMaxZ = maxZ;
     }
 
-    public Box getRenderBounds(){
+    public Box getRenderBounds() {
         return Box.create(renderBoundsMinX, renderBoundsMinY, renderBoundsMinZ, renderBoundsMaxX, renderBoundsMaxY, renderBoundsMaxZ);
     }
 
@@ -165,35 +165,34 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         refreshRenderState();
     }
 
-    public boolean canOverlap(MicroblockItemType type, PlacementSlot slot, int size){
+    public boolean canOverlap(MicroblockItemType type, PlacementSlot slot, int size) {
         return true;
     }
 
-    public void refreshRenderState(){
+    public void refreshRenderState() {
         if (slot == null) {
             return;
         }
-        
+
         setRenderBounds(getMicroblockModel().getRenderBounds(slot, size, x, y, z).copy());
         renderMask = 0;
         int maxSlot = (slot.ordinal() < 6) ? 6 : (slot.ordinal() < 15) ? 15 : 26;
-        for(MultipartComponent component : state.components){
-            if(component == this) continue;
-            if(component instanceof MicroblockMultipartComponent microblock){
+        for (MultipartComponent component : state.components) {
+            if (component == this) continue;
+            if (component instanceof MicroblockMultipartComponent microblock) {
                 if (microblock.slot == null) {
                     continue;
                 }
-                
-                if(microblock.slot.ordinal() >= maxSlot){
+
+                if (microblock.slot.ordinal() >= maxSlot) {
                     continue;
                 }
-                if(shouldShrink(microblock)){
-                   int side = ShrinkHelper.shrinkSide(slot, microblock.slot);
-                   if(side != -1){
-                       setRenderBounds(ShrinkHelper.shrink(getRenderBounds(), microblock.getRenderBounds(), Direction.byId(side)));
-                   }
-                }
-                else if(microblock.slot.ordinal() < 6 && !microblock.isTransparent()){
+                if (shouldShrink(microblock)) {
+                    int side = ShrinkHelper.shrinkSide(slot, microblock.slot);
+                    if (side != -1) {
+                        setRenderBounds(ShrinkHelper.shrink(getRenderBounds(), microblock.getRenderBounds(), Direction.byId(side)));
+                    }
+                } else if (microblock.slot.ordinal() < 6 && !microblock.isTransparent()) {
                     this.renderMask |= ShrinkHelper.calculateCulling(microblock, getRenderBounds().offset(-x, -y, -z));
                 } else {
                     this.renderMask |= 0;
@@ -202,25 +201,24 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         }
     }
 
-    public boolean shouldShrink(MicroblockMultipartComponent other){
+    public boolean shouldShrink(MicroblockMultipartComponent other) {
         int componentPriority = this.getPriority();
         int otherPriority = other.getPriority();
-        if(componentPriority != otherPriority) {
+        if (componentPriority != otherPriority) {
             return componentPriority < otherPriority;
         }
-        if(this.slot.ordinal() < 6) {
-            if(this.isTransparent() != other.isTransparent()) {
+        if (this.slot.ordinal() < 6) {
+            if (this.isTransparent() != other.isTransparent()) {
                 return this.isTransparent();
             }
-            if(this.getSize() != other.getSize()) {
+            if (this.getSize() != other.getSize()) {
                 return this.getSize() < other.getSize();
             }
-        }
-        else {
-            if(this.getSize() != other.getSize()) {
+        } else {
+            if (this.getSize() != other.getSize()) {
                 return this.getSize() < other.getSize();
             }
-            if(this.isTransparent() != other.isTransparent()) {
+            if (this.isTransparent() != other.isTransparent()) {
                 return this.isTransparent();
             }
         }
@@ -261,23 +259,24 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         return Block.BLOCKS_LIGHT_LUMINANCE[block.id];
     }
 
-    public boolean canUse(PlayerEntity player, Vec3d pos, Direction face, @Nullable PlacementSlot slotOverride){
-        if(!player.isSneaking() && player.getHand() != null && player.getHand().getItem() instanceof MicroblockItem microblockItem){
-            if(microblockItem.block != block || microblockItem.meta != meta){
+    public boolean canUse(PlayerEntity player, Vec3d pos, Direction face, @Nullable PlacementSlot slotOverride) {
+        ItemStack stack = player.getHand();
+        if (!player.isSneaking() && stack != null && stack.getItem() instanceof MicroblockItem microblockItem) {
+            if (microblockItem.block != block || microblockItem.meta != meta) {
                 return false;
             }
             PlacementSlot placementSlot = slotOverride;
-            if(slotOverride == null){
-                 placementSlot = microblockItem.getPlacementHelper().getSlot(x, y, z, face, new net.modificationstation.stationapi.api.util.math.Vec3d(pos.x, pos.y, pos.z), microblockItem.getPlacementHelper().getGridCenterSize());
+            if (slotOverride == null) {
+                placementSlot = microblockItem.getPlacementHelper().getSlot(x, y, z, face, new net.modificationstation.stationapi.api.util.math.Vec3d(pos.x, pos.y, pos.z), microblockItem.getPlacementHelper().getGridCenterSize());
             }
-            if(placementSlot != slot){
+            if (placementSlot != slot) {
                 return false;
             }
-            if(size + microblockItem.getSize() > getMaxSize()){
+            if (size + microblockItem.getSize() > getMaxSize()) {
                 return false;
             }
-            if(MathHelper.getHitDepth(new net.modificationstation.stationapi.api.util.math.Vec3d(pos.x - x, pos.y - y, pos.z - z), face) < 1){
-                if(!microblockItem.getPlacementHelper().canGrow(this, size + microblockItem.getSize())){
+            if (MathHelper.getHitDepth(new net.modificationstation.stationapi.api.util.math.Vec3d(pos.x - x, pos.y - y, pos.z - z), face) < 1) {
+                if (!microblockItem.getPlacementHelper().canGrow(this, size + microblockItem.getSize())) {
                     return false;
                 }
                 return true;
@@ -288,12 +287,14 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
 
     @Override
     public boolean onUse(PlayerEntity player, Vec3d pos, Direction face) {
-        if(canUse(player, pos, face, null)){
-            if(player.getHand().getItem() instanceof MicroblockItem microblockItem){
-                if(world.isRemote){
+        if (canUse(player, pos, face, null)) {
+            ItemStack stack = player.getHand();
+            if (stack.getItem() instanceof MicroblockItem microblockItem) {
+                if (world.isRemote) {
                     return true;
                 }
                 size += microblockItem.getSize();
+                stack.count--;
                 markDirty();
                 notifyNeighbors();
                 refreshRenderState();
@@ -321,6 +322,7 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
     }
 
     public abstract int getMaxSize();
+
     public int getSize() {
         return size;
     }
