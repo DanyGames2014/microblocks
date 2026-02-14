@@ -252,6 +252,15 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         return clippedList;
     }
 
+    @Override
+    public int getLightLevel() {
+        if (block == null) {
+            return 0;
+        }
+
+        return Block.BLOCKS_LIGHT_LUMINANCE[block.id];
+    }
+
     public boolean canUse(PlayerEntity player, Vec3d pos, Direction face, @Nullable PlacementSlot slotOverride){
         if(!player.isSneaking() && player.getHand() != null && player.getHand().getItem() instanceof MicroblockItem microblockItem){
             if(microblockItem.block != block || microblockItem.meta != meta){
