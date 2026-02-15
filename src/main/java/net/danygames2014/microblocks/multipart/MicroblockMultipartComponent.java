@@ -10,10 +10,15 @@ import net.danygames2014.microblocks.util.MathHelper;
 import net.danygames2014.microblocks.util.ShrinkHelper;
 import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.danygames2014.nyalib.multipart.MultipartState;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.BlockParticle;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -22,11 +27,14 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
+import net.modificationstation.stationapi.api.util.SideUtil;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class MicroblockMultipartComponent extends MultipartComponent {
+import java.util.Random;
 
+public abstract class MicroblockMultipartComponent extends MultipartComponent {
+    public Random random = new Random();
     public Block block;
     public int meta;
     public PlacementSlot slot;
@@ -165,6 +173,71 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         refreshRenderState();
     }
 
+    @Override
+    public void onBreak() {
+        super.onBreak();
+
+        SideUtil.run(this::spawnBreakingParticles, () -> {});
+    }
+    
+    @Environment(EnvType.CLIENT)
+    public void spawnBreakingParticles() {
+        double volume = (renderBoundsMaxX - renderBoundsMinX) * (renderBoundsMaxY - renderBoundsMinY) * (renderBoundsMaxZ - renderBoundsMinZ);
+
+        int steps = (int) MathHelper.clamp(volume * 16, 2, 4);
+        
+        for(int stepX = 0; stepX < steps; ++stepX) {
+            for(int stepY = 0; stepY < steps; ++stepY) {
+                for(int stepZ = 0; stepZ < steps; ++stepZ) {
+                    double particleX = renderBoundsMinX + (renderBoundsMaxX - renderBoundsMinX) * ((double)stepX + 0.5D) / (double)steps;
+                    double particleY = renderBoundsMinY + (renderBoundsMaxY - renderBoundsMinY) * ((double)stepY + 0.5D) / (double)steps;
+                    double particleZ = renderBoundsMinZ + (renderBoundsMaxZ - renderBoundsMinZ) * ((double)stepZ + 0.5D) / (double)steps;
+                    
+                    int side = this.random.nextInt(6);
+                    Minecraft.INSTANCE.particleManager.addParticle((new BlockParticle(this.world, particleX, particleY, particleZ, particleX - (double)x - (double)0.5F, particleY - (double)y - (double)0.5F, particleZ - (double)z - (double)0.5F, block, side, meta)).color(x, y, z));
+                }
+            }
+        }
+    }
+
+    @Override
+    @Environment(EnvType.CLIENT)
+    public void onBeingBroken(ClientPlayerEntity player, Vec3d hitVec, Direction face) {
+        float var7 = 0.1F;
+        double particleX = this.random.nextDouble() * (renderBoundsMaxX - renderBoundsMinX - (double)(var7 * 2.0F)) + (double)var7 + renderBoundsMinX;
+        double particleY = this.random.nextDouble() * (renderBoundsMaxY - renderBoundsMinY - (double)(var7 * 2.0F)) + (double)var7 + renderBoundsMinY;
+        double particleZ = this.random.nextDouble() * (renderBoundsMaxZ - renderBoundsMinZ - (double)(var7 * 2.0F)) + (double)var7 + renderBoundsMinZ;
+
+        int side = face.getId();
+        if (side == 0) {
+            particleY = renderBoundsMinY - (double)var7;
+        }
+
+        if (side == 1) {
+            particleY = renderBoundsMaxY + (double)var7;
+        }
+
+        if (side == 2) {
+            particleZ = renderBoundsMinZ - (double)var7;
+        }
+
+        if (side == 3) {
+            particleZ = renderBoundsMaxZ + (double)var7;
+        }
+
+        if (side == 4) {
+            particleX = renderBoundsMinX - (double)var7;
+        }
+
+        if (side == 5) {
+            particleX = renderBoundsMaxX + (double)var7;
+        }
+        
+        Minecraft.INSTANCE.particleManager.addParticle(
+                new BlockParticle(world, particleX, particleY, particleZ, 0.0F, 0.0F, 0.0F, block, face.getId(), meta).color(x, y, z).multiplyVelocity(0.2F).setScale(0.6F)
+        );
+    }
+
     public boolean canOverlap(MicroblockItemType type, PlacementSlot slot, int size) {
         return true;
     }
@@ -276,10 +349,7 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
                 return false;
             }
             if (MathHelper.getHitDepth(new net.modificationstation.stationapi.api.util.math.Vec3d(pos.x - x, pos.y - y, pos.z - z), face) < 1) {
-                if (!microblockItem.getPlacementHelper().canGrow(this, size + microblockItem.getSize())) {
-                    return false;
-                }
-                return true;
+                return microblockItem.getPlacementHelper().canGrow(this, size + microblockItem.getSize());
             }
         }
         return false;

@@ -46,4 +46,8 @@ public class MathHelper {
     public static BlockPos getPlacementPos(int x, int y, int z, Direction face){
         return new BlockPos(x + face.getOffsetX(), y + face.getOffsetY(), z + face.getOffsetZ());
     }
+    
+    public static double clamp(double value, double min, double max) {
+        return Math.max(min, Math.min(max, value));
+    }
 }
