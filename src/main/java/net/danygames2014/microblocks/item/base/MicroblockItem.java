@@ -15,6 +15,7 @@ import net.danygames2014.nyalib.item.multipart.CustomMultipartOutlineRenderer;
 import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.danygames2014.nyalib.multipart.MultipartHitResult;
 import net.danygames2014.nyalib.multipart.MultipartState;
+import net.danygames2014.nyalib.sound.SoundHelper;
 import net.danygames2014.nyalib.util.PlayerUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -84,6 +85,7 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
         if (state != null && MathHelper.getHitDepth(stapiRelativeVec, direction) < 1) {
             if (tryPlace(world, x, y, z, direction, stapiVec, size, player)) {
                 stack.count--;
+                SoundHelper.playSound(world, x + 0.5F, y + 0.5F, z + 0.5F, block.soundGroup.getSound(), (block.soundGroup.getVolume() + 1.0F) / 2.0F, block.soundGroup.getPitch() * 0.8F);
                 return true;
             }
         }
@@ -91,6 +93,7 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
         BlockPos pPos = MathHelper.getPlacementPos(x, y, z, direction);
         if(tryPlace(world, pPos.getX(), pPos.getY(), pPos.getZ(), direction, stapiVec, size, player)) {
             stack.count--;
+            SoundHelper.playSound(world, pPos.getX() + 0.5F, pPos.getY() + 0.5F, pPos.getZ() + 0.5F, block.soundGroup.getSound(), (block.soundGroup.getVolume() + 1.0F) / 2.0F, block.soundGroup.getPitch() * 0.8F);
             return true;
         }
         

@@ -10,6 +10,7 @@ import net.danygames2014.microblocks.util.MathHelper;
 import net.danygames2014.microblocks.util.ShrinkHelper;
 import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.danygames2014.nyalib.multipart.MultipartState;
+import net.danygames2014.nyalib.sound.SoundHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
@@ -368,6 +369,7 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
                 markDirty();
                 notifyNeighbors();
                 refreshRenderState();
+                SoundHelper.playSound(world, x + 0.5F, y + 0.5F, z + 0.5F, block.soundGroup.getSound(), (block.soundGroup.getVolume() + 1.0F) / 2.0F, block.soundGroup.getPitch() * 0.8F);
                 return true;
             }
         }
