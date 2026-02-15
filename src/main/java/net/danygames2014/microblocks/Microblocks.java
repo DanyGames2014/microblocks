@@ -177,6 +177,12 @@ public class Microblocks {
             // Panel Strip -> 2x Cover Strip
             recipeManager.addRecipe(MicroblockRecipeIngredient.STRIP, 2,"S", "P", 'P', MicroblockItemType.PANEL_STRIP);
             
+            // Slab Corner -> 2x Panel Corner
+            recipeManager.addRecipe(MicroblockRecipeIngredient.PANEL_CORNER, 2,"S", "L", 'L', MicroblockItemType.SLAB_CORNER);
+            
+            // Panel Corner -> 2x Cover Corner
+            recipeManager.addRecipe(MicroblockRecipeIngredient.CORNER, 2,"S", "P", 'P', MicroblockItemType.PANEL_CORNER);
+            
             // Combining
             // 2x Slab -> Full Block
             recipeManager.addRecipe(MicroblockRecipeIngredient.BLOCK, 1,"SS", 'S', MicroblockItemType.SLAB);
