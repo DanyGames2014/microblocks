@@ -21,6 +21,9 @@
     "stationapi:event_bus_client": [
     ],
     "stationapi:event_bus_server": [
+    ],
+    "alwaysmoreitems:plugin": [
+      "net.danygames2014.microblocks.compat.ami.MicroblocksAmiPlugin"
     ]
   },
   "mixins": [
