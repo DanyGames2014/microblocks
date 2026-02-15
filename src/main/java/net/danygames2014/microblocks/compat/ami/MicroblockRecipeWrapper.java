@@ -72,7 +72,7 @@ public class MicroblockRecipeWrapper implements RecipeWrapper {
             for(Block block : MicroblockRegistry.getInstance().registry.keySet()){
                 int[] metas = MicroblockRegistry.getMeta(block);
                 for(int meta : metas) {
-                    stacks.add(new ItemStack(block, 1,  meta));
+                    stacks.add(new ItemStack(block, recipe.getOutputAmount(),  meta));
                 }
             }
             items.add(stacks);
@@ -83,7 +83,7 @@ public class MicroblockRecipeWrapper implements RecipeWrapper {
 
                 var metas = block.getValue().int2ObjectEntrySet();
                 for(var entry : metas) {
-                    stacks.add(new ItemStack(entry.getValue(), 1,  entry.getIntKey()));
+                    stacks.add(new ItemStack(entry.getValue(), recipe.getOutputAmount(),  entry.getIntKey()));
                 }
             }
             items.add(stacks);
