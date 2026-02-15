@@ -54,14 +54,16 @@ public class MicroblocksAmiPlugin implements ModPluginProvider {
 
     @Override
     public void updateBlacklist(AMIHelpers amiHelpers) {
-        for (var microblockItemsOfType : Microblocks.microblockItems.values()) {
-            for (var microblockItems : microblockItemsOfType.values()) {
-                for (Int2ObjectMap.Entry<MicroblockItem> microblockItem : microblockItems.int2ObjectEntrySet()) {
-                    if (microblockItem.getValue().block == Block.STONE) {
-                        continue;
+        if (Microblocks.CONFIG.hideMicroblocksInAmi) {
+            for (var microblockItemsOfType : Microblocks.microblockItems.values()) {
+                for (var microblockItems : microblockItemsOfType.values()) {
+                    for (Int2ObjectMap.Entry<MicroblockItem> microblockItem : microblockItems.int2ObjectEntrySet()) {
+                        if (microblockItem.getValue().block == Block.STONE) {
+                            continue;
+                        }
+
+                        amiHelpers.getItemBlacklist().addItemToBlacklist(new ItemStack(microblockItem.getValue(), 1, microblockItem.getIntKey()));
                     }
-                    
-                    amiHelpers.getItemBlacklist().addItemToBlacklist(new ItemStack(microblockItem.getValue(), 1, microblockItem.getIntKey()));
                 }
             }
         }

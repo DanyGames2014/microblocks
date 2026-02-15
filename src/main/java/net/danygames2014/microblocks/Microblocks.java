@@ -3,6 +3,7 @@ package net.danygames2014.microblocks;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.danygames2014.microblocks.config.MicroblocksConfig;
 import net.danygames2014.microblocks.event.MicroblockRegistryEvent;
 import net.danygames2014.microblocks.item.MicroblockItemType;
 import net.danygames2014.microblocks.item.base.HandSawItem;
@@ -13,6 +14,7 @@ import net.danygames2014.microblocks.recipe.MicroblockRecipeIngredient;
 import net.danygames2014.microblocks.recipe.MicroblockRecipeManager;
 import net.danygames2014.nyalib.event.MultipartComponentRegistryEvent;
 import net.fabricmc.loader.api.FabricLoader;
+import net.glasslauncher.mods.gcapi3.api.ConfigRoot;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.minecraft.client.resource.language.I18n;
@@ -41,6 +43,9 @@ public class Microblocks {
     @Entrypoint.Logger
     public static Logger LOGGER;
 
+    @ConfigRoot(value = "microblocks", visibleName = "Microblocks")
+    public static final MicroblocksConfig CONFIG = new MicroblocksConfig();
+    
     public static Item ironHandsaw;
     public static Item diamondHandsaw;
 

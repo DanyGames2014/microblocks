@@ -2,10 +2,12 @@ package net.danygames2014.microblocks.microblock;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.danygames2014.microblocks.Microblocks;
+import net.danygames2014.microblocks.item.MicroblockItemType;
 import net.minecraft.block.Block;
 
 public class MicroblockRegistry {
-    public final Object2ObjectOpenHashMap<Block, int[]> registry = new Object2ObjectOpenHashMap<>();
+    public final Object2ObjectOpenHashMap<Block, int[]> registry = new Object2ObjectOpenHashMap<>(); // VALID_META_VALUES_FOR_BLOCK
+    public final Object2ObjectOpenHashMap<MicroblockItemType, Block> MICROBLOCKS_OF_TYPE = new Object2ObjectOpenHashMap<>(); 
     
     private static MicroblockRegistry INSTANCE;
     

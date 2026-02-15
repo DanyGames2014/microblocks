@@ -24,7 +24,14 @@
     ],
     "alwaysmoreitems:plugin": [
       "net.danygames2014.microblocks.compat.ami.MicroblocksAmiPlugin"
+    ],
+    "gcapi3": [
+      "net.danygames2014.microblocks.Microblocks"
+    ],
+    "gcapi3:presave": [
+      "net.danygames2014.microblocks.config.MicroblocksConfigListener"
     ]
+    
   },
   "mixins": [
     "microblocks.mixins.json"
