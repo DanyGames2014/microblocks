@@ -30,9 +30,43 @@ public abstract class EdgeMicroblockItem extends MicroblockItem {
     }
 
     protected boolean tryPlace(World world, int x, int y, int z, Direction dir, net.modificationstation.stationapi.api.util.math.Vec3d vec, int size, PlayerEntity player) {
+//        PlacementSlot slot = placementHelper.getSlot(x, y, z, dir, vec, placementHelper.getGridCenterSize());
+//
+//        boolean sneaking = player != null && player.isSneaking();
+//
+//        if(sneaking && slot != PlacementSlot.INVALID){
+//            slot = placementHelper.getOppositeSlot(slot, dir);
+//        }
+//
+//        if(slot != PlacementSlot.INVALID){
+//            if (placementHelper.canPlace(world, x, y, z, getType(), slot, size, EdgeMicroblockMultipartComponent.MODEL)) {
+//                world.addMultipartComponent(x, y, z, new EdgeMicroblockMultipartComponent(this.block, meta, slot, size));
+//                return true;
+//            }
+//        } else {
+//            slot = postPlacementHelper.getSlot(x, y, z, dir, vec, placementHelper.getGridCenterSize());
+//            if (placementHelper.canPlace(world, x, y, z, getType(), slot, size, PostMicroblockMultipartComponent.MODEL)) {
+//                world.addMultipartComponent(x, y, z, new PostMicroblockMultipartComponent(this.block, meta, slot, size));
+//                return true;
+//            }
+//        }
+//
+//        if(!sneaking) {
+//            PlacementSlot oppositeSlot = placementHelper.getOppositeSlot(slot, dir);
+//            if(oppositeSlot != PlacementSlot.INVALID){
+//                if (placementHelper.canPlace(world, x, y, z, getType(), oppositeSlot, size, EdgeMicroblockMultipartComponent.MODEL)) {
+//                    world.addMultipartComponent(x, y, z, new EdgeMicroblockMultipartComponent(this.block, meta, oppositeSlot, size));
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
+
         PlacementSlot slot = placementHelper.getSlot(x, y, z, dir, vec, placementHelper.getGridCenterSize());
 
-        if (player != null && player.isSneaking()) {
+        boolean sneaking = player != null && player.isSneaking();
+
+        if(sneaking && slot != PlacementSlot.INVALID){
             slot = placementHelper.getOppositeSlot(slot, dir);
         }
 
@@ -41,6 +75,15 @@ public abstract class EdgeMicroblockItem extends MicroblockItem {
                 world.addMultipartComponent(x, y, z, new EdgeMicroblockMultipartComponent(this.block, meta, slot, size));
                 return true;
             }
+            if(!sneaking) {
+                PlacementSlot oppositeSlot = placementHelper.getOppositeSlot(slot, dir);
+                if(oppositeSlot != PlacementSlot.INVALID){
+                    if (placementHelper.canPlace(world, x, y, z, getType(), oppositeSlot, size, EdgeMicroblockMultipartComponent.MODEL)) {
+                        world.addMultipartComponent(x, y, z, new EdgeMicroblockMultipartComponent(this.block, meta, oppositeSlot, size));
+                        return true;
+                    }
+                }
+            }
         } else {
             slot = postPlacementHelper.getSlot(x, y, z, dir, vec, placementHelper.getGridCenterSize());
             if (placementHelper.canPlace(world, x, y, z, getType(), slot, size, PostMicroblockMultipartComponent.MODEL)) {
@@ -48,6 +91,7 @@ public abstract class EdgeMicroblockItem extends MicroblockItem {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -78,6 +122,24 @@ public abstract class EdgeMicroblockItem extends MicroblockItem {
             GL11.glDisable(GL11.GL_BLEND);
             GL11.glPopMatrix();
             return true;
+        }
+
+        if(!player.isSneaking()){
+            PlacementSlot oppositeSlot = placementHelper.getOppositeSlot(placementSlot, dir);
+            if(placementHelper.canPlace(world, x, y, z, getType(), oppositeSlot, size, model)){
+                MicroblockRenderer renderer = MicroblockRenderer.INSTANCE;
+                GL11.glPushMatrix();
+                GL11.glEnable(GL11.GL_BLEND);
+                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+                Vec3d playerPos = PlayerUtil.getRenderPosition(player, tickDelta);
+                GL11.glTranslated(x - playerPos.x, y - playerPos.y, z - playerPos.z);
+
+                renderer.renderMicroblockPreview(model, oppositeSlot, block, meta, size, 0, 0, 0);
+                GL11.glDisable(GL11.GL_BLEND);
+                GL11.glPopMatrix();
+                return true;
+            }
         }
         return false;
     }

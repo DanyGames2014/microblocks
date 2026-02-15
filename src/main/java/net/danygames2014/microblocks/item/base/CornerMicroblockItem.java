@@ -27,13 +27,23 @@ public abstract class CornerMicroblockItem extends MicroblockItem {
     protected boolean tryPlace(World world, int x, int y, int z, Direction dir, net.modificationstation.stationapi.api.util.math.Vec3d vec, int size, PlayerEntity player) {
         PlacementSlot slot = placementHelper.getSlot(x, y, z, dir, vec, placementHelper.getGridCenterSize());
 
-        if (player != null && player.isSneaking()) {
+        boolean sneaking = player != null && player.isSneaking();
+
+        if(sneaking){
             slot = placementHelper.getOppositeSlot(slot, dir);
         }
 
         if (placementHelper.canPlace(world, x, y, z, getType(), slot, size, CornerMicroblockMultipartComponent.MODEL)) {
             world.addMultipartComponent(x, y, z, new CornerMicroblockMultipartComponent(this.block, meta, slot, size));
             return true;
+        }
+
+        if(!sneaking) {
+            PlacementSlot oppositeSlot = placementHelper.getOppositeSlot(slot, dir);
+            if (placementHelper.canPlace(world, x, y, z, getType(), oppositeSlot, size, CornerMicroblockMultipartComponent.MODEL)) {
+                world.addMultipartComponent(x, y, z, new CornerMicroblockMultipartComponent(this.block, meta, oppositeSlot, size));
+                return true;
+            }
         }
         return false;
     }

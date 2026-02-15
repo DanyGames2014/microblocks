@@ -78,7 +78,6 @@ public class EdgePlacementHelper extends PlacementHelper{
         if (edgeIndex >= EDGE_OPPOSITE_MAP.length){
             return slot;
         }
-        System.out.println("new slot: " + (EDGE_OPPOSITE_MAP[edgeIndex][side.ordinal()]));
         return PlacementSlot.fromOrdinal(14 + EDGE_OPPOSITE_MAP[edgeIndex][side.ordinal()]);
     }
 

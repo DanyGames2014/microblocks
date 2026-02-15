@@ -1,5 +1,6 @@
 package net.danygames2014.microblocks.item.base;
 
+import net.danygames2014.microblocks.multipart.CornerMicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.HollowMicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
@@ -27,13 +28,23 @@ public abstract class HollowFaceMicroblockItem extends MicroblockItem{
     protected boolean tryPlace(World world, int x, int y, int z, Direction dir, net.modificationstation.stationapi.api.util.math.Vec3d vec, int size, PlayerEntity player) {
         PlacementSlot slot = placementHelper.getSlot(x, y, z, dir, vec, placementHelper.getGridCenterSize());
 
-        if (player != null && player.isSneaking()) {
+        boolean sneaking = player != null && player.isSneaking();
+
+        if(sneaking){
             slot = placementHelper.getOppositeSlot(slot, dir);
         }
 
         if (placementHelper.canPlace(world, x, y, z, getType(), slot, size, HollowMicroblockMultipartComponent.MODEL)) {
             world.addMultipartComponent(x, y, z, new HollowMicroblockMultipartComponent(this.block, meta, slot, size));
             return true;
+        }
+
+        if(!sneaking) {
+            PlacementSlot oppositeSlot = placementHelper.getOppositeSlot(slot, dir);
+            if (placementHelper.canPlace(world, x, y, z, getType(), oppositeSlot, size, HollowMicroblockMultipartComponent.MODEL)) {
+                world.addMultipartComponent(x, y, z, new HollowMicroblockMultipartComponent(this.block, meta, oppositeSlot, size));
+                return true;
+            }
         }
         return false;
     }

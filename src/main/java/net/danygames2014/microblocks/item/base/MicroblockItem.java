@@ -166,6 +166,24 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
             GL11.glPopMatrix();
             return true;
         }
+
+        if(!player.isSneaking()){
+            PlacementSlot oppositeSlot = placementHelper.getOppositeSlot(placementSlot, dir);
+            if(placementHelper.canPlace(world, x, y, z, getType(), oppositeSlot, size, microblockModel)){
+                MicroblockRenderer renderer = MicroblockRenderer.INSTANCE;
+                GL11.glPushMatrix();
+                GL11.glEnable(GL11.GL_BLEND);
+                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+                Vec3d playerPos = PlayerUtil.getRenderPosition(player, tickDelta);
+                GL11.glTranslated(x - playerPos.x, y - playerPos.y, z - playerPos.z);
+
+                renderer.renderMicroblockPreview(microblockModel, oppositeSlot, block, meta, size, 0, 0, 0);
+                GL11.glDisable(GL11.GL_BLEND);
+                GL11.glPopMatrix();
+                return true;
+            }
+        }
         return false;
     }
 
