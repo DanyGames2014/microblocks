@@ -3,6 +3,7 @@ package net.danygames2014.microblocks.compat.ami;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.danygames2014.microblocks.Microblocks;
 import net.danygames2014.microblocks.item.base.MicroblockItem;
+import net.danygames2014.microblocks.recipe.MicroblockRecipeManager;
 import net.glasslauncher.mods.alwaysmoreitems.api.*;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -36,7 +37,9 @@ public class MicroblocksAmiPlugin implements ModPluginProvider {
 
     @Override
     public void register(ModRegistry registry) {
-
+        registry.addRecipeCategories(new MicroblockRecipeCategory());
+        registry.addRecipeHandlers(new MicroblockRecipeHandler());
+        registry.addRecipes(Microblocks.recipeManager.patterns);
     }
 
     @Override

@@ -1,6 +1,8 @@
 item.microblocks.iron_handsaw.name=Iron Handsaw
 item.microblocks.diamond_handsaw.name=Diamond Handsaw
 
+gui.microblocks.category.microblocks=Microblock Crafting
+
 microblock.microblocks.cover.name=%s Cover
 microblock.microblocks.panel.name=%s Panel
 microblock.microblocks.slab.name=%s Slab

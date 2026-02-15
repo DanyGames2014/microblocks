@@ -34,6 +34,10 @@ public class MicroblockRecipe implements CraftingRecipe {
         }
     }
 
+    public MicroblockRecipeIngredient[] getInput(){
+        return this.input;
+    }
+
     @Override
     public ItemStack getOutput() {
         return this.output;
@@ -124,5 +128,13 @@ public class MicroblockRecipe implements CraftingRecipe {
     @Override
     public int getSize() {
         return this.width * this.height;
+    }
+
+    public int getWidth(){
+        return width;
+    }
+
+    public int getHeight(){
+        return height;
     }
 }

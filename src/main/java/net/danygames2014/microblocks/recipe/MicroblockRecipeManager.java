@@ -15,7 +15,7 @@ import java.util.HashMap;
 
 public class MicroblockRecipeManager {
     Object2ObjectOpenHashMap<Block, ObjectArrayList<MicroblockRecipe>> recipes = new Object2ObjectOpenHashMap<>();
-    ObjectArrayList<MicroblockRecipe> patterns = new ObjectArrayList<>();
+    public ObjectArrayList<MicroblockRecipe> patterns = new ObjectArrayList<>();
     
     public MicroblockRecipeManager() {
         
