@@ -4,7 +4,6 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.multipart.MicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
-import net.danygames2014.microblocks.util.ShrinkHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
@@ -179,6 +178,127 @@ public class MicroblockRenderer {
     }
 
     public void renderBox(BlockView blockView, Block block, Box box, int x, int y, int z, float red, float green, float blue, int[] textures, int[] sideColors, int renderMask){
+        if(Minecraft.INSTANCE.options.ao){
+            renderBoxSmooth(blockView, block, box, x, y, z, red, green, blue, textures, sideColors, renderMask);
+        } else {
+            renderBoxFlat(blockView, block, box, x, y, z, red, green, blue, textures, sideColors, renderMask);
+        }
+    }
+
+    public void renderBoxFlat(BlockView blockView, Block block, Box box, int x, int y, int z, float red, float green, float blue, int[] textures, int[] sideColors, int renderMask){
+        this.useAo = false;
+        Tessellator var8 = Tessellator.INSTANCE;
+
+        float var10 = 0.5F;
+        float var11 = 1.0F;
+        float var12 = 0.8F;
+        float var13 = 0.6F;
+        float var14 = var11 * red;
+        float var15 = var11 * green;
+        float var16 = var11 * blue;
+        float var17 = var10;
+        float var18 = var12;
+        float var19 = var13;
+        float var20 = var10;
+        float var21 = var12;
+        float var22 = var13;
+        float var23 = var10;
+        float var24 = var12;
+        float var25 = var13;
+
+        if (block != Block.GRASS_BLOCK) {
+            var17 = var10 * red;
+            var18 = var12 * red;
+            var19 = var13 * red;
+            var20 = var10 * green;
+            var21 = var12 * green;
+            var22 = var13 * green;
+            var23 = var10 * blue;
+            var24 = var12 * blue;
+            var25 = var13 * blue;
+        }
+
+        float var26 = block.getLuminance(blockView, x, y, z);
+        // Bottom
+        if ((renderMask & 1) == 0) {
+            float var27 = block.getLuminance(blockView, x, y - 1, z);
+            var8.color(var17 * var27, var20 * var27, var23 * var27);
+            renderBottom(box, x, y, z, textures[0], 0xFFFFFF);
+        }
+
+        // Top
+        if ((renderMask & 2) == 0) {
+            float var29 = block.getLuminance(blockView, x, y + 1, z);
+            if (block.maxY != (double)1.0F && !block.material.isFluid()) {
+                var29 = var26;
+            }
+
+            var8.color(var14 * var29, var15 * var29, var16 * var29);
+            renderTop(box, x, y, z, textures[1], 0xFFFFFF);
+        }
+
+        // East
+        if ((renderMask & 4) == 0) {
+            float var30 = block.getLuminance(blockView, x, y, z - 1);
+            if (block.minZ > (double)0.0F) {
+                var30 = var26;
+            }
+
+            var8.color(var18 * var30, var21 * var30, var24 * var30);
+            renderEast(box, x, y, z, textures[2], 0xFFFFFF);
+            if (Minecraft.INSTANCE.options.fancyGraphics && textures[2] == 3) {
+                var8.color(var18 * var30 * red, var21 * var30 * green, var24 * var30 * blue);
+                renderEast(box, x, y, z, 38, 0xFFFFFF);
+            }
+        }
+
+        // West
+        if ((renderMask & 8) == 0) {
+            float var31 = block.getLuminance(blockView, x, y, z + 1);
+            if (block.maxZ < (double)1.0F) {
+                var31 = var26;
+            }
+
+            var8.color(var18 * var31, var21 * var31, var24 * var31);
+            renderWest(box, x, y, z, textures[3], 0xFFFFFF);
+            if (Minecraft.INSTANCE.options.fancyGraphics && textures[3] == 3) {
+                var8.color(var18 * var31 * red, var21 * var31 * green, var24 * var31 * blue);
+                renderWest(box, x, y, z, 38, 0xFFFFFF);
+            }
+        }
+
+        // North
+        if ((renderMask & 16) == 0) {
+            float var32 = block.getLuminance(blockView, x - 1, y, z);
+            if (block.minX > (double)0.0F) {
+                var32 = var26;
+            }
+
+            var8.color(var19 * var32, var22 * var32, var25 * var32);
+            renderNorth(box, x, y, z, textures[4], 0xFFFFFF);
+            if (Minecraft.INSTANCE.options.fancyGraphics && textures[4] == 3) {
+                var8.color(var19 * var32 * red, var22 * var32 * green, var25 * var32 * blue);
+                renderNorth(box, x, y, z, 38, 0xFFFFFF);
+            }
+        }
+
+        // South
+        if ((renderMask & 32) == 0) {
+            float var33 = block.getLuminance(blockView, x + 1, y, z);
+            if (block.maxX < (double)1.0F) {
+                var33 = var26;
+            }
+
+            var8.color(var19 * var33, var22 * var33, var25 * var33);
+            renderSouth(box, x, y, z, textures[5], 0xFFFFFF);
+            if (Minecraft.INSTANCE.options.fancyGraphics && textures[5] == 3) {
+                var8.color(var19 * var33 * red, var22 * var33 * green, var25 * var33 * blue);
+                renderSouth(box, x, y, z, 38, 0xFFFFFF);
+            }
+        }
+    }
+
+    public void renderBoxSmooth(BlockView blockView, Block block, Box box, int x, int y, int z, float red, float green, float blue, int[] textures, int[] sideColors, int renderMask){
         this.useAo = true;
         float var9;
         float var10;
