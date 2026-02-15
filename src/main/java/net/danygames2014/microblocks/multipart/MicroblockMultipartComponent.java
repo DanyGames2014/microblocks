@@ -178,7 +178,10 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
     public void onBreak() {
         super.onBreak();
 
-        SideUtil.run(this::spawnBreakingParticles, () -> {});
+        SideUtil.run(() -> {
+            //noinspection Convert2MethodRef NO YOU FUCKING CANNOT
+            this.spawnBreakingParticles();
+        }, () -> {});
     }
     
     @Environment(EnvType.CLIENT)
