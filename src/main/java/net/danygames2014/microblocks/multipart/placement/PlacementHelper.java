@@ -10,6 +10,7 @@ import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.danygames2014.nyalib.multipart.MultipartState;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
@@ -42,8 +43,12 @@ public abstract class PlacementHelper {
         ObjectArrayList<Box> newBoxes = model.getBoxesForSlot(slot, size, x, y, z);
 
         for(Box newBox : newBoxes) {
-            if (!world.getEntities(null, newBox).isEmpty()) {
-                return false;
+            var entitiesInBox = world.getEntities(null, newBox);
+
+            for (var entity : entitiesInBox) {
+                if (!(entity instanceof ItemEntity)) {
+                    return false;
+                }
             }
         }
         
@@ -88,8 +93,12 @@ public abstract class PlacementHelper {
         }
 
         for(Box newBox : newBoxes) {
-            if (!world.getEntities(null, newBox).isEmpty()) {
-                return false;
+            var entitiesInBox = world.getEntities(null, newBox);
+
+            for (var entity : entitiesInBox) {
+                if (!(entity instanceof ItemEntity)) {
+                    return false;
+                }
             }
             
             if(isFullyCovered(newBox, existingBoxes)) {
