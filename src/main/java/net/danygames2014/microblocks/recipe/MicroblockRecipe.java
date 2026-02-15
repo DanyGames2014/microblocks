@@ -13,6 +13,7 @@ public class MicroblockRecipe implements CraftingRecipe {
     private final int height;
     private final MicroblockRecipeIngredient[] input;
     private ItemStack output;
+    private MicroblockRecipeIngredient outputType;
     private final Block block;
     private final int meta;
 
@@ -20,6 +21,7 @@ public class MicroblockRecipe implements CraftingRecipe {
         this.width = width;
         this.height = height;
         this.input = input;
+        this.outputType = outputType;
         this.block = block;
         this.meta = meta;
         
@@ -35,6 +37,10 @@ public class MicroblockRecipe implements CraftingRecipe {
     @Override
     public ItemStack getOutput() {
         return this.output;
+    }
+
+    public MicroblockRecipeIngredient getOutputType() {
+        return outputType;
     }
 
     @Override
