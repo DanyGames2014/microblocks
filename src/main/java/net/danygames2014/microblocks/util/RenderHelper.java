@@ -17,16 +17,16 @@ public class RenderHelper {
             case UP -> {
                 GL11.glRotatef(180f, 1f, 0f, 0f);
             }
-            case EAST -> {
+            case NORTH -> {
                 GL11.glRotatef(90f, 1f, 0f, 0f);
             }
-            case WEST -> {
+            case SOUTH -> {
                 GL11.glRotatef(-90f, 1f, 0f, 0f);
             }
-            case NORTH -> {
+            case EAST -> {
                 GL11.glRotatef(90f, 0f, 0f, 1f);
             }
-            case SOUTH -> {
+            case WEST -> {
                 GL11.glRotatef(-90f, 0f, 0f, 1f);
             }
         }
@@ -44,6 +44,6 @@ public class RenderHelper {
         quat.conjugate();
         vec = MathHelper.rotate(vec, quat);
 
-        GL11.glTranslated(0, face.getAxis() != Direction.Axis.X ? vec.y - 0.003 : vec.y + 0.003, 0);
+        GL11.glTranslated(0, vec.y - 0.003, 0);
     }
 }

@@ -45,16 +45,16 @@ public class ShrinkHelper {
             case UP -> {
                 if (target.maxY > other.minY) target.maxY = other.minY;
             }
-            case EAST -> {
+            case NORTH -> {
                 if (target.minZ < other.maxZ) target.minZ = other.maxZ;
             }
-            case WEST -> {
+            case SOUTH -> {
                 if (target.maxZ > other.minZ) target.maxZ = other.minZ;
             }
-            case NORTH -> {
+            case WEST -> {
                 if (target.minX < other.maxX) target.minX = other.maxX;
             }
-            case SOUTH -> {
+            case EAST -> {
                 if (target.maxX > other.minX) target.maxX = other.minX;
             }
         }

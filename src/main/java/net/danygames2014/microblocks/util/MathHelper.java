@@ -31,10 +31,10 @@ public class MathHelper {
         return switch (side) {
             case DOWN -> Quaternion.IDENTITY;
             case UP -> Vec3f.POSITIVE_X.getDegreesQuaternion(180.0F);
-            case EAST -> Vec3f.POSITIVE_X.getDegreesQuaternion(90.0F);
-            case WEST -> Vec3f.POSITIVE_X.getDegreesQuaternion(-90.0F);
-            case NORTH -> Vec3f.POSITIVE_Z.getDegreesQuaternion(90.0F);
-            case SOUTH -> Vec3f.POSITIVE_Z.getDegreesQuaternion(-90.0F);
+            case NORTH -> Vec3f.POSITIVE_X.getDegreesQuaternion(90.0F);
+            case SOUTH -> Vec3f.POSITIVE_X.getDegreesQuaternion(-90.0F);
+            case EAST -> Vec3f.POSITIVE_Z.getDegreesQuaternion(90.0F);
+            case WEST -> Vec3f.POSITIVE_Z.getDegreesQuaternion(-90.0F);
         };
     }
 
