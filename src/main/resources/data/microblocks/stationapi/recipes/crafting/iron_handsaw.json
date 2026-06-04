@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "sss",
+    " ii"
+  ],
+  "key":
+  {
+    "s":
+    {
+      "tag": "c:sticks"
+    },
+    "i": {
+      "tag": "c:ingots/iron"
+    }
+  },
+  "result":
+  {
+    "item": "microblocks:iron_handsaw",
+    "count": 1
+  }
+}

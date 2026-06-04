@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "sss",
+    "iii",
+    " dd"
+  ],
+  "key":
+  {
+    "s":
+    {
+      "tag": "c:sticks"
+    },
+    "i": {
+      "tag": "c:ingots/iron"
+    },
+    "d": {
+      "tag": "c:gems/diamond"
+    }
+  },
+  "result":
+  {
+    "item": "microblocks:diamond_handsaw",
+    "count": 1
+  }
+}
