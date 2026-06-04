@@ -12,13 +12,14 @@ import net.danygames2014.microblocks.util.MathHelper;
 import net.danygames2014.microblocks.util.MicroblockBoxUtil;
 import net.danygames2014.nyalib.item.EnhancedPlacementContextItem;
 import net.danygames2014.nyalib.item.multipart.CustomMultipartOutlineRenderer;
-import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.danygames2014.nyalib.multipart.MultipartHitResult;
 import net.danygames2014.nyalib.multipart.MultipartState;
 import net.danygames2014.nyalib.sound.SoundHelper;
 import net.danygames2014.nyalib.util.PlayerUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvironmentInterface;
+import net.fabricmc.api.EnvironmentInterfaces;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.font.TextRenderer;
@@ -45,6 +46,10 @@ import org.lwjgl.opengl.GL11;
 
 import static org.lwjgl.opengl.GL11.*;
 
+@EnvironmentInterfaces({
+        @EnvironmentInterface(value = EnvType.CLIENT, itf = CustomMultipartOutlineRenderer.class),
+        @EnvironmentInterface(value = EnvType.CLIENT, itf = CustomItemRenderer.class)
+})
 public abstract class MicroblockItem extends TemplateItem implements EnhancedPlacementContextItem, CustomItemRenderer, CustomMultipartOutlineRenderer {
     public Block block;
     public int meta;
@@ -105,6 +110,7 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
     // Rendering
 
 
+    @Environment(EnvType.CLIENT)
     @Override
     public boolean renderOutline(PlayerEntity player, MultipartHitResult hitResult, float tickDelta) {
         if(hitResult != null){
@@ -113,6 +119,7 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
         return false;
     }
 
+    @Environment(EnvType.CLIENT)
     public boolean renderOutline(PlayerEntity player, BlockPos pos, Vec3d vec, Direction side, float tickDelta){
 
         Vec3d stapiVec = new Vec3d(vec.x, vec.y, vec.z);
@@ -149,6 +156,7 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
         return true;
     }
 
+    @Environment(EnvType.CLIENT)
     public boolean tryRenderPreview(World world, int x, int y, int z, Direction dir, Vec3d vec, int size, MicroblockModel microblockModel, Block block, int meta, PlacementHelper placementHelper, PlayerEntity player, float tickDelta){
         PlacementSlot placementSlot = placementHelper.getSlot(x, y, z, dir, vec, placementHelper.getGridCenterSize());
         if (player.isSneaking()) {
@@ -190,6 +198,7 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
         return false;
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public void renderInGui(ArsenicItemRenderer arsenicItemRenderer, ItemRenderer itemRenderer, TextRenderer textRenderer, TextureManager textureManager, ItemStack stack, int x, int y) {
         SpriteAtlasTexture atlas = StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE);
@@ -246,10 +255,12 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
         GL11.glPopMatrix();
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public void renderInHand(SpriteAtlasTexture atlas, Sprite texture, Tessellator tessellator, LivingEntity entity, ItemStack stack) {
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public boolean renderInHandBlock(SpriteAtlasTexture atlas, Tessellator tessellator, LivingEntity entity, ItemStack stack) {
         MicroblockRenderer microblockRenderer = MicroblockRenderer.INSTANCE;
@@ -302,11 +313,13 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
         return true;
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public boolean renderOnGround(ArsenicItemRenderer arsenicItemRenderer, ItemRenderer itemRenderer, Tessellator tessellator, ItemEntity itemEntity, float x, float y, float z, float delta, ItemStack stack, float yOffset, float angle, byte renderedAmount, SpriteAtlasTexture atlas) {
         return false;
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public boolean renderOnGroundBlock(ArsenicItemRenderer arsenicItemRenderer, ItemRenderer itemRenderer, Tessellator tessellator, ItemEntity itemEntity, float x, float y, float z, float delta, ItemStack stack, float yOffset, float angle, byte renderedAmount, SpriteAtlasTexture atlas) {
         MicroblockRenderer microblockRenderer = MicroblockRenderer.INSTANCE;

@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
-public abstract class FaceMicroblockItem extends MicroblockItem{
+public abstract class FaceMicroblockItem extends MicroblockItem {
     private static final FacePlacementHelper placementHelper = new FacePlacementHelper();
 
     public FaceMicroblockItem(Identifier identifier, Block block, int meta) {
