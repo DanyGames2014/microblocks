@@ -4,23 +4,16 @@ import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 public class DirectionUtil {
+    // All these directions are wrong but BoxUtil is broken so it has to be like this
     public static Direction faceSlotToDirection(PlacementSlot slot){
         return switch (slot) {
-            case FACE_NEG_Y -> Direction.DOWN;
-            case FACE_POS_Y -> Direction.UP;
-            case FACE_NEG_Z -> Direction.NORTH;
-            case FACE_POS_Z -> Direction.SOUTH;
-            case FACE_NEG_X -> Direction.WEST; // West and east needs to be swapped because of what I assume is a bug with the BoxUtil class
-            case FACE_POS_X -> Direction.EAST;
+            case FACE_NEG_Y -> Direction.UP;
+            case FACE_POS_Y -> Direction.DOWN;
+            case FACE_NEG_Z -> Direction.SOUTH;
+            case FACE_POS_Z -> Direction.NORTH;
+            case FACE_NEG_X -> Direction.EAST;
+            case FACE_POS_X -> Direction.WEST;
             default -> Direction.DOWN;
-        };
-    }
-
-    public static Direction.Axis postSlotToAxis(PlacementSlot slot) {
-        return switch (slot) {
-            default -> Direction.Axis.X;
-            case POST_Y -> Direction.Axis.Y;
-            case POST_Z -> Direction.Axis.Z;
         };
     }
 }

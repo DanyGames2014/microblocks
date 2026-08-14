@@ -10,6 +10,7 @@ import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -24,12 +25,31 @@ public class PostMicroblockMultipartComponent extends MicroblockMultipartCompone
     public double secondaryRenderBoundsMaxY;
     public double secondaryRenderBoundsMaxZ;
 
-    public static final PostMicroblockModel MODEL = new PostMicroblockModel();
+    public Direction.Axis axis = Direction.Axis.Y;
+
+    public static final PostMicroblockModel MODEL_X = new PostMicroblockModel(Direction.Axis.X);
+    public static final PostMicroblockModel MODEL_Y = new PostMicroblockModel(Direction.Axis.X);
+    public static final PostMicroblockModel MODEL_Z = new PostMicroblockModel(Direction.Axis.X);
 
     public PostMicroblockMultipartComponent(){}
 
-    public PostMicroblockMultipartComponent(Block block, int meta, PlacementSlot slot, int size) {
+    public PostMicroblockMultipartComponent(Block block, int meta, PlacementSlot slot, Direction.Axis axis, int size) {
         super(block, meta, slot, size);
+        this.axis = axis;
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
+        if(nbt.contains("axis")) {
+            axis = Direction.Axis.VALUES[nbt.getByte("axis")];
+        }
+    }
+
+    @Override
+    public void writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
+        nbt.putByte("axis", (byte)axis.ordinal());
     }
 
     @Override
@@ -86,7 +106,7 @@ public class PostMicroblockMultipartComponent extends MicroblockMultipartCompone
 
     @Override
     public MicroblockModel getMicroblockModel() {
-        return MODEL;
+        return PostMicroblockModel.MODELS[axis.ordinal()];
     }
 
     @Override
@@ -100,7 +120,7 @@ public class PostMicroblockMultipartComponent extends MicroblockMultipartCompone
         for(MultipartComponent component : state.components) {
             if(component instanceof FaceMicroblockMultipartComponent face){
                 Direction faceDir = Direction.byId(face.slot.ordinal());
-                Direction.Axis postAxis = DirectionUtil.postSlotToAxis(slot);
+                Direction.Axis postAxis = this.axis;
                 if(faceDir.getAxis() == postAxis){
                     shrinkFace(face);
                 }
@@ -143,7 +163,7 @@ public class PostMicroblockMultipartComponent extends MicroblockMultipartCompone
 
         double centerX, centerY, centerZ;
 
-        switch (DirectionUtil.postSlotToAxis(slot)){
+        switch (this.axis){
             case X -> {
                 centerX = Math.floor(renderBoundsMinX) + 0.5;
                 renderBoundsMaxX = centerX - halfWidth;

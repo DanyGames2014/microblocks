@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.nyalib.util.BoxUtil;
 import net.minecraft.util.math.Box;
+import net.modificationstation.stationapi.api.util.math.Direction;
 
 public class MicroblockBoxUtil {
     public static Box transformCornerMicroblock(Box box, PlacementSlot slot) {
@@ -99,16 +100,16 @@ public class MicroblockBoxUtil {
         return origin;
     }
 
-    public static Box transformPostMicroblock(Box box, PlacementSlot slot) {
+    public static Box transformPostMicroblock(Box box, Direction.Axis axis) {
         Box origin = box.copy();
-        switch (slot) {
+        switch (axis) {
             default -> {
                 return origin;
             }
-            case POST_X -> {
+            case X -> {
                 origin = BoxUtil.rotateYClockwise(box, true);
             }
-            case POST_Y -> {
+            case Y -> {
                 origin = BoxUtil.rotateXClockwise(box, true);
             }
         }

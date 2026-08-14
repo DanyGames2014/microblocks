@@ -17,7 +17,7 @@ public class ShrinkHelper {
         if(componentPriority != otherPriority) {
             return componentPriority < otherPriority;
         }
-        if(component.slot.ordinal() < 6) {
+        if(component.slot.slotIndex < 6) {
             if(component.isTransparent() != other.isTransparent()) {
                 return component.isTransparent();
             }
@@ -33,7 +33,7 @@ public class ShrinkHelper {
                 return component.isTransparent();
             }
         }
-        return component.slot.ordinal() < other.slot.ordinal();
+        return component.slot.slotIndex < other.slot.slotIndex;
 
     }
 
@@ -62,7 +62,7 @@ public class ShrinkHelper {
     }
 
     public static int calculateCulling(MicroblockMultipartComponent other, Box bounds) {
-        if(switch(other.slot.ordinal()) {
+        if(switch(other.slot.slotIndex) {
             case 0 -> bounds.minY <= 0;
             case 1 -> bounds.maxY >= 1;
             case 2 -> bounds.minZ <= 0;
@@ -71,18 +71,18 @@ public class ShrinkHelper {
             case 5 -> bounds.maxX >= 1;
             default -> false;
         }){
-        return 1<<other.slot.ordinal();
+        return 1<<other.slot.slotIndex;
         }
         return 0;
     }
 
     public static int shrinkSide(PlacementSlot slot, PlacementSlot other){
-        if(other.ordinal() < 6) {
-            return other.ordinal();
+        if(other.slotIndex < 6) {
+            return other.slotIndex;
         }
-        if(slot.ordinal() < 14) {
-            int c1 = slot.ordinal()-6;
-            int c2 = other.ordinal()-6;
+        if(slot.slotIndex < 15) {
+            int c1 = slot.slotIndex-7;
+            int c2 = other.slotIndex-7;
             return switch (c1 ^ c2) {
                 case 1 -> c2 & 1;
                 case 2 -> 2 | (c2 & 2) >> 1;
@@ -90,17 +90,17 @@ public class ShrinkHelper {
                 default -> -1;
             };
         }
-        if(other.ordinal() < 14){
-            int e1 = slot.ordinal() - 14;
-            int c2 = other.ordinal() - 6;
+        if(other.slotIndex < 15){
+            int e1 = slot.slotIndex - 15;
+            int c2 = other.slotIndex - 7;
             int ebits = PlacementSlot.unpackEdgeBits(e1);
             if((c2&PlacementSlot.edgeAxisMask(e1)) != ebits){
                 return -1;
             }
             return (e1&0xC)>>1|(c2&(~ebits))>>(e1>>2);
         }
-        int e1 = slot.ordinal()-14;
-        int e2 = other.ordinal()-14;
+        int e1 = slot.slotIndex-15;
+        int e2 = other.slotIndex-15;
         int e1bits = PlacementSlot.unpackEdgeBits(e1);
         int e2bits = PlacementSlot.unpackEdgeBits(e2);
         if((e1&0xC) == (e2&0xC))//same axis

@@ -33,14 +33,14 @@ public abstract class FaceMicroblockItem extends MicroblockItem {
             slot = placementHelper.getOppositeSlot(slot, dir);
         }
 
-        if (placementHelper.canPlace(world, x, y, z, getType(), slot, size, FaceMicroblockMultipartComponent.MODEL)) {
+        if (placementHelper.canPlace(world, x, y, z, dir, getType(), slot, size, FaceMicroblockMultipartComponent.MODEL)) {
             world.addMultipartComponent(x, y, z, new FaceMicroblockMultipartComponent(this.block, meta, slot, size));
             return true;
         }
 
         if(!sneaking) {
             PlacementSlot oppositeSlot = placementHelper.getOppositeSlot(slot, dir);
-            if (placementHelper.canPlace(world, x, y, z, getType(), oppositeSlot, size, FaceMicroblockMultipartComponent.MODEL)) {
+            if (placementHelper.canPlace(world, x, y, z, dir, getType(), oppositeSlot, size, FaceMicroblockMultipartComponent.MODEL)) {
                 world.addMultipartComponent(x, y, z, new FaceMicroblockMultipartComponent(this.block, meta, oppositeSlot, size));
                 return true;
             }

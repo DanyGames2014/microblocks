@@ -10,25 +10,36 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 public class PostMicroblockModel extends MicroblockModel{
     public Box bounds = Box.create(0.5D, 0.5D, 0D, 0.5D, 0.5D, 1D);
 
+    public final Direction.Axis axis;
+
+    public static PostMicroblockModel[] MODELS = new PostMicroblockModel[3];
+
+    static {
+        for(Direction.Axis axis1 : Direction.Axis.VALUES) {
+            MODELS[axis1.ordinal()] = new PostMicroblockModel(axis1);
+        }
+    }
+
+    public PostMicroblockModel(Direction.Axis axis) {
+        this.axis = axis;
+    }
+
     @Override
     public ObjectArrayList<Box> getBoxesForSlot(PlacementSlot slot, int size, double offsetX, double offsetY, double offsetZ) {
-        if(slot == null){
-            slot = PlacementSlot.POST_Y;
-        }
         ObjectArrayList<Box> boxes = new ObjectArrayList<>();
         Box box = bounds.copy();
         box.minX -= ((float)size * 0.5f) * PIXEL_SIZE;
         box.minY -= ((float)size * 0.5f) * PIXEL_SIZE;
         box.maxX += ((float)size * 0.5f) * PIXEL_SIZE;
         box.maxY += ((float)size * 0.5f) * PIXEL_SIZE;
-        boxes.add(MicroblockBoxUtil.transformPostMicroblock(box, slot).offset(offsetX, offsetY, offsetZ));
+        boxes.add(MicroblockBoxUtil.transformPostMicroblock(box, axis).offset(offsetX, offsetY, offsetZ));
         return boxes;
     }
 
     @Override
     public Box getRenderBounds(PlacementSlot slot, int size, double offsetX, double offsetY, double offsetZ) {
         if(slot == null){
-            slot = PlacementSlot.POST_Y;
+            slot = PlacementSlot.CUSTOM;
         }
         return getBoxesForSlot(slot, size, offsetX, offsetY, offsetZ).get(0);
     }
@@ -37,7 +48,7 @@ public class PostMicroblockModel extends MicroblockModel{
     public boolean canOverlap(MicroblockItemType type, PlacementSlot slot, MicroblockItemType otherType, PlacementSlot otherSlot) {
         if(otherType.isFace()){
             Direction.Axis axis = Direction.byId(otherSlot.ordinal()).getAxis();
-            return axis.ordinal() == slot.ordinal() - PlacementSlot.POST_X.ordinal();
+            return axis == this.axis;
         }
         return otherSlot.ordinal() > 25;
     }

@@ -163,7 +163,7 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
             placementSlot = placementHelper.getOppositeSlot(placementSlot, dir);
         }
 
-        if(placementHelper.canPlace(world, x, y, z, getType(), placementSlot, size, microblockModel)){
+        if(placementHelper.canPlace(world, x, y, z, dir, getType(), placementSlot, size, microblockModel)){
             MicroblockRenderer renderer = MicroblockRenderer.INSTANCE;
             GL11.glPushMatrix();
             GL11.glEnable(GL11.GL_BLEND);
@@ -180,7 +180,7 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
 
         if(!player.isSneaking()){
             PlacementSlot oppositeSlot = placementHelper.getOppositeSlot(placementSlot, dir);
-            if(placementHelper.canPlace(world, x, y, z, getType(), oppositeSlot, size, microblockModel)){
+            if(placementHelper.canPlace(world, x, y, z, dir, getType(), oppositeSlot, size, microblockModel)){
                 MicroblockRenderer renderer = MicroblockRenderer.INSTANCE;
                 GL11.glPushMatrix();
                 GL11.glEnable(GL11.GL_BLEND);

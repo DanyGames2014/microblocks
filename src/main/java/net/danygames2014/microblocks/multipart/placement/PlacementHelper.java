@@ -5,6 +5,7 @@ import net.danygames2014.microblocks.client.render.grid.GridRenderer;
 import net.danygames2014.microblocks.item.MicroblockItemType;
 import net.danygames2014.microblocks.multipart.MicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.PlacementSlot;
+import net.danygames2014.microblocks.multipart.PostMicroblockMultipartComponent;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
 import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.danygames2014.nyalib.multipart.MultipartState;
@@ -27,14 +28,14 @@ public abstract class PlacementHelper {
     }
 
     public boolean canGrow(MicroblockMultipartComponent component, int newSize){
-        return canPlace(component.world, component.x, component.y, component.z, component.getClosestItemType(), component.slot, newSize, component.getMicroblockModel(), component);
+        return canPlace(component.world, component.x, component.y, component.z, null, component.getClosestItemType(), component.slot, newSize, component.getMicroblockModel(), component);
     }
 
-    public boolean canPlace(World world, int x, int y, int z, MicroblockItemType type, PlacementSlot slot, int size, MicroblockModel model) {
-        return canPlace(world, x, y, z, type, slot, size, model, null);
+    public boolean canPlace(World world, int x, int y, int z, @Nullable Direction direction, MicroblockItemType type, PlacementSlot slot, int size, MicroblockModel model) {
+        return canPlace(world, x, y, z, direction, type, slot, size, model, null);
     }
 
-    public boolean canPlace(World world, int x, int y, int z, MicroblockItemType type, PlacementSlot slot, int size, MicroblockModel model, @Nullable MicroblockMultipartComponent componentToIgnore) {
+    public boolean canPlace(World world, int x, int y, int z, @Nullable Direction direction, MicroblockItemType type, PlacementSlot slot, int size, MicroblockModel model, @Nullable MicroblockMultipartComponent componentToIgnore) {
         if (y >= world.getTopY() - 1) {
             return false;
         }
@@ -87,7 +88,11 @@ public abstract class PlacementHelper {
                 if(microblock.slot == null){
                     continue;
                 }
-                if(microblock.slot == slot) return false;
+                if(slot == PlacementSlot.CUSTOM && microblock.slot == PlacementSlot.CUSTOM) {
+                    if (type.isStrip() && direction != null && microblock instanceof PostMicroblockMultipartComponent post && post.axis == direction.getAxis()) {
+                        return false;
+                    }
+                } else if(microblock.slot == slot) return false;
                 existingBoxes.addAll(microblock.getMicroblockModel().getBoxesForSlot(microblock.slot, microblock.getSize(), x, y, z));
             }
         }

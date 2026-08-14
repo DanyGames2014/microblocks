@@ -29,12 +29,12 @@ public class CornerPlacementHelper extends PlacementHelper {
         int bv = (v >= 0) ? 1 : 0;
         int bw = (face.ordinal() & 1) ^ 1;
 
-        return PlacementSlot.fromOrdinal(6 + (bw<<(face.ordinal()>>1)| bu<<(s1>>1)| bv<<(s2>>1)));
+        return PlacementSlot.fromOrdinal(7 + (bw<<(face.ordinal()>>1)| bu<<(s1>>1)| bv<<(s2>>1)));
     }
 
     @Override
     public PlacementSlot getOppositeSlot(PlacementSlot slot, Direction side) {
-        return PlacementSlot.fromOrdinal(((slot.ordinal()-6)^(1<<(side.ordinal()>>1)))+6);
+        return PlacementSlot.fromOrdinal(((slot.ordinal()-7)^(1<<(side.ordinal()>>1)))+7);
     }
 
     @Override

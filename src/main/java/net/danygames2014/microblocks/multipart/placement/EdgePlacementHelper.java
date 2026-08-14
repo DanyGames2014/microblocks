@@ -43,7 +43,7 @@ public class EdgePlacementHelper extends PlacementHelper{
         double v = MathHelper.scalarProject(offset, new Vec3d(v2.getX(), v2.getY(), v2.getZ()));
 
         if(Math.abs(u) < size && Math.abs(v) < size){
-            return PlacementSlot.INVALID;
+            return PlacementSlot.CUSTOM;
         }
 
         if (Math.abs(u) > size && Math.abs(v) > size) {
@@ -58,27 +58,28 @@ public class EdgePlacementHelper extends PlacementHelper{
             if(u < 0) {
                 b^=1;
             }
-            return PlacementSlot.fromOrdinal(14+((s2&6)<<1 | b<<1 | face.ordinal()&1^1));
+            return PlacementSlot.fromOrdinal(15+((s2&6)<<1 | b<<1 | face.ordinal()&1^1));
         }
         else {
             if(v < 0) {
                 b^=1;
             }
-            return PlacementSlot.fromOrdinal(14+((s1&6)<<1 | (face.ordinal()&1^1)<<1 | b));
+            return PlacementSlot.fromOrdinal(15+((s1&6)<<1 | (face.ordinal()&1^1)<<1 | b));
         }
     }
 
     @Override
     public PlacementSlot getOppositeSlot(PlacementSlot slot, Direction side) {
 
-        if(slot == PlacementSlot.INVALID || slot.ordinal() < 14){
+        if(slot == PlacementSlot.CUSTOM || slot.ordinal() < 15){
             return slot;
         }
-        int edgeIndex = slot.ordinal()-14;
+        int edgeIndex = slot.ordinal()-15;
         if (edgeIndex >= EDGE_OPPOSITE_MAP.length){
             return slot;
         }
-        return PlacementSlot.fromOrdinal(14 + EDGE_OPPOSITE_MAP[edgeIndex][side.ordinal()]);
+        int e = slot.slotIndex - 15;
+        return PlacementSlot.fromOrdinal(15 + PlacementSlot.packEdgeBits(e, PlacementSlot.unpackEdgeBits(e) ^ (1 << (side.ordinal() >> 1))));
     }
 
     @Override
