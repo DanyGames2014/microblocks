@@ -4,9 +4,13 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.item.MicroblockItemType;
 import net.danygames2014.microblocks.multipart.model.HollowMicroblockModel;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
+import net.danygames2014.nyalib.block.voxelshape.VoxelShape;
+import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.danygames2014.nyalib.multipart.MultipartSlot;
+import net.danygames2014.nyalib.util.MultipartOcclusionUtil;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 public class HollowMicroblockMultipartComponent extends MicroblockMultipartComponent{
 
@@ -62,5 +66,15 @@ public class HollowMicroblockMultipartComponent extends MicroblockMultipartCompo
     @Override
     public boolean allowCompleteOcclusion() {
         return true;
+    }
+
+    @Override
+    public @Nullable VoxelShape getOcclusionShape() {
+        return MODEL.getRingShapeForSlot(slot, size, x, y, z);
+    }
+
+    @Override
+    public boolean occlusionTest(MultipartComponent component) {
+        return MultipartOcclusionUtil.componentOcclusionTest(this, component);
     }
 }
