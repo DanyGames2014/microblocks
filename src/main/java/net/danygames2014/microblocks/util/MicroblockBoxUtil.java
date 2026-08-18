@@ -1,13 +1,13 @@
 package net.danygames2014.microblocks.util;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.danygames2014.microblocks.multipart.PlacementSlot;
+import net.danygames2014.nyalib.multipart.MultipartSlot;
 import net.danygames2014.nyalib.util.BoxUtil;
 import net.minecraft.util.math.Box;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 public class MicroblockBoxUtil {
-    public static Box transformCornerMicroblock(Box box, PlacementSlot slot) {
+    public static Box transformCornerMicroblock(Box box, MultipartSlot slot) {
         Box origin = box.copy();
         switch (slot) {
             default -> {
@@ -43,7 +43,7 @@ public class MicroblockBoxUtil {
         return origin;
     }
 
-    public static Box transformEdgeMicroblock(Box box, PlacementSlot slot) {
+    public static Box transformEdgeMicroblock(Box box, MultipartSlot slot) {
         Box origin = box.copy();
         switch (slot) {
             case EDGE_MID_NEG_X_NEG_Z -> {

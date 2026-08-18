@@ -1,9 +1,10 @@
 package net.danygames2014.microblocks.multipart.model;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.danygames2014.microblocks.item.MicroblockItemType;
-import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.util.DirectionUtil;
+import net.danygames2014.nyalib.block.voxelshape.VoxelData;
+import net.danygames2014.nyalib.block.voxelshape.VoxelShape;
+import net.danygames2014.nyalib.multipart.MultipartSlot;
 import net.danygames2014.nyalib.util.BoxUtil;
 import net.minecraft.util.math.Box;
 
@@ -15,9 +16,9 @@ public class HollowMicroblockModel extends MicroblockModel{
     public int holeSize = 8;
 
     @Override
-    public ObjectArrayList<Box> getBoxesForSlot(PlacementSlot slot, int size, double offsetX, double offsetY, double offsetZ) {
+    public VoxelShape getShapeForSlot(MultipartSlot slot, int size, int offsetX, int offsetY, int offsetZ) {
         if(slot == null){
-            slot = PlacementSlot.FACE_NEG_Z;
+            slot = MultipartSlot.FACE_NEG_Z;
         }
         ObjectArrayList<Box> boxes = new ObjectArrayList<>();
         Box box_top = bounds_top.copy();
@@ -40,24 +41,19 @@ public class HollowMicroblockModel extends MicroblockModel{
         box_right.minY = box_bottom.maxY;
         box_right.maxY = box_top.minY;
 
-        boxes.add(BoxUtil.rotate(box_top, DirectionUtil.faceSlotToDirection(slot)).offset(offsetX, offsetY, offsetZ));
-        boxes.add(BoxUtil.rotate(box_bottom, DirectionUtil.faceSlotToDirection(slot)).offset(offsetX, offsetY, offsetZ));
-        boxes.add(BoxUtil.rotate(box_left, DirectionUtil.faceSlotToDirection(slot)).offset(offsetX, offsetY, offsetZ));
-        boxes.add(BoxUtil.rotate(box_right, DirectionUtil.faceSlotToDirection(slot)).offset(offsetX, offsetY, offsetZ));
+        boxes.add(BoxUtil.rotate(box_top, DirectionUtil.faceSlotToDirection(slot)));
+        boxes.add(BoxUtil.rotate(box_bottom, DirectionUtil.faceSlotToDirection(slot)));
+        boxes.add(BoxUtil.rotate(box_left, DirectionUtil.faceSlotToDirection(slot)));
+        boxes.add(BoxUtil.rotate(box_right, DirectionUtil.faceSlotToDirection(slot)));
 
-        return boxes;
+        return new VoxelData(boxes.toArray(new Box[0])).withOffset(offsetX, offsetY, offsetZ);
     }
 
     @Override
-    public Box getRenderBounds(PlacementSlot slot, int size, double offsetX, double offsetY, double offsetZ) {
+    public Box getRenderBounds(MultipartSlot slot, int size, double offsetX, double offsetY, double offsetZ) {
         if(slot == null){
-            slot = PlacementSlot.FACE_NEG_Z;
+            slot = MultipartSlot.FACE_NEG_Z;
         }
         return BoxUtil.rotate(Box.create(0D, 0D, 0D, size * PIXEL_SIZE, 1D, 1D), DirectionUtil.faceSlotToDirection(slot)).offset(offsetX, offsetY, offsetZ);
-    }
-
-    @Override
-    public boolean canOverlap(MicroblockItemType type, PlacementSlot slot, MicroblockItemType otherType, PlacementSlot otherSlot) {
-        return !otherType.isCorner();
     }
 }

@@ -1,8 +1,7 @@
 package net.danygames2014.microblocks.util;
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.multipart.MicroblockMultipartComponent;
-import net.danygames2014.microblocks.multipart.PlacementSlot;
+import net.danygames2014.nyalib.multipart.MultipartSlot;
 import net.minecraft.util.math.Box;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
@@ -76,7 +75,7 @@ public class ShrinkHelper {
         return 0;
     }
 
-    public static int shrinkSide(PlacementSlot slot, PlacementSlot other){
+    public static int shrinkSide(MultipartSlot slot, MultipartSlot other){
         if(other.slotIndex < 6) {
             return other.slotIndex;
         }
@@ -93,16 +92,16 @@ public class ShrinkHelper {
         if(other.slotIndex < 15){
             int e1 = slot.slotIndex - 15;
             int c2 = other.slotIndex - 7;
-            int ebits = PlacementSlot.unpackEdgeBits(e1);
-            if((c2&PlacementSlot.edgeAxisMask(e1)) != ebits){
+            int ebits = MultipartSlot.unpackEdgeBits(e1);
+            if((c2&MultipartSlot.edgeAxisMask(e1)) != ebits){
                 return -1;
             }
             return (e1&0xC)>>1|(c2&(~ebits))>>(e1>>2);
         }
         int e1 = slot.slotIndex-15;
         int e2 = other.slotIndex-15;
-        int e1bits = PlacementSlot.unpackEdgeBits(e1);
-        int e2bits = PlacementSlot.unpackEdgeBits(e2);
+        int e1bits = MultipartSlot.unpackEdgeBits(e1);
+        int e2bits = MultipartSlot.unpackEdgeBits(e2);
         if((e1&0xC) == (e2&0xC))//same axis
         {
             return switch (e1bits^e2bits)
@@ -115,7 +114,7 @@ public class ShrinkHelper {
         }
         else
         {
-            int mask = PlacementSlot.edgeAxisMask(e1)&PlacementSlot.edgeAxisMask(e2);
+            int mask = MultipartSlot.edgeAxisMask(e1)&MultipartSlot.edgeAxisMask(e2);
             if((e1bits&mask) != (e2bits&mask)){
                 return -1;
             }

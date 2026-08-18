@@ -1,14 +1,14 @@
 package net.danygames2014.microblocks.multipart.placement;
 
-import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.util.MathHelper;
+import net.danygames2014.nyalib.multipart.MultipartSlot;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import net.modificationstation.stationapi.api.util.math.Vec3d;
 import net.modificationstation.stationapi.api.util.math.Vec3i;
 
 public class FacePlacementHelper extends PlacementHelper{
     @Override
-    public PlacementSlot getSlot(int x, int y, int z, Direction face, Vec3d hit, double size) {
+    public MultipartSlot getSlot(int x, int y, int z, Direction face, Vec3d hit, double size) {
 
         Vec3d relativeHit = getRelativeHitVec(x, y, z, face, hit);
 
@@ -24,18 +24,18 @@ public class FacePlacementHelper extends PlacementHelper{
         double v = MathHelper.scalarProject(offset, new Vec3d(v2.getX(), v2.getY(), v2.getZ()));
 
         if(Math.abs(u) < size && Math.abs(v) < size){
-            return PlacementSlot.fromOrdinal(face.ordinal()^1);
+            return MultipartSlot.fromOrdinal(face.ordinal()^1);
         }
         if(Math.abs(u) > Math.abs(v)){
-            return u > 0 ? PlacementSlot.fromOrdinal(s1) : PlacementSlot.fromOrdinal(s1^1);
+            return u > 0 ? MultipartSlot.fromOrdinal(s1) : MultipartSlot.fromOrdinal(s1^1);
         }
         else {
-            return v > 0 ? PlacementSlot.fromOrdinal(s2) : PlacementSlot.fromOrdinal(s2^1);
+            return v > 0 ? MultipartSlot.fromOrdinal(s2) : MultipartSlot.fromOrdinal(s2^1);
         }
     }
 
     @Override
-    public PlacementSlot getOppositeSlot(PlacementSlot slot, Direction side) {
-        return PlacementSlot.fromOrdinal(slot.ordinal()^1);
+    public MultipartSlot getOppositeSlot(MultipartSlot slot, Direction side) {
+        return MultipartSlot.fromOrdinal(slot.ordinal()^1);
     }
 }

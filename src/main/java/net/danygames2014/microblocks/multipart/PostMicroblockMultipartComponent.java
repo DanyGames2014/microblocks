@@ -4,9 +4,9 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.item.MicroblockItemType;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
 import net.danygames2014.microblocks.multipart.model.PostMicroblockModel;
-import net.danygames2014.microblocks.util.DirectionUtil;
 import net.danygames2014.microblocks.util.ShrinkHelper;
 import net.danygames2014.nyalib.multipart.MultipartComponent;
+import net.danygames2014.nyalib.multipart.MultipartSlot;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -15,6 +15,8 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class PostMicroblockMultipartComponent extends MicroblockMultipartComponent{
     public boolean useSecondaryRenderbounds = false;
@@ -33,7 +35,7 @@ public class PostMicroblockMultipartComponent extends MicroblockMultipartCompone
 
     public PostMicroblockMultipartComponent(){}
 
-    public PostMicroblockMultipartComponent(Block block, int meta, PlacementSlot slot, Direction.Axis axis, int size) {
+    public PostMicroblockMultipartComponent(Block block, int meta, MultipartSlot slot, Direction.Axis axis, int size) {
         super(block, meta, slot, size);
         this.axis = axis;
     }
@@ -145,7 +147,7 @@ public class PostMicroblockMultipartComponent extends MicroblockMultipartCompone
     }
 
     @Override
-    public boolean canUse(PlayerEntity player, Vec3d pos, Direction face, @Nullable PlacementSlot slotOverride) {
+    public boolean canUse(PlayerEntity player, Vec3d pos, Direction face, @Nullable MultipartSlot slotOverride) {
         return super.canUse(player, pos, face, slot);
     }
 
@@ -190,7 +192,7 @@ public class PostMicroblockMultipartComponent extends MicroblockMultipartCompone
     }
 
     @Override
-    public ObjectArrayList<Box> getClippedBoxes(ObjectArrayList<Box> boxes) {
+    public ObjectArrayList<Box> getClippedBoxes(List<Box> boxes) {
         ObjectArrayList<Box> clippedList = new ObjectArrayList<>();
 
         Box[] allRenderBounds;

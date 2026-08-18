@@ -4,6 +4,8 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.item.MicroblockItemType;
 import net.danygames2014.microblocks.multipart.model.FaceMicroblockModel;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
+import net.danygames2014.nyalib.block.voxelshape.VoxelShape;
+import net.danygames2014.nyalib.multipart.MultipartSlot;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
@@ -13,7 +15,7 @@ public class FaceMicroblockMultipartComponent extends MicroblockMultipartCompone
 
     public FaceMicroblockMultipartComponent(){}
 
-    public FaceMicroblockMultipartComponent(Block block, int meta, PlacementSlot slot, int size) {
+    public FaceMicroblockMultipartComponent(Block block, int meta, MultipartSlot slot, int size) {
         super(block, meta, slot, size);
     }
 
@@ -50,11 +52,6 @@ public class FaceMicroblockMultipartComponent extends MicroblockMultipartCompone
             case 4, 5, 6, 7 -> MicroblockItemType.PANEL;
             default -> MicroblockItemType.SLAB;
         };
-    }
-
-    @Override
-    public boolean canOverlap(MicroblockItemType type, PlacementSlot slot, int size) {
-        return (!type.isFace() && !type.isHollowFace()) || slot.ordinal() != (this.slot.ordinal() ^ 1);
     }
 
     @Override

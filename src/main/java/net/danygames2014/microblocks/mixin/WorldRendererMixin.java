@@ -1,15 +1,6 @@
 package net.danygames2014.microblocks.mixin;
 
-import net.danygames2014.microblocks.client.render.MicroblockRenderer;
 import net.danygames2014.microblocks.item.base.MicroblockItem;
-import net.danygames2014.microblocks.multipart.PlacementSlot;
-import net.danygames2014.microblocks.multipart.model.MicroblockModel;
-import net.danygames2014.microblocks.multipart.placement.PlacementHelper;
-import net.danygames2014.microblocks.util.DirectionUtil;
-import net.danygames2014.microblocks.util.MathHelper;
-import net.danygames2014.nyalib.multipart.MultipartState;
-import net.danygames2014.nyalib.util.PlayerUtil;
-import net.minecraft.block.Block;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -19,7 +10,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import net.modificationstation.stationapi.api.util.math.Vec3d;
-import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

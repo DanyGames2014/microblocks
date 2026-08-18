@@ -4,8 +4,8 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.client.render.CustomItemRenderer;
 import net.danygames2014.microblocks.client.render.MicroblockRenderer;
 import net.danygames2014.microblocks.item.MicroblockItemType;
-import net.danygames2014.microblocks.multipart.MicroblockMultipartComponent;
-import net.danygames2014.microblocks.multipart.PlacementSlot;
+import net.danygames2014.microblocks.multipart.FaceMicroblockMultipartComponent;
+import net.danygames2014.microblocks.multipart.MicroblockMultipartComponent;;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
 import net.danygames2014.microblocks.multipart.placement.PlacementHelper;
 import net.danygames2014.microblocks.util.MathHelper;
@@ -13,6 +13,7 @@ import net.danygames2014.microblocks.util.MicroblockBoxUtil;
 import net.danygames2014.nyalib.item.EnhancedPlacementContextItem;
 import net.danygames2014.nyalib.item.multipart.CustomMultipartOutlineRenderer;
 import net.danygames2014.nyalib.multipart.MultipartHitResult;
+import net.danygames2014.nyalib.multipart.MultipartSlot;
 import net.danygames2014.nyalib.multipart.MultipartState;
 import net.danygames2014.nyalib.sound.SoundHelper;
 import net.danygames2014.nyalib.util.PlayerUtil;
@@ -73,6 +74,8 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
 
     public abstract MicroblockItemType getType();
 
+    public abstract MicroblockFactory getMicroblockFactory();
+
     @Override
     public boolean useOnBlock(ItemStack stack, PlayerEntity player, World world, int x, int y, int z, int side, net.minecraft.util.math.Vec3d hitVec) {
         if (world.isRemote) {
@@ -105,7 +108,35 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
         return false;
     }
 
-    protected abstract boolean tryPlace(World world, int x, int y, int z, Direction dir, net.modificationstation.stationapi.api.util.math.Vec3d vec, int size, PlayerEntity player);
+    protected boolean tryPlace(World world, int x, int y, int z, Direction dir, net.modificationstation.stationapi.api.util.math.Vec3d vec, int size, PlayerEntity player) {
+        PlacementHelper placementHelper = getPlacementHelper();
+        MultipartSlot slot = placementHelper.getSlot(x, y, z, dir, vec, placementHelper.getGridCenterSize());
+
+        boolean sneaking = player != null && player.isSneaking();
+
+        if(sneaking){
+            slot = placementHelper.getOppositeSlot(slot, dir);
+        }
+
+        MicroblockMultipartComponent component = getMicroblockFactory().create(block, meta, slot, getSize());
+        component.x = x;
+        component.y = y;
+        component.z = z;
+
+        if (placementHelper.canPlace(world, x, y, z, component)) {
+            world.addMultipartComponent(x, y, z, new FaceMicroblockMultipartComponent(this.block, meta, slot, size));
+            return true;
+        }
+
+        if(!sneaking) {
+            component.slot = placementHelper.getOppositeSlot(slot, dir);
+            if (placementHelper.canPlace(world, x, y, z, component)) {
+                world.addMultipartComponent(x, y, z, component);
+                return true;
+            }
+        }
+        return false;
+    }
 
     // Rendering
 
@@ -158,12 +189,17 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
 
     @Environment(EnvType.CLIENT)
     public boolean tryRenderPreview(World world, int x, int y, int z, Direction dir, Vec3d vec, int size, MicroblockModel microblockModel, Block block, int meta, PlacementHelper placementHelper, PlayerEntity player, float tickDelta){
-        PlacementSlot placementSlot = placementHelper.getSlot(x, y, z, dir, vec, placementHelper.getGridCenterSize());
+        MultipartSlot placementSlot = placementHelper.getSlot(x, y, z, dir, vec, placementHelper.getGridCenterSize());
         if (player.isSneaking()) {
             placementSlot = placementHelper.getOppositeSlot(placementSlot, dir);
         }
 
-        if(placementHelper.canPlace(world, x, y, z, dir, getType(), placementSlot, size, microblockModel)){
+        MicroblockMultipartComponent component = getMicroblockFactory().create(block, meta, placementSlot, size);
+        component.x = x;
+        component.y = y;
+        component.z = z;
+
+        if(placementHelper.canPlace(world, x, y, z, component)){
             MicroblockRenderer renderer = MicroblockRenderer.INSTANCE;
             GL11.glPushMatrix();
             GL11.glEnable(GL11.GL_BLEND);
@@ -179,8 +215,8 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
         }
 
         if(!player.isSneaking()){
-            PlacementSlot oppositeSlot = placementHelper.getOppositeSlot(placementSlot, dir);
-            if(placementHelper.canPlace(world, x, y, z, dir, getType(), oppositeSlot, size, microblockModel)){
+            component.slot = placementHelper.getOppositeSlot(placementSlot, dir);
+            if(placementHelper.canPlace(world, x, y, z, component)){
                 MicroblockRenderer renderer = MicroblockRenderer.INSTANCE;
                 GL11.glPushMatrix();
                 GL11.glEnable(GL11.GL_BLEND);
@@ -189,7 +225,7 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
                 Vec3d playerPos = PlayerUtil.getRenderPosition(player, tickDelta);
                 GL11.glTranslated(x - playerPos.x, y - playerPos.y, z - playerPos.z);
 
-                renderer.renderMicroblockPreview(microblockModel, oppositeSlot, block, meta, size, 0, 0, 0);
+                renderer.renderMicroblockPreview(microblockModel, component.slot, block, meta, size, 0, 0, 0);
                 GL11.glDisable(GL11.GL_BLEND);
                 GL11.glPopMatrix();
                 return true;
@@ -219,7 +255,7 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
         Tessellator tessellator = Tessellator.INSTANCE;
         MicroblockRenderer microblockRenderer = MicroblockRenderer.INSTANCE;
         microblockRenderer.useAo = false;
-        ObjectArrayList<Box> boxes = MicroblockBoxUtil.getCenteredBoxes(getMicroblockModel().getBoxesForSlot(null, getSize(), 0, 0, 0), getMicroblockModel().getRenderBounds(null, getSize(), 0, 0, 0));
+        ObjectArrayList<Box> boxes = MicroblockBoxUtil.getCenteredBoxes(ObjectArrayList.of(getMicroblockModel().getShapeForSlot(null, getSize(), 0, 0, 0).getBoxes().toArray(new Box[0])), getMicroblockModel().getRenderBounds(null, getSize(), 0, 0, 0));
         tessellator.startQuads();
         tessellator.color(block.getColor(meta));
         for(Box box : boxes){
@@ -265,7 +301,7 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
     public boolean renderInHandBlock(SpriteAtlasTexture atlas, Tessellator tessellator, LivingEntity entity, ItemStack stack) {
         MicroblockRenderer microblockRenderer = MicroblockRenderer.INSTANCE;
         microblockRenderer.useAo = false;
-        ObjectArrayList<Box> boxes = MicroblockBoxUtil.getCenteredBoxes(getMicroblockModel().getBoxesForSlot(null, getSize(), 0, 0, 0), getMicroblockModel().getRenderBounds(null, getSize(), 0, 0, 0));
+        ObjectArrayList<Box> boxes = MicroblockBoxUtil.getCenteredBoxes(ObjectArrayList.of(getMicroblockModel().getShapeForSlot(null, getSize(), 0, 0, 0).getBoxes().toArray(new Box[0])), getMicroblockModel().getRenderBounds(null, getSize(), 0, 0, 0));
 
         GL11.glPushMatrix();
 //        glTranslated(0, 3D / 16, -5D / 16);
@@ -324,7 +360,7 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
     public boolean renderOnGroundBlock(ArsenicItemRenderer arsenicItemRenderer, ItemRenderer itemRenderer, Tessellator tessellator, ItemEntity itemEntity, float x, float y, float z, float delta, ItemStack stack, float yOffset, float angle, byte renderedAmount, SpriteAtlasTexture atlas) {
         MicroblockRenderer microblockRenderer = MicroblockRenderer.INSTANCE;
         microblockRenderer.useAo = false;
-        ObjectArrayList<Box> boxes = MicroblockBoxUtil.getCenteredBoxes(getMicroblockModel().getBoxesForSlot(null, getSize(), 0, 0, 0), getMicroblockModel().getRenderBounds(null, getSize(), 0, 0, 0));
+        ObjectArrayList<Box> boxes = MicroblockBoxUtil.getCenteredBoxes(ObjectArrayList.of(getMicroblockModel().getShapeForSlot(null, getSize(), 0, 0, 0).getBoxes().toArray(new Box[0])), getMicroblockModel().getRenderBounds(null, getSize(), 0, 0, 0));
 
         GL11.glRotatef(angle, 0.0F, 1.0F, 0.0F);
         GL11.glScalef(0.25F, 0.25F, 0.25F);
@@ -379,5 +415,9 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
         }
 
         return true;
+    }
+
+    public interface MicroblockFactory {
+        MicroblockMultipartComponent create(Block block, int meta, MultipartSlot slot, int size);
     }
 }

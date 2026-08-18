@@ -28,6 +28,7 @@ loom {
 }
 
 repositories {
+    mavenLocal()
     // Used for Babric Loom Extensions
     maven {
         name = "Babric"

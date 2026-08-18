@@ -2,8 +2,8 @@ package net.danygames2014.microblocks.multipart.placement;
 
 import net.danygames2014.microblocks.client.render.grid.EdgeGridRenderer;
 import net.danygames2014.microblocks.client.render.grid.GridRenderer;
-import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.util.MathHelper;
+import net.danygames2014.nyalib.multipart.MultipartSlot;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import net.modificationstation.stationapi.api.util.math.Vec3d;
 import net.modificationstation.stationapi.api.util.math.Vec3i;
@@ -28,7 +28,7 @@ public class EdgePlacementHelper extends PlacementHelper{
     };
 
     @Override
-    public PlacementSlot getSlot(int x, int y, int z, Direction face, Vec3d hit, double size) {
+    public MultipartSlot getSlot(int x, int y, int z, Direction face, Vec3d hit, double size) {
         Vec3d relativeHit = getRelativeHitVec(x, y, z, face, hit);
 
         int s1 = (face.ordinal() + 2) % 6;
@@ -43,7 +43,7 @@ public class EdgePlacementHelper extends PlacementHelper{
         double v = MathHelper.scalarProject(offset, new Vec3d(v2.getX(), v2.getY(), v2.getZ()));
 
         if(Math.abs(u) < size && Math.abs(v) < size){
-            return PlacementSlot.CUSTOM;
+            return MultipartSlot.CUSTOM;
         }
 
         if (Math.abs(u) > size && Math.abs(v) > size) {
@@ -58,20 +58,20 @@ public class EdgePlacementHelper extends PlacementHelper{
             if(u < 0) {
                 b^=1;
             }
-            return PlacementSlot.fromOrdinal(15+((s2&6)<<1 | b<<1 | face.ordinal()&1^1));
+            return MultipartSlot.fromOrdinal(15+((s2&6)<<1 | b<<1 | face.ordinal()&1^1));
         }
         else {
             if(v < 0) {
                 b^=1;
             }
-            return PlacementSlot.fromOrdinal(15+((s1&6)<<1 | (face.ordinal()&1^1)<<1 | b));
+            return MultipartSlot.fromOrdinal(15+((s1&6)<<1 | (face.ordinal()&1^1)<<1 | b));
         }
     }
 
     @Override
-    public PlacementSlot getOppositeSlot(PlacementSlot slot, Direction side) {
+    public MultipartSlot getOppositeSlot(MultipartSlot slot, Direction side) {
 
-        if(slot == PlacementSlot.CUSTOM || slot.ordinal() < 15){
+        if(slot == MultipartSlot.CUSTOM || slot.ordinal() < 15){
             return slot;
         }
         int edgeIndex = slot.ordinal()-15;
@@ -79,7 +79,7 @@ public class EdgePlacementHelper extends PlacementHelper{
             return slot;
         }
         int e = slot.slotIndex - 15;
-        return PlacementSlot.fromOrdinal(15 + PlacementSlot.packEdgeBits(e, PlacementSlot.unpackEdgeBits(e) ^ (1 << (side.ordinal() >> 1))));
+        return MultipartSlot.fromOrdinal(15 + MultipartSlot.packEdgeBits(e, MultipartSlot.unpackEdgeBits(e) ^ (1 << (side.ordinal() >> 1))));
     }
 
     @Override
@@ -87,7 +87,7 @@ public class EdgePlacementHelper extends PlacementHelper{
         return EdgeGridRenderer.INSTANCE;
     }
 
-    private PlacementSlot getCornerSlot(Direction face, int uSign, int vSign){
+    private MultipartSlot getCornerSlot(Direction face, int uSign, int vSign){
         if(face.getDirection() == Direction.AxisDirection.NEGATIVE){
             uSign = uSign == 0 ? 1 : 0;
             vSign = vSign == 0 ? 1 : 0;
@@ -96,47 +96,47 @@ public class EdgePlacementHelper extends PlacementHelper{
         switch (face.getAxis()){
             case X -> {
                 if(uSign == 0 && vSign == 0){
-                    return PlacementSlot.EDGE_BOT_NEG_Z;
+                    return MultipartSlot.EDGE_BOT_NEG_Z;
                 }
                 if(uSign == 0 && vSign == 1){
-                    return PlacementSlot.EDGE_BOT_POS_Z;
+                    return MultipartSlot.EDGE_BOT_POS_Z;
                 }
                 if(uSign == 1 && vSign == 0){
-                    return PlacementSlot.EDGE_TOP_NEG_Z;
+                    return MultipartSlot.EDGE_TOP_NEG_Z;
                 }
                 if(uSign == 1 && vSign == 1){
-                    return PlacementSlot.EDGE_TOP_POS_Z;
+                    return MultipartSlot.EDGE_TOP_POS_Z;
                 }
             }
             case Y -> {
                 if(uSign == 0 && vSign == 0){
-                    return PlacementSlot.EDGE_MID_NEG_X_NEG_Z;
+                    return MultipartSlot.EDGE_MID_NEG_X_NEG_Z;
                 }
                 if(uSign == 0 && vSign == 1){
-                    return PlacementSlot.EDGE_MID_POS_X_NEG_Z;
+                    return MultipartSlot.EDGE_MID_POS_X_NEG_Z;
                 }
                 if(uSign == 1 && vSign == 0){
-                    return PlacementSlot.EDGE_MID_NEG_X_POS_Z;
+                    return MultipartSlot.EDGE_MID_NEG_X_POS_Z;
                 }
                 if(uSign == 1 && vSign == 1){
-                    return PlacementSlot.EDGE_MID_POS_X_POS_Z;
+                    return MultipartSlot.EDGE_MID_POS_X_POS_Z;
                 }
             }
             case Z -> {
                 if(uSign == 0 && vSign == 0){
-                    return PlacementSlot.EDGE_BOT_NEG_X;
+                    return MultipartSlot.EDGE_BOT_NEG_X;
                 }
                 if(uSign == 0 && vSign == 1){
-                    return PlacementSlot.EDGE_TOP_NEG_X;
+                    return MultipartSlot.EDGE_TOP_NEG_X;
                 }
                 if(uSign == 1 && vSign == 0){
-                    return PlacementSlot.EDGE_BOT_POS_X;
+                    return MultipartSlot.EDGE_BOT_POS_X;
                 }
                 if(uSign == 1 && vSign == 1){
-                    return PlacementSlot.EDGE_TOP_POS_X;
+                    return MultipartSlot.EDGE_TOP_POS_X;
                 }
             }
         }
-        return PlacementSlot.EDGE_BOT_NEG_X;
+        return MultipartSlot.EDGE_BOT_NEG_X;
     }
 }

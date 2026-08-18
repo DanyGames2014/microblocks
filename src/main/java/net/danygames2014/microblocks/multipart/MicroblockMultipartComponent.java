@@ -8,9 +8,10 @@ import net.danygames2014.microblocks.item.base.MicroblockItem;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
 import net.danygames2014.microblocks.util.MathHelper;
 import net.danygames2014.microblocks.util.ShrinkHelper;
-import net.danygames2014.nyalib.multipart.MultipartComponent;
-import net.danygames2014.nyalib.multipart.MultipartState;
+import net.danygames2014.nyalib.block.voxelshape.VoxelShape;
+import net.danygames2014.nyalib.multipart.*;
 import net.danygames2014.nyalib.sound.SoundHelper;
+import net.danygames2014.nyalib.util.MultipartOcclusionUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
@@ -32,13 +33,14 @@ import net.modificationstation.stationapi.api.util.SideUtil;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Random;
 
-public abstract class MicroblockMultipartComponent extends MultipartComponent {
+public abstract class MicroblockMultipartComponent extends MultipartComponent implements SlottedMultipart, PartialOcclusionComponent {
     public Random random = new Random();
     public Block block;
     public int meta;
-    public PlacementSlot slot;
+    public MultipartSlot slot;
     public double renderBoundsMinX;
     public double renderBoundsMinY;
     public double renderBoundsMinZ;
@@ -52,7 +54,7 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
 
     }
 
-    public MicroblockMultipartComponent(Block block, int meta, PlacementSlot slot, int size) {
+    public MicroblockMultipartComponent(Block block, int meta, MultipartSlot slot, int size) {
         this.block = block;
         this.meta = meta;
         this.slot = slot;
@@ -118,7 +120,7 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         }
 
         if (nbt.contains("slot")) {
-            this.slot = PlacementSlot.fromOrdinal(nbt.getInt("slot"));
+            this.slot = MultipartSlot.fromOrdinal(nbt.getInt("slot"));
         } else {
             throw new IllegalStateException();
         }
@@ -242,10 +244,6 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         );
     }
 
-    public boolean canOverlap(MicroblockItemType type, PlacementSlot slot, int size) {
-        return true;
-    }
-
     public void refreshRenderState() {
         if (slot == null) {
             return;
@@ -302,7 +300,7 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         return this.slot.ordinal() < other.slot.ordinal();
     }
 
-    public ObjectArrayList<Box> getClippedBoxes(ObjectArrayList<Box> boxes) {
+    public ObjectArrayList<Box> getClippedBoxes(List<Box> boxes) {
         ObjectArrayList<Box> clippedList = new ObjectArrayList<>();
 
         Box renderBounds = getRenderBounds();
@@ -336,13 +334,13 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
         return Block.BLOCKS_LIGHT_LUMINANCE[block.id];
     }
 
-    public boolean canUse(PlayerEntity player, Vec3d pos, Direction face, @Nullable PlacementSlot slotOverride) {
+    public boolean canUse(PlayerEntity player, Vec3d pos, Direction face, @Nullable MultipartSlot slotOverride) {
         ItemStack stack = player.getHand();
         if (!player.isSneaking() && stack != null && stack.getItem() instanceof MicroblockItem microblockItem) {
             if (microblockItem.block != block || microblockItem.meta != meta) {
                 return false;
             }
-            PlacementSlot placementSlot = slotOverride;
+            MultipartSlot placementSlot = slotOverride;
             if (slotOverride == null) {
                 placementSlot = microblockItem.getPlacementHelper().getSlot(x, y, z, face, new net.modificationstation.stationapi.api.util.math.Vec3d(pos.x, pos.y, pos.z), microblockItem.getPlacementHelper().getGridCenterSize());
             }
@@ -353,7 +351,9 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
                 return false;
             }
             if (MathHelper.getHitDepth(new net.modificationstation.stationapi.api.util.math.Vec3d(pos.x - x, pos.y - y, pos.z - z), face) < 1) {
-                return microblockItem.getPlacementHelper().canGrow(this, size + microblockItem.getSize());
+                if(size + microblockItem.getSize() <= this.getMaxSize()) {
+
+                }
             }
         }
         return false;
@@ -388,17 +388,27 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent {
 
     @Override
     public void getCollisionBoxes(ObjectArrayList<Box> boxes) {
-        boxes.addAll(getMicroblockModel().getBoxesForSlot(slot, size, x, y, z));
+        boxes.addAll(getMicroblockModel().getShapeForSlot(slot, size, x, y, z).getOffsetBoxes());
     }
 
     @Override
     public ObjectArrayList<Box> getBoundingBoxes() {
-        return getMicroblockModel().getBoxesForSlot(slot, size, x, y, z);
+        return ObjectArrayList.of(getMicroblockModel().getShapeForSlot(slot, size, x, y, z).getOffsetBoxes().toArray(new Box[0]));
     }
 
     public abstract int getMaxSize();
 
     public int getSize() {
         return size;
+    }
+
+    @Override
+    public int getMask() {
+        return slot.mask;
+    }
+
+    @Override
+    public VoxelShape getPartialOcclusionShape() {
+        return getMicroblockModel().getShapeForSlot(slot, size, x, y, z);
     }
 }

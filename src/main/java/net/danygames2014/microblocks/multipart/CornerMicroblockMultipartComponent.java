@@ -4,6 +4,8 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.item.MicroblockItemType;
 import net.danygames2014.microblocks.multipart.model.CornerMicroblockModel;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
+import net.danygames2014.nyalib.block.voxelshape.VoxelShape;
+import net.danygames2014.nyalib.multipart.MultipartSlot;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
@@ -14,7 +16,7 @@ public class CornerMicroblockMultipartComponent extends MicroblockMultipartCompo
 
     public CornerMicroblockMultipartComponent(){}
 
-    public CornerMicroblockMultipartComponent(Block block, int meta, PlacementSlot slot, int size) {
+    public CornerMicroblockMultipartComponent(Block block, int meta, MultipartSlot slot, int size) {
         super(block, meta, slot, size);
     }
 

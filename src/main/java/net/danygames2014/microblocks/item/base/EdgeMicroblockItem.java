@@ -6,6 +6,7 @@ import net.danygames2014.microblocks.multipart.model.MicroblockModel;
 import net.danygames2014.microblocks.multipart.model.PostMicroblockModel;
 import net.danygames2014.microblocks.multipart.placement.EdgePlacementHelper;
 import net.danygames2014.microblocks.multipart.placement.PlacementHelper;
+import net.danygames2014.nyalib.multipart.MultipartSlot;
 import net.danygames2014.nyalib.util.PlayerUtil;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,31 +29,23 @@ public abstract class EdgeMicroblockItem extends MicroblockItem {
     }
 
     protected boolean tryPlace(World world, int x, int y, int z, Direction dir, net.modificationstation.stationapi.api.util.math.Vec3d vec, int size, PlayerEntity player) {
-        PlacementSlot slot = placementHelper.getSlot(x, y, z, dir, vec, placementHelper.getGridCenterSize());
+        MultipartSlot slot = placementHelper.getSlot(x, y, z, dir, vec, placementHelper.getGridCenterSize());
 
         boolean sneaking = player != null && player.isSneaking();
 
-        if(sneaking && slot != PlacementSlot.CUSTOM){
+        if(sneaking && slot != MultipartSlot.CUSTOM){
             slot = placementHelper.getOppositeSlot(slot, dir);
         }
 
-        if (slot != PlacementSlot.CUSTOM) {
-            if(placementHelper.canPlace(world, x, y, z, dir, getType(), slot, size, EdgeMicroblockMultipartComponent.MODEL)) {
-                world.addMultipartComponent(x, y, z, new EdgeMicroblockMultipartComponent(this.block, meta, slot, size));
-                return true;
-            }
-            if(!sneaking) {
-                PlacementSlot oppositeSlot = placementHelper.getOppositeSlot(slot, dir);
-                if(oppositeSlot != PlacementSlot.CUSTOM){
-                    if (placementHelper.canPlace(world, x, y, z, dir, getType(), oppositeSlot, size, EdgeMicroblockMultipartComponent.MODEL)) {
-                        world.addMultipartComponent(x, y, z, new EdgeMicroblockMultipartComponent(this.block, meta, oppositeSlot, size));
-                        return true;
-                    }
-                }
-            }
+        if (slot != MultipartSlot.CUSTOM) {
+            super.tryPlace(world, x, y, z, dir, vec, size, player);
         } else {
-            if (placementHelper.canPlace(world, x, y, z, dir, getType(), slot, size, PostMicroblockModel.MODELS[dir.getAxis().ordinal()])) {
-                world.addMultipartComponent(x, y, z, new PostMicroblockMultipartComponent(this.block, meta, slot, dir.getAxis(), size));
+            PostMicroblockMultipartComponent component = new PostMicroblockMultipartComponent(this.block, meta, slot, dir.getAxis(), size);
+            component.x = x;
+            component.y = y;
+            component.z = z;
+            if (placementHelper.canPlace(world, x, y, z, component)) {
+                world.addMultipartComponent(x, y, z, component);
                 return true;
             }
         }
@@ -62,18 +55,18 @@ public abstract class EdgeMicroblockItem extends MicroblockItem {
 
     @Override
     public boolean tryRenderPreview(World world, int x, int y, int z, Direction dir, Vec3d vec, int size, MicroblockModel microblockModel, Block block, int meta, PlacementHelper placementHelper, PlayerEntity player, float tickDelta){
-        PlacementSlot placementSlot = placementHelper.getSlot(x, y, z, dir, vec, placementHelper.getGridCenterSize());
+        MultipartSlot placementSlot = placementHelper.getSlot(x, y, z, dir, vec, placementHelper.getGridCenterSize());
 
-        MicroblockModel model = microblockModel;
-        if(placementSlot == PlacementSlot.CUSTOM){
-            model = PostMicroblockModel.MODELS[dir.getAxis().ordinal()];
+        if(placementSlot != MultipartSlot.CUSTOM){
+            super.tryRenderPreview(world, x, y, z, dir, vec, size, microblockModel, block, meta, placementHelper, player, tickDelta);
         }
 
-        if (player.isSneaking() && placementSlot != PlacementSlot.CUSTOM) {
-            placementSlot = placementHelper.getOppositeSlot(placementSlot, dir);
-        }
+        MicroblockMultipartComponent component = new PostMicroblockMultipartComponent(block, meta, placementSlot, dir.getAxis(), size);
+        component.x = x;
+        component.y = y;
+        component.z = z;
 
-        if(placementHelper.canPlace(world, x, y, z, dir, getType(), placementSlot, size, model)){
+        if(placementHelper.canPlace(world, x, y, z, component)){
             MicroblockRenderer renderer = MicroblockRenderer.INSTANCE;
             GL11.glPushMatrix();
             GL11.glEnable(GL11.GL_BLEND);
@@ -82,29 +75,29 @@ public abstract class EdgeMicroblockItem extends MicroblockItem {
             Vec3d playerPos = PlayerUtil.getRenderPosition(player, tickDelta);
             GL11.glTranslated(x - playerPos.x, y - playerPos.y, z - playerPos.z);
 
-            renderer.renderMicroblockPreview(model, placementSlot, block, meta, size, 0, 0, 0);
+            renderer.renderMicroblockPreview(component.getMicroblockModel(), placementSlot, block, meta, size, 0, 0, 0);
             GL11.glDisable(GL11.GL_BLEND);
             GL11.glPopMatrix();
             return true;
         }
 
-        if(!player.isSneaking()){
-            PlacementSlot oppositeSlot = placementHelper.getOppositeSlot(placementSlot, dir);
-            if(placementHelper.canPlace(world, x, y, z, dir, getType(), oppositeSlot, size, model)){
-                MicroblockRenderer renderer = MicroblockRenderer.INSTANCE;
-                GL11.glPushMatrix();
-                GL11.glEnable(GL11.GL_BLEND);
-                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-
-                Vec3d playerPos = PlayerUtil.getRenderPosition(player, tickDelta);
-                GL11.glTranslated(x - playerPos.x, y - playerPos.y, z - playerPos.z);
-
-                renderer.renderMicroblockPreview(model, oppositeSlot, block, meta, size, 0, 0, 0);
-                GL11.glDisable(GL11.GL_BLEND);
-                GL11.glPopMatrix();
-                return true;
-            }
-        }
+//        if(!player.isSneaking()){
+//            MultipartSlot oppositeSlot = placementHelper.getOppositeSlot(placementSlot, dir);
+//            if(placementHelper.canPlace(world, x, y, z, dir, getType(), oppositeSlot, size, model)){
+//                MicroblockRenderer renderer = MicroblockRenderer.INSTANCE;
+//                GL11.glPushMatrix();
+//                GL11.glEnable(GL11.GL_BLEND);
+//                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+//
+//                Vec3d playerPos = PlayerUtil.getRenderPosition(player, tickDelta);
+//                GL11.glTranslated(x - playerPos.x, y - playerPos.y, z - playerPos.z);
+//
+//                renderer.renderMicroblockPreview(model, oppositeSlot, block, meta, size, 0, 0, 0);
+//                GL11.glDisable(GL11.GL_BLEND);
+//                GL11.glPopMatrix();
+//                return true;
+//            }
+//        }
         return false;
     }
 
@@ -116,5 +109,10 @@ public abstract class EdgeMicroblockItem extends MicroblockItem {
     @Override
     public PlacementHelper getPlacementHelper() {
         return placementHelper;
+    }
+
+    @Override
+    public MicroblockFactory getMicroblockFactory() {
+        return EdgeMicroblockMultipartComponent::new;
     }
 }

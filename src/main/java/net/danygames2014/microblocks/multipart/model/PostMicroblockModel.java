@@ -1,9 +1,10 @@
 package net.danygames2014.microblocks.multipart.model;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.danygames2014.microblocks.item.MicroblockItemType;
-import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.util.MicroblockBoxUtil;
+import net.danygames2014.nyalib.block.voxelshape.VoxelData;
+import net.danygames2014.nyalib.block.voxelshape.VoxelShape;
+import net.danygames2014.nyalib.multipart.MultipartSlot;
 import net.minecraft.util.math.Box;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
@@ -25,31 +26,22 @@ public class PostMicroblockModel extends MicroblockModel{
     }
 
     @Override
-    public ObjectArrayList<Box> getBoxesForSlot(PlacementSlot slot, int size, double offsetX, double offsetY, double offsetZ) {
+    public VoxelShape getShapeForSlot(MultipartSlot slot, int size, int offsetX, int offsetY, int offsetZ) {
         ObjectArrayList<Box> boxes = new ObjectArrayList<>();
         Box box = bounds.copy();
         box.minX -= ((float)size * 0.5f) * PIXEL_SIZE;
         box.minY -= ((float)size * 0.5f) * PIXEL_SIZE;
         box.maxX += ((float)size * 0.5f) * PIXEL_SIZE;
         box.maxY += ((float)size * 0.5f) * PIXEL_SIZE;
-        boxes.add(MicroblockBoxUtil.transformPostMicroblock(box, axis).offset(offsetX, offsetY, offsetZ));
-        return boxes;
+        boxes.add(MicroblockBoxUtil.transformPostMicroblock(box, axis));
+        return new VoxelData(boxes.toArray(new Box[0])).withOffset(offsetX, offsetY, offsetZ);
     }
 
     @Override
-    public Box getRenderBounds(PlacementSlot slot, int size, double offsetX, double offsetY, double offsetZ) {
+    public Box getRenderBounds(MultipartSlot slot, int size, double offsetX, double offsetY, double offsetZ) {
         if(slot == null){
-            slot = PlacementSlot.CUSTOM;
+            slot = MultipartSlot.CUSTOM;
         }
-        return getBoxesForSlot(slot, size, offsetX, offsetY, offsetZ).get(0);
-    }
-
-    @Override
-    public boolean canOverlap(MicroblockItemType type, PlacementSlot slot, MicroblockItemType otherType, PlacementSlot otherSlot) {
-        if(otherType.isFace()){
-            Direction.Axis axis = Direction.byId(otherSlot.ordinal()).getAxis();
-            return axis == this.axis;
-        }
-        return otherSlot.ordinal() > 25;
+        return getShapeForSlot(slot, size, (int) offsetX, (int) offsetY, (int) offsetZ).getOffsetBoxes().get(0);
     }
 }

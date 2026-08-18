@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.item.MicroblockItemType;
 import net.danygames2014.microblocks.multipart.model.EdgeMicroblockModel;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
+import net.danygames2014.nyalib.multipart.MultipartSlot;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
@@ -12,7 +13,7 @@ public class EdgeMicroblockMultipartComponent extends MicroblockMultipartCompone
 
     public EdgeMicroblockMultipartComponent(){}
 
-    public EdgeMicroblockMultipartComponent(Block block, int meta, PlacementSlot slot, int size) {
+    public EdgeMicroblockMultipartComponent(Block block, int meta, MultipartSlot slot, int size) {
         super(block, meta, slot, size);
     }
 

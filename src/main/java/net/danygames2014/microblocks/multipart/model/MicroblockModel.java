@@ -1,18 +1,13 @@
 package net.danygames2014.microblocks.multipart.model;
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.danygames2014.microblocks.item.MicroblockItemType;
-import net.danygames2014.microblocks.multipart.PlacementSlot;
+import net.danygames2014.nyalib.block.voxelshape.VoxelShape;
+import net.danygames2014.nyalib.multipart.MultipartSlot;
 import net.minecraft.util.math.Box;
 import org.jetbrains.annotations.Nullable;
 
 
 public abstract class MicroblockModel {
     public static double PIXEL_SIZE = 1D / 16D;
-    public abstract ObjectArrayList<Box> getBoxesForSlot(@Nullable PlacementSlot slot, int size, double offsetX, double offsetY, double offsetZ);
-    public abstract Box getRenderBounds(PlacementSlot slot, int size, double offsetX, double offsetY, double offsetZ);
-
-    public boolean canOverlap(MicroblockItemType type, PlacementSlot slot, MicroblockItemType otherType, PlacementSlot otherSlot){
-        return true;
-    }
+    public abstract VoxelShape getShapeForSlot(@Nullable MultipartSlot slot, int size, int offsetX, int offsetY, int offsetZ);
+    public abstract Box getRenderBounds(MultipartSlot slot, int size, double offsetX, double offsetY, double offsetZ);
 }

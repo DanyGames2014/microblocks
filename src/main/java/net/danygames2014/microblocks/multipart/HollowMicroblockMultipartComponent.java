@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.item.MicroblockItemType;
 import net.danygames2014.microblocks.multipart.model.HollowMicroblockModel;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
+import net.danygames2014.nyalib.multipart.MultipartSlot;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
@@ -14,7 +15,7 @@ public class HollowMicroblockMultipartComponent extends MicroblockMultipartCompo
 
     public HollowMicroblockMultipartComponent(){}
 
-    public HollowMicroblockMultipartComponent(Block block, int meta, PlacementSlot slot, int size) {
+    public HollowMicroblockMultipartComponent(Block block, int meta, MultipartSlot slot, int size) {
         super(block, meta, slot, size);
     }
 
@@ -54,15 +55,12 @@ public class HollowMicroblockMultipartComponent extends MicroblockMultipartCompo
     }
 
     @Override
-    public boolean canOverlap(MicroblockItemType type, PlacementSlot slot, int size) {
-        if(size > 8 - (holeSize / 2)){
-            return false;
-        }
-        return (!type.isFace() && !type.isHollowFace()) || slot.ordinal() != (this.slot.ordinal() ^ 1);
+    public MicroblockModel getMicroblockModel() {
+        return MODEL;
     }
 
     @Override
-    public MicroblockModel getMicroblockModel() {
-        return MODEL;
+    public boolean allowCompleteOcclusion() {
+        return true;
     }
 }

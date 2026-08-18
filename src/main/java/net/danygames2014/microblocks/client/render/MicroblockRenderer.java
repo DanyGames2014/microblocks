@@ -2,8 +2,8 @@ package net.danygames2014.microblocks.client.render;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.multipart.MicroblockMultipartComponent;
-import net.danygames2014.microblocks.multipart.PlacementSlot;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
+import net.danygames2014.nyalib.multipart.MultipartSlot;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
@@ -14,6 +14,8 @@ import net.modificationstation.stationapi.api.client.StationRenderAPI;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import org.lwjgl.opengl.GL11;
+
+import java.util.List;
 
 public class MicroblockRenderer {
     public static final MicroblockRenderer INSTANCE = new MicroblockRenderer();
@@ -89,7 +91,7 @@ public class MicroblockRenderer {
     public void renderMicroblock(BlockView blockView, MicroblockMultipartComponent component, BlockRenderManager blockRenderManager){
         MicroblockModel model = component.getMicroblockModel();
         Tessellator.INSTANCE.color(1f, 1f, 1f, 1f);
-        ObjectArrayList<Box> boxes = model.getBoxesForSlot(component.slot, component.getSize(), component.x, component.y, component.z);
+        List<Box> boxes = model.getShapeForSlot(component.slot, component.getSize(), component.x, component.y, component.z).getBoxes();
         ObjectArrayList<Box> clippedBoxes = component.getClippedBoxes(boxes);
 
         for(int i = 0; i < clippedBoxes.size(); i++){
@@ -142,7 +144,7 @@ public class MicroblockRenderer {
         overrideSouth = false;
     }
 
-    public void renderMicroblockPreview(MicroblockModel model, PlacementSlot slot, Block block, int meta, int size, int x, int y, int z){
+    public void renderMicroblockPreview(MicroblockModel model, MultipartSlot slot, Block block, int meta, int size, int x, int y, int z){
         Tessellator tessellator = Tessellator.INSTANCE;
 
         tessellator.startQuads();
@@ -161,7 +163,7 @@ public class MicroblockRenderer {
         GL11.glPolygonOffset(-1.0F, -1.0F);
         GL11.glEnable(GL11.GL_POLYGON_OFFSET_FILL);
 
-        ObjectArrayList<Box> boxes = model.getBoxesForSlot(slot, size, 0, 0, 0);
+        List<Box> boxes = model.getShapeForSlot(slot, size, 0, 0, 0).getBoxes();
         for(Box box : boxes){
             renderBottom(box, x, y, z, block.getTexture(0, meta), 0xFFFFFF);
             renderTop(box, x, y, z, block.getTexture(1, meta), 0xFFFFFF);
