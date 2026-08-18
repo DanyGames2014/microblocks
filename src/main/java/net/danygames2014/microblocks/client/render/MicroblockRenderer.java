@@ -91,7 +91,7 @@ public class MicroblockRenderer {
     public void renderMicroblock(BlockView blockView, MicroblockMultipartComponent component, BlockRenderManager blockRenderManager){
         MicroblockModel model = component.getMicroblockModel();
         Tessellator.INSTANCE.color(1f, 1f, 1f, 1f);
-        List<Box> boxes = model.getShapeForSlot(component.slot, component.getSize(), component.x, component.y, component.z).getBoxes();
+        List<Box> boxes = model.getShapeForSlot(component.slot, component.getSize(), component.x, component.y, component.z).getOffsetBoxes();
         ObjectArrayList<Box> clippedBoxes = component.getClippedBoxes(boxes);
 
         for(int i = 0; i < clippedBoxes.size(); i++){

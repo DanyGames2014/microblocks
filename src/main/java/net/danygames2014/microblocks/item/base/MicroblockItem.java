@@ -124,7 +124,7 @@ public abstract class MicroblockItem extends TemplateItem implements EnhancedPla
         component.z = z;
 
         if (placementHelper.canPlace(world, x, y, z, component)) {
-            world.addMultipartComponent(x, y, z, new FaceMicroblockMultipartComponent(this.block, meta, slot, size));
+            world.addMultipartComponent(x, y, z, component);
             return true;
         }
 

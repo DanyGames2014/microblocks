@@ -42,6 +42,10 @@ public abstract class PlacementHelper {
             return true;
         }
 
+        if(component.slot != MultipartSlot.CUSTOM && state.isSlotOccupied(component.slot)) {
+            return false;
+        }
+
         return state.canAddComponent(component);
     }
 

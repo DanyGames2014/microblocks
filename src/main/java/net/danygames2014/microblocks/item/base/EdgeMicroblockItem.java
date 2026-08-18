@@ -38,7 +38,7 @@ public abstract class EdgeMicroblockItem extends MicroblockItem {
         }
 
         if (slot != MultipartSlot.CUSTOM) {
-            super.tryPlace(world, x, y, z, dir, vec, size, player);
+            return super.tryPlace(world, x, y, z, dir, vec, size, player);
         } else {
             PostMicroblockMultipartComponent component = new PostMicroblockMultipartComponent(this.block, meta, slot, dir.getAxis(), size);
             component.x = x;
@@ -58,7 +58,7 @@ public abstract class EdgeMicroblockItem extends MicroblockItem {
         MultipartSlot placementSlot = placementHelper.getSlot(x, y, z, dir, vec, placementHelper.getGridCenterSize());
 
         if(placementSlot != MultipartSlot.CUSTOM){
-            super.tryRenderPreview(world, x, y, z, dir, vec, size, microblockModel, block, meta, placementHelper, player, tickDelta);
+            return super.tryRenderPreview(world, x, y, z, dir, vec, size, microblockModel, block, meta, placementHelper, player, tickDelta);
         }
 
         MicroblockMultipartComponent component = new PostMicroblockMultipartComponent(block, meta, placementSlot, dir.getAxis(), size);
