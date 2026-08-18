@@ -223,4 +223,12 @@ public class PostMicroblockMultipartComponent extends MicroblockMultipartCompone
 
         return clippedList;
     }
+
+    @Override
+    public boolean occlusionTest(MultipartComponent component) {
+        if(component instanceof PostMicroblockMultipartComponent post && post.axis == this.axis) {
+            return false;
+        }
+        return super.occlusionTest(component);
+    }
 }
