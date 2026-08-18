@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.microblocks.item.MicroblockItemType;
 import net.danygames2014.microblocks.multipart.model.FaceMicroblockModel;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
+import net.danygames2014.microblocks.util.DirectionUtil;
 import net.danygames2014.nyalib.block.voxelshape.VoxelShape;
 import net.danygames2014.nyalib.multipart.MultipartSlot;
 import net.minecraft.block.Block;
@@ -57,5 +58,14 @@ public class FaceMicroblockMultipartComponent extends MicroblockMultipartCompone
     @Override
     public MicroblockModel getMicroblockModel() {
         return MODEL;
+    }
+
+    @Override
+    public void onPlaced() {
+        super.onPlaced();
+
+        System.out.println(slot);
+        System.out.println(DirectionUtil.faceSlotToDirection(slot));
+        System.out.println(slot.slotIndex);
     }
 }

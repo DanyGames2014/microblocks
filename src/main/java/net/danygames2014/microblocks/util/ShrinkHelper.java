@@ -62,12 +62,12 @@ public class ShrinkHelper {
 
     public static int calculateCulling(MicroblockMultipartComponent other, Box bounds) {
         if(switch(other.slot.slotIndex) {
-            case 0 -> bounds.minY <= 0;
-            case 1 -> bounds.maxY >= 1;
-            case 2 -> bounds.minZ <= 0;
-            case 3 -> bounds.maxZ >= 1;
-            case 4 -> bounds.minX <= 0;
-            case 5 -> bounds.maxX >= 1;
+            case 0 -> bounds.maxY >= 1;
+            case 1 -> bounds.minY <= 0;
+            case 2 -> bounds.maxZ >= 1;
+            case 3 -> bounds.minZ <= 0;
+            case 4 -> bounds.maxX >= 1;
+            case 5 -> bounds.minX <= 0;
             default -> false;
         }){
         return 1<<other.slot.slotIndex;

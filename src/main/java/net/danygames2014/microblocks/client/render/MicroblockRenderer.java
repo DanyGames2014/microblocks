@@ -111,12 +111,12 @@ public class MicroblockRenderer {
 
             if(component.slot.ordinal() < 6 && !component.isTransparent()){
                 switch (component.slot){
-                    case FACE_POS_Y -> overrideBottom = true;
-                    case FACE_NEG_Y -> overrideTop = true;
-                    case FACE_POS_Z -> overrideEast = true;
-                    case FACE_NEG_Z -> overrideWest = true;
-                    case FACE_POS_X -> overrideNorth = true;
-                    case FACE_NEG_X -> overrideSouth = true;
+                    case FACE_NEG_Y -> overrideBottom = true;
+                    case FACE_POS_Y -> overrideTop = true;
+                    case FACE_NEG_Z -> overrideEast = true;
+                    case FACE_POS_Z -> overrideWest = true;
+                    case FACE_NEG_X -> overrideNorth = true;
+                    case FACE_POS_X -> overrideSouth = true;
                 }
             }
 
