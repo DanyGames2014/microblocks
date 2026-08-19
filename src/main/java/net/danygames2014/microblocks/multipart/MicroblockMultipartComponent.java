@@ -352,7 +352,16 @@ public abstract class MicroblockMultipartComponent extends MultipartComponent im
             }
             if (MathHelper.getHitDepth(new net.modificationstation.stationapi.api.util.math.Vec3d(pos.x - x, pos.y - y, pos.z - z), face) < 1) {
                 if(size + microblockItem.getSize() <= this.getMaxSize()) {
+                    int oldSize = this.size;
+                    this.size += microblockItem.getSize();
+                    if(state.canReplaceComponent(this, this)) {
+                        refreshRenderState();
+                        this.size = oldSize;
+                        return true;
+                    }
 
+                    this.size = oldSize;
+                    return false;
                 }
             }
         }

@@ -59,7 +59,7 @@ public class HollowMicroblockModel extends MicroblockModel{
         double holeRadiusOffset = ((double) holeSize / 2) * PIXEL_SIZE;
         double ringOuterOffset = ((double) holeSize / 2 + ringWidth) * PIXEL_SIZE;
 
-        double ringMaxX = (size + 1) * PIXEL_SIZE;
+        double ringMaxX = size * PIXEL_SIZE;
 
         Box ring_top = bounds_top.copy();
         ring_top.maxX = ringMaxX;

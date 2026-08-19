@@ -6,9 +6,11 @@ import net.danygames2014.microblocks.multipart.model.FaceMicroblockModel;
 import net.danygames2014.microblocks.multipart.model.MicroblockModel;
 import net.danygames2014.microblocks.util.DirectionUtil;
 import net.danygames2014.nyalib.block.voxelshape.VoxelShape;
+import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.danygames2014.nyalib.multipart.MultipartSlot;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.modificationstation.stationapi.api.util.math.Direction;
 
 public class FaceMicroblockMultipartComponent extends MicroblockMultipartComponent{
 
@@ -67,5 +69,17 @@ public class FaceMicroblockMultipartComponent extends MicroblockMultipartCompone
         System.out.println(slot);
         System.out.println(DirectionUtil.faceSlotToDirection(slot));
         System.out.println(slot.slotIndex);
+    }
+
+    @Override
+    public boolean occlusionTest(MultipartComponent component) {
+        if(component instanceof FaceMicroblockMultipartComponent face) {
+            if(Direction.byId(face.slot.slotIndex).getAxis() == Direction.byId(slot.slotIndex).getAxis()) {
+                if(face.size + size > 16) {
+                    return false;
+                }
+            }
+        }
+        return super.occlusionTest(component);
     }
 }
